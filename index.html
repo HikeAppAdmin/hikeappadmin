@@ -631,8 +631,13 @@ function updateExploreUserPosition(pos){
   if(!Number.isFinite(lat)||!Number.isFinite(lon)||!exploreMap||!window.L)return;
   const p=[lat,lon];
   const heading=Number.isFinite(pos.coords.heading)&&pos.coords.heading>=0?pos.coords.heading:0;
-  if(exploreUserMarker) exploreUserMarker.setLatLng(p).setIcon(arrowIcon(heading));
-  else exploreUserMarker=L.marker(p,{icon:arrowIcon(heading),zIndexOffset:2000}).addTo(exploreMap);
+  if(exploreUserMarker){
+    exploreUserMarker.setLatLng(p).setIcon(arrowIcon(heading));
+    try{exploreUserMarker.setZIndexOffset(5000);exploreUserMarker.bringToFront()}catch(e){}
+  } else {
+    exploreUserMarker=L.marker(p,{icon:arrowIcon(heading),zIndexOffset:5000,interactive:false,pane:'markerPane'}).addTo(exploreMap);
+    try{exploreUserMarker.bringToFront()}catch(e){}
+  }
   const accuracy=Number(pos.coords.accuracy)||0;
   if(accuracy>0){
     if(exploreAccuracyCircle) exploreAccuracyCircle.setLatLng(p).setRadius(Math.min(accuracy,200));
@@ -987,7 +992,19 @@ function cpbar(){const n=checkpointTargets.length||checkpointCount();$('cpbar').
 function checkpointIcon(n,done=false){return L.divIcon({className:'checkpoint-icon',html:`<div class=\"checkpoint-dot ${done?'done':''}\"><span>${n}</span></div>`,iconSize:[34,34],iconAnchor:[17,17]})}
 function drawCheckpoints(){if(checkpointLayer){checkpointLayer.clearLayers()}else{checkpointLayer=L.layerGroup().addTo(map)}checkpointTargets=getCheckpointTargets();checkpointMarkers=[];checkpointPoints=checkpointTargets.map((_,i)=>checkpointAt(i));checkpointPoints.forEach((p,i)=>{const m=L.marker([p.lat,p.lon],{icon:checkpointIcon(i+1,cp>=i+1),zIndexOffset:500}).addTo(checkpointLayer);m.bindTooltip(`Checkpoint ${i+1}`,{direction:'top',offset:[0,-14],opacity:.95});checkpointMarkers.push(m)});const s=pts[0],e=pts[pts.length-1];L.circleMarker([s.lat,s.lon],{radius:7,color:'#fff',weight:3,fillColor:'#171717',fillOpacity:1}).bindTooltip('Départ',{direction:'top'}).addTo(checkpointLayer);L.circleMarker([e.lat,e.lon],{radius:7,color:'#fff',weight:3,fillColor:'#fc4c02',fillOpacity:1}).bindTooltip('Arrivée',{direction:'top'}).addTo(checkpointLayer)}
 function refreshCheckpointMarkers(){checkpointMarkers.forEach((m,i)=>m.setIcon(checkpointIcon(i+1,cp>=i+1)))}
-function arrowIcon(deg){return L.divIcon({className:'hike-location-arrow',html:`<div class="wazeArrow" style="transform:rotate(${Number(deg)||0}deg)"><div class="wazeArrowHalo"></div><div class="wazeArrowBody"><span></span></div></div>`,iconSize:[64,64],iconAnchor:[32,32]})}
+function arrowIcon(deg){
+  const d=Number.isFinite(Number(deg))?Number(deg):0;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+    <circle cx="36" cy="36" r="30" fill="#4b9cff" fill-opacity=".13"/>
+    <circle cx="36" cy="36" r="27" fill="none" stroke="#fff" stroke-width="4"/>
+    <g transform="rotate(${d} 36 36)" filter="url(#s)">
+      <path d="M36 9 L58 56 L39 47 L36 61 L33 47 L14 56 Z" fill="#1976ed"/>
+      <path d="M36 9 L58 56 L39 47 L36 61 L33 47 L14 56 Z" fill="none" stroke="#0d65d4" stroke-width="1.2"/>
+    </g>
+    <defs><filter id="s" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#0046a0" flood-opacity=".28"/></filter></defs>
+  </svg>`;
+  return L.divIcon({className:'hike-location-arrow',html:svg,iconSize:[72,72],iconAnchor:[36,36]});
+}
 function makeMap(){if(map)return true;if(!window.L)return false;map=L.map('map',{zoomControl:false,attributionControl:true});L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);return true}
 function routeSlice(from,to){const out=[];const a=Math.max(0,Math.min(from,total)),b=Math.max(a,Math.min(to,total));if(!pts.length)return out;out.push([atProg(a).lat,atProg(a).lon]);for(let i=1;i<pts.length-1;i++){if(cum[i]>a&&cum[i]<b)out.push([pts[i].lat,pts[i].lon])}out.push([atProg(b).lat,atProg(b).lon]);return out}
 function updateRouteGuidance(progress){
