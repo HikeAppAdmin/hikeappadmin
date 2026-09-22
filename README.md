@@ -1,17 +1,11 @@
-# HIKE+ V.01 — Version officielle
+# HIKE+ V01.2.7 ADMIN
 
-Version officielle V.01 de HIKE+.
+Base reprise de HIKE+ V01.2.6 sans modification des randonnées existantes.
 
-## Contenu
-- Application HIKE+ en français
-- Navigation GPS HIKE+
-- Départ à 150 m
-- Choix Google Maps / Waze pour rejoindre le départ
-- Pop-ups intégrées à l'application
-- Mode sombre
-- PWA installable
-- Parcours GPX inclus dans `gpx/`
+Ajout uniquement :
+- pack France de 126 vrais tracés GPX intégré ;
+- proposition au menu d'accueil pour décompresser/installer le pack ;
+- après installation, les 126 randonnées apparaissent dans la carte et la recherche ;
+- les GPX du pack sont conservés dans `gpx/france/`.
 
-## Déploiement GitHub Pages
-Publier le contenu de ce dossier à la racine du dépôt GitHub Pages.
-Le dossier `gpx/` doit rester au même niveau que `index.html`.
+Le pack est intégré à cette version : aucune commande CMD ni téléchargement supplémentaire n'est nécessaire.
