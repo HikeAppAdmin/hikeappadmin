@@ -284,10 +284,10 @@ html:not(.darkMode){color-scheme:light!important;}
 
 /* Curseur GPS style Waze */
 .hike-location-arrow{background:transparent!important;border:0!important}
-.wazeArrow{position:relative;width:64px;height:64px;display:grid;place-items:center;transform-origin:center;transition:transform .2s ease;filter:drop-shadow(0 2px 4px rgba(0,0,0,.24))}
-.wazeArrowHalo{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(64,150,255,.13);box-shadow:0 0 0 3px rgba(255,255,255,.96),0 0 0 10px rgba(64,150,255,.09)}
-.wazeArrowBody{position:relative;width:39px;height:49px;background:linear-gradient(160deg,#338ff7 0%,#0871e9 72%);clip-path:polygon(50% 0%,100% 91%,56% 72%,50% 100%,44% 72%,0% 91%);border-radius:7px;box-shadow:0 2px 6px rgba(0,70,160,.34)}
-.wazeArrowBody:before{content:'';position:absolute;left:50%;top:7px;transform:translateX(-50%);width:3px;height:26px;border-radius:99px;background:rgba(255,255,255,.16)}
+.wazeArrow{position:relative;width:48px;height:48px;display:grid;place-items:center;transform-origin:center;transition:transform .15s ease;filter:drop-shadow(0 1px 3px rgba(0,0,0,.22))}
+.wazeArrowHalo{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(64,150,255,.12);box-shadow:0 0 0 2.5px rgba(255,255,255,.96),0 0 0 7px rgba(64,150,255,.07)}
+.wazeArrowBody{position:relative;width:27px;height:34px;background:linear-gradient(160deg,#338ff7 0%,#0871e9 72%);clip-path:polygon(50% 0%,100% 91%,56% 72%,50% 100%,44% 72%,0% 91%);border-radius:5px;box-shadow:0 1px 4px rgba(0,70,160,.30)}
+.wazeArrowBody:before{content:'';position:absolute;left:50%;top:5px;transform:translateX(-50%);width:2px;height:18px;border-radius:99px;background:rgba(255,255,255,.16)}
 .wazeArrowBody span{display:none}
 .sheetMeta{display:none!important;}\n</style>
 
@@ -624,13 +624,49 @@ $('regAvatarFile').onchange=e=>{const f=e.target.files?.[0];if(!f)return;fileToA
 function findProfileByEmail(email){const target=email.trim().toLowerCase();return Object.keys(db.profiles).find(k=>(db.profiles[k].email||'').toLowerCase()===target)}
 $('authForm').onsubmit=e=>{e.preventDefault();const email=$('email').value.trim().toLowerCase();if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return toast('Entre une adresse e-mail valide');const password=mode==='register'?$('password').value:$('passwordLogin').value;if(password.length<6)return toast('Le mot de passe doit contenir au moins 6 caractères');if(mode==='register'){const pseudo=$('pseudo').value.trim();const confirm=$('passwordConfirm').value;if(!pseudo||pseudo.length<2)return toast('Choisis un pseudo d’au moins 2 caractères');if(password!==confirm)return toast('Les mots de passe ne correspondent pas');if(findProfileByEmail(email))return toast('Cette adresse e-mail est déjà utilisée');const avatarFile=$('regAvatarFile').files?.[0];const create=avatar=>{const key=email;db.profiles[key]={name:pseudo,email,password,xp:0,level:1,hikes:[],tutorialSeen:false,avatar:avatar||'',darkMode:false,certified:false,grades:[],countdownDuration:20,language:'fr',feedbackAnswered:false,feedback:null};db.current=key;persist();enter(true)};if(avatarFile){fileToAvatarDataURL(avatarFile,create)}else create('')}else{const key=findProfileByEmail(email);if(!key)return toast('Aucun compte trouvé avec cet e-mail');const p=db.profiles[key];if(p.password!==password)return toast('Mot de passe incorrect');db.current=key;persist();enter()}};
 let exploreAccuracyCircle=null;let exploreLocationRequested=false;
+let lastExploreFix=null;
+let deviceHeading=null;
+let deviceHeadingListening=false;
+function normalizeHeading(v){const n=Number(v);if(!Number.isFinite(n))return null;return ((n%360)+360)%360}
+function enableDeviceHeading(){
+  if(deviceHeadingListening)return;
+  deviceHeadingListening=true;
+  const handler=e=>{
+    let h=null;
+    if(Number.isFinite(e.webkitCompassHeading)) h=normalizeHeading(e.webkitCompassHeading);
+    else if(Number.isFinite(e.alpha)) h=normalizeHeading(360-e.alpha);
+    if(h!==null){deviceHeading=h;
+      if(window.hikeCurrentPosition && exploreMap) updateExploreUserPosition(window.hikeCurrentPosition);
+    }
+  };
+  try{
+    if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
+      DeviceOrientationEvent.requestPermission().then(r=>{if(r==='granted')window.addEventListener('deviceorientation',handler,true)}).catch(()=>{});
+    }else if('ondeviceorientationabsolute' in window){window.addEventListener('deviceorientationabsolute',handler,true)}
+    else window.addEventListener('deviceorientation',handler,true);
+  }catch(e){}
+}
+function positionHeading(pos,previous){
+  const gps=normalizeHeading(pos?.coords?.heading);
+  if(gps!==null)return gps;
+  if(deviceHeading!==null)return deviceHeading;
+  if(previous){
+    const a=Number(previous.lat),b=Number(previous.lon),c=Number(pos.coords.latitude),d=Number(pos.coords.longitude);
+    const dy=Math.sin((d-b)*Math.PI/180)*Math.cos(c*Math.PI/180);
+    const dx=Math.cos(a*Math.PI/180)*Math.sin(c*Math.PI/180)-Math.sin(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.cos((d-b)*Math.PI/180);
+    const h=Math.atan2(dy,dx)*180/Math.PI;
+    if(Math.hypot(c-a,d-b)>0.00001)return normalizeHeading(h);
+  }
+  return 0;
+}
 function updateExploreUserPosition(pos){
   if(!pos?.coords)return;
   window.hikeCurrentPosition=pos;
   const lat=Number(pos.coords.latitude),lon=Number(pos.coords.longitude);
   if(!Number.isFinite(lat)||!Number.isFinite(lon)||!exploreMap||!window.L)return;
   const p=[lat,lon];
-  const heading=Number.isFinite(pos.coords.heading)&&pos.coords.heading>=0?pos.coords.heading:0;
+  const heading=positionHeading(pos,lastExploreFix);
+  lastExploreFix={lat,lon};
   if(exploreUserMarker){
     exploreUserMarker.setLatLng(p).setIcon(arrowIcon(heading));
     try{exploreUserMarker.setZIndexOffset(5000);exploreUserMarker.bringToFront()}catch(e){}
@@ -783,6 +819,7 @@ function startSelectedHike(h){
 }
 function drawExploreMarkers(){if(!exploreMap||!window.L)return;exploreMarkers.forEach(m=>exploreMap.removeLayer(m));exploreMarkers=[];const arr=mancheFiltered();arr.forEach(h=>{const m=L.marker([h.lat,h.lon],{icon:markerIcon(h),title:h.name}).addTo(exploreMap);m.on('click',()=>openHikeSheet(h));exploreMarkers.push(m)});$('exploreCount').textContent=`${arr.length} randonnée${arr.length>1?'s':''} affichée${arr.length>1?'s':''}`;}
 function locateExplore(){
+  enableDeviceHeading();
   if(!navigator.geolocation)return toast('GPS indisponible sur cet appareil');
   const opts={enableHighAccuracy:true,maximumAge:0,timeout:20000};
   navigator.geolocation.getCurrentPosition(pos=>{
@@ -994,16 +1031,16 @@ function drawCheckpoints(){if(checkpointLayer){checkpointLayer.clearLayers()}els
 function refreshCheckpointMarkers(){checkpointMarkers.forEach((m,i)=>m.setIcon(checkpointIcon(i+1,cp>=i+1)))}
 function arrowIcon(deg){
   const d=Number.isFinite(Number(deg))?Number(deg):0;
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
-    <circle cx="36" cy="36" r="30" fill="#4b9cff" fill-opacity=".13"/>
-    <circle cx="36" cy="36" r="27" fill="none" stroke="#fff" stroke-width="4"/>
-    <g transform="rotate(${d} 36 36)" filter="url(#s)">
-      <path d="M36 9 L58 56 L39 47 L36 61 L33 47 L14 56 Z" fill="#1976ed"/>
-      <path d="M36 9 L58 56 L39 47 L36 61 L33 47 L14 56 Z" fill="none" stroke="#0d65d4" stroke-width="1.2"/>
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+    <circle cx="24" cy="24" r="20" fill="#4b9cff" fill-opacity=".12"/>
+    <circle cx="24" cy="24" r="18" fill="none" stroke="#fff" stroke-width="2.5"/>
+    <g transform="rotate(${d} 24 24)" filter="url(#s)">
+      <path d="M24 6 L39 37 L26 31 L24 42 L22 31 L9 37 Z" fill="#1976ed"/>
+      <path d="M24 6 L39 37 L26 31 L24 42 L22 31 L9 37 Z" fill="none" stroke="#0d65d4" stroke-width=".9"/>
     </g>
-    <defs><filter id="s" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#0046a0" flood-opacity=".28"/></filter></defs>
+    <defs><filter id="s" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1" stdDeviation="1.4" flood-color="#0046a0" flood-opacity=".25"/></filter></defs>
   </svg>`;
-  return L.divIcon({className:'hike-location-arrow',html:svg,iconSize:[72,72],iconAnchor:[36,36]});
+  return L.divIcon({className:'hike-location-arrow',html:svg,iconSize:[48,48],iconAnchor:[24,24]});
 }
 function makeMap(){if(map)return true;if(!window.L)return false;map=L.map('map',{zoomControl:false,attributionControl:true});L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);return true}
 function routeSlice(from,to){const out=[];const a=Math.max(0,Math.min(from,total)),b=Math.max(a,Math.min(to,total));if(!pts.length)return out;out.push([atProg(a).lat,atProg(a).lon]);for(let i=1;i<pts.length-1;i++){if(cum[i]>a&&cum[i]<b)out.push([pts[i].lat,pts[i].lon])}out.push([atProg(b).lat,atProg(b).lon]);return out}
@@ -1025,7 +1062,7 @@ function updateRouteGuidance(progress){
   if(routeDone)routeDone.bringToBack();
 }
 function drawRoute(){if(route)map.removeLayer(route);if(routeDone)map.removeLayer(routeDone);if(guidanceLine)map.removeLayer(guidanceLine);route=null;routeDone=null;guidanceLine=null;route=L.polyline(pts.map(p=>[p.lat,p.lon]),{color:'#fc4c02',weight:7,opacity:.98,lineCap:'round',lineJoin:'round'}).addTo(map);routeDone=L.polyline([], {color:'#9aa0a0',weight:5,opacity:.45,lineCap:'round',lineJoin:'round'}).addTo(map);guidanceLine=L.polyline([], {color:'#fff',weight:11,opacity:.9,dashArray:'2 13',lineCap:'round',lineJoin:'round',interactive:false}).addTo(map);drawCheckpoints();map.fitBounds(route.getBounds(),{padding:[70,130]})}
-function marker(p,heading){if(userMarker)userMarker.setLatLng([p.lat,p.lon]).setIcon(arrowIcon(heading||0));else userMarker=L.marker([p.lat,p.lon],{icon:arrowIcon(heading||0),zIndexOffset:1000}).addTo(map)}
+function marker(p,heading){const h=normalizeHeading(heading);const d=h===null?(deviceHeading??0):h;if(userMarker)userMarker.setLatLng([p.lat,p.lon]).setIcon(arrowIcon(d));else userMarker=L.marker([p.lat,p.lon],{icon:arrowIcon(d),zIndexOffset:1000}).addTo(map)}
 function angleDelta(a,b){return ((b-a+540)%360)-180}
 function nextTurn(progress){
   if(!pts.length||progress>=total-8)return null;
@@ -1140,7 +1177,7 @@ async function runStartCountdown(duration){const overlay=$('startCountdownOverla
 function formatNavTime(totalSeconds){const s=Math.max(0,Math.floor(Number(totalSeconds)||0));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return h>0?(h+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')):(String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'))}
 const START_RADIUS_METERS=150;
 async function ensureStartRadius(){if(!navigator.geolocation){toast('Le GPS est nécessaire pour commencer la randonnée');return false}let pos=window.hikeCurrentPosition;if(!pos||!pos.coords){try{pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,maximumAge:3000,timeout:15000}))}catch(e){toast(e.code===1?'Autorisez la localisation pour vérifier le départ':'Position GPS indisponible — réessayez');return false}}const current={lat:pos.coords.latitude,lon:pos.coords.longitude};let start=null;if(Number.isFinite(Number(routeData.lat))&&Number.isFinite(Number(routeData.lon)))start={lat:Number(routeData.lat),lon:Number(routeData.lon)};if(!start&&routeData.gpx){try{const r=await fetch(routeData.gpx,{cache:'no-store'});if(!r.ok)throw new Error();const txt=await r.text();const first=parseGPX(txt)[0];if(first)start=first}catch(e){}}if(!start){toast('Point de départ indisponible');return false}const d=hav(current,start);if(d>START_RADIUS_METERS){toast('Tu dois être à moins de 150 m du départ pour commencer la randonnée');clearTimeout(window._returnToHikeChoiceTimer);window._returnToHikeChoiceTimer=setTimeout(()=>{if(!document.getElementById('navScreen')?.classList.contains('active'))render('hikes',true)},4000);return false}return true}
-async function startNav(){if(!(await ensureStartRadius()))return;stopWatch();if(routeData.gpx){try{const r=await fetch(routeData.gpx,{cache:'no-store'});if(!r.ok)throw new Error('GPX '+r.status);GPX=await r.text()}catch(e){toast('Impossible de charger le tracé GPX');return}}prep();if(!makeMap()){$('instruction').textContent='Carte indisponible — recharge la page avec Internet';$('navScreen').classList.add('active');return}$('app').classList.remove('active');$('navScreen').classList.add('active');setTimeout(()=>map.invalidateSize(true),100);traveled=0;dplus=0;best=0;cp=0;lastPos=null;offRouteSince=0;navStarted=false;navCancelling=false;drawRoute();updateRouteGuidance(0);refreshCheckpointMarkers();if(turnMarker){map.removeLayer(turnMarker);turnMarker=null}$('offroute').classList.remove('show');if(userMarker){map.removeLayer(userMarker);userMarker=null}const initialPos=window.hikeCurrentPosition;if(initialPos&&initialPos.coords){const ic=initialPos.coords;const ip={lat:ic.latitude,lon:ic.longitude};const ih=Number.isFinite(ic.heading)&&ic.heading>=0?ic.heading:0;marker(ip,ih);$('gpsAcc').textContent=Number.isFinite(ic.accuracy)?Math.round(ic.accuracy)+' m':'—';}cpbar();$('instruction').textContent=t('preparing');$('navStatus').textContent='DÉPART · COMPTE À REBOURS';$('time').textContent='00:00';const duration=[5,10,15,20,30,35,60].includes(Number(user.countdownDuration))?Number(user.countdownDuration):20;await runStartCountdown(duration);navStarted=true;$('instruction').textContent=t('searching');$('navStatus').textContent=t('navigation');startAt=Date.now();timerId=setInterval(()=>{const s=Math.floor((Date.now()-startAt)/1000);$('time').textContent=formatNavTime(s)},500);saveNavSession();if(!navigator.geolocation){gpsError({code:2});return}const opts={enableHighAccuracy:true,maximumAge:0,timeout:15000};navigator.geolocation.getCurrentPosition(onGPS,gpsError,opts);watchId=navigator.geolocation.watchPosition(onGPS,gpsError,opts)}
+async function startNav(){enableDeviceHeading();if(!(await ensureStartRadius()))return;stopWatch();if(routeData.gpx){try{const r=await fetch(routeData.gpx,{cache:'no-store'});if(!r.ok)throw new Error('GPX '+r.status);GPX=await r.text()}catch(e){toast('Impossible de charger le tracé GPX');return}}prep();if(!makeMap()){$('instruction').textContent='Carte indisponible — recharge la page avec Internet';$('navScreen').classList.add('active');return}$('app').classList.remove('active');$('navScreen').classList.add('active');setTimeout(()=>map.invalidateSize(true),100);traveled=0;dplus=0;best=0;cp=0;lastPos=null;offRouteSince=0;navStarted=false;navCancelling=false;drawRoute();updateRouteGuidance(0);refreshCheckpointMarkers();if(turnMarker){map.removeLayer(turnMarker);turnMarker=null}$('offroute').classList.remove('show');if(userMarker){map.removeLayer(userMarker);userMarker=null}const initialPos=window.hikeCurrentPosition;if(initialPos&&initialPos.coords){const ic=initialPos.coords;const ip={lat:ic.latitude,lon:ic.longitude};const ih=Number.isFinite(ic.heading)&&ic.heading>=0?ic.heading:0;marker(ip,ih);$('gpsAcc').textContent=Number.isFinite(ic.accuracy)?Math.round(ic.accuracy)+' m':'—';}cpbar();$('instruction').textContent=t('preparing');$('navStatus').textContent='DÉPART · COMPTE À REBOURS';$('time').textContent='00:00';const duration=[5,10,15,20,30,35,60].includes(Number(user.countdownDuration))?Number(user.countdownDuration):20;await runStartCountdown(duration);navStarted=true;$('instruction').textContent=t('searching');$('navStatus').textContent=t('navigation');startAt=Date.now();timerId=setInterval(()=>{const s=Math.floor((Date.now()-startAt)/1000);$('time').textContent=formatNavTime(s)},500);saveNavSession();if(!navigator.geolocation){gpsError({code:2});return}const opts={enableHighAccuracy:true,maximumAge:0,timeout:15000};navigator.geolocation.getCurrentPosition(onGPS,gpsError,opts);watchId=navigator.geolocation.watchPosition(onGPS,gpsError,opts)}
 const NAV_SESSION_KEY='hikeplus_nav_session_v1';
 function saveNavSession(){try{const active=document.getElementById('navScreen')?.classList.contains('active');if(!active){localStorage.removeItem(NAV_SESSION_KEY);return}localStorage.setItem(NAV_SESSION_KEY,JSON.stringify({active:true,name:routeData.name,distance:routeData.distance,dplusMeta:routeData.dplus,gpx:routeData.gpx,startAt,traveled,dplus,best,cp,navStarted,simulating,lastPos,offRouteSince,savedAt:Date.now()}))}catch(e){console.warn('HIKE+: session navigation non sauvegardée',e)}}
 function clearNavSession(){try{localStorage.removeItem(NAV_SESSION_KEY)}catch(e){}}
