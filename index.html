@@ -967,6 +967,31 @@ let homeRecommendation=null;
 let homeRecommendationDeadline=0;
 let homeRecommendationTimer=null;
 const HOME_RECOMMENDATION_INTERVAL=5*60*1000;
+const HOME_RECOMMENDATION_STATE_KEY='hikeplus_home_recommendation_v2';
+function saveHomeRecommendationState(){
+  try{
+    localStorage.setItem(HOME_RECOMMENDATION_STATE_KEY,JSON.stringify({
+      deadline:Number(homeRecommendationDeadline)||0,
+      name:homeRecommendation?.name||'',
+      savedAt:Date.now()
+    }));
+  }catch(e){}
+}
+function loadHomeRecommendationState(){
+  try{
+    const raw=localStorage.getItem(HOME_RECOMMENDATION_STATE_KEY);
+    if(!raw)return false;
+    const st=JSON.parse(raw)||{};
+    const deadline=Number(st.deadline)||0;
+    if(deadline<=Date.now())return false;
+    homeRecommendationDeadline=deadline;
+    if(st.name){
+      const found=MANCHE_HIKES.find(h=>h&&h.name===st.name);
+      if(found)homeRecommendation=found;
+    }
+    return true;
+  }catch(e){return false}
+}
 function recommendationCandidates(){
   const pos=window.hikeCurrentPosition?.coords;
   if(!pos)return [];
@@ -993,10 +1018,14 @@ function formatRecommendationCountdown(){
   return `Nouvelle dans ${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
 }
 function updateRecommendationTimer(){
-  if(homeRecommendationDeadline<=0)homeRecommendationDeadline=Date.now()+HOME_RECOMMENDATION_INTERVAL;
+  if(homeRecommendationDeadline<=0){
+    homeRecommendationDeadline=Date.now()+HOME_RECOMMENDATION_INTERVAL;
+    saveHomeRecommendationState();
+  }
   if(Date.now()>=homeRecommendationDeadline){
     homeRecommendationDeadline=Date.now()+HOME_RECOMMENDATION_INTERVAL;
     chooseHomeRecommendation();
+    saveHomeRecommendationState();
     updateHomeRecommendation();
   }
   const el=$('homeRecTimer');
@@ -1014,7 +1043,10 @@ function bindHomeRecommendation(){
 function updateHomeRecommendation(force=false){
   const card=$('homeRecommendationCard');
   if(!card)return;
-  if(force||!homeRecommendation)chooseHomeRecommendation();
+  if(force&&!loadHomeRecommendationState())chooseHomeRecommendation();
+  else if(!homeRecommendation)chooseHomeRecommendation();
+  if(homeRecommendationDeadline<=0)homeRecommendationDeadline=Date.now()+HOME_RECOMMENDATION_INTERVAL;
+  saveHomeRecommendationState();
   const rec=homeRecommendation;
   if(!rec){
     card.innerHTML='<div class="refRecBody"><h3>Recherche autour de vous…</h3><p>Autorisez la localisation pour afficher une randonnée située à moins de 100 km.</p></div>';
@@ -1025,6 +1057,7 @@ function updateHomeRecommendation(force=false){
   const timer=$('homeRecTimer');if(timer)timer.textContent=formatRecommendationCountdown();
 }
 function startHomeRecommendationTimer(){
+  loadHomeRecommendationState();
   if(!homeRecommendationDeadline)homeRecommendationDeadline=Date.now()+HOME_RECOMMENDATION_INTERVAL;
   clearInterval(homeRecommendationTimer);
   homeRecommendationTimer=setInterval(updateRecommendationTimer,1000);
