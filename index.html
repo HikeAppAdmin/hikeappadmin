@@ -494,10 +494,6 @@ html.darkMode, html.darkMode body { background-color:#101210 !important; }
 .darkMode #feedbackModal .feedbackHeader{background:linear-gradient(180deg,#251d19 0%,#181b18 100%)!important;border-color:#30352f!important}
 @media(max-width:480px){#feedbackModal{padding:10px!important}#feedbackModal .feedbackCard{width:100%!important;max-height:calc(100dvh - 20px)!important;border-radius:22px!important}#feedbackModal .feedbackHeader{padding:19px 18px 16px!important}#feedbackModal .feedbackContent{padding:2px 18px 18px!important}#feedbackModal .feedbackActions{padding:12px 18px 15px!important}}
 </style>
-<style id="hike-location-fix">
-.exploreLocate{touch-action:manipulation;position:relative;z-index:1001}
-.exploreLocate:disabled{opacity:.65;transform:scale(.96)}
-</style>
 </head>
 <body>
 
@@ -627,17 +623,31 @@ $('regAvatarBtn').onclick=()=>$('regAvatarFile').click();
 $('regAvatarFile').onchange=e=>{const f=e.target.files?.[0];if(!f)return;fileToAvatarDataURL(f,data=>{$('regAvatarPreview').innerHTML=`<img src="${data}" alt="">`})};
 function findProfileByEmail(email){const target=email.trim().toLowerCase();return Object.keys(db.profiles).find(k=>(db.profiles[k].email||'').toLowerCase()===target)}
 $('authForm').onsubmit=e=>{e.preventDefault();const email=$('email').value.trim().toLowerCase();if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return toast('Entre une adresse e-mail valide');const password=mode==='register'?$('password').value:$('passwordLogin').value;if(password.length<6)return toast('Le mot de passe doit contenir au moins 6 caractères');if(mode==='register'){const pseudo=$('pseudo').value.trim();const confirm=$('passwordConfirm').value;if(!pseudo||pseudo.length<2)return toast('Choisis un pseudo d’au moins 2 caractères');if(password!==confirm)return toast('Les mots de passe ne correspondent pas');if(findProfileByEmail(email))return toast('Cette adresse e-mail est déjà utilisée');const avatarFile=$('regAvatarFile').files?.[0];const create=avatar=>{const key=email;db.profiles[key]={name:pseudo,email,password,xp:0,level:1,hikes:[],tutorialSeen:false,avatar:avatar||'',darkMode:false,certified:false,grades:[],countdownDuration:20,language:'fr',feedbackAnswered:false,feedback:null};db.current=key;persist();enter(true)};if(avatarFile){fileToAvatarDataURL(avatarFile,create)}else create('')}else{const key=findProfileByEmail(email);if(!key)return toast('Aucun compte trouvé avec cet e-mail');const p=db.profiles[key];if(p.password!==password)return toast('Mot de passe incorrect');db.current=key;persist();enter()}};
-function updateExploreUserPosition(pos){window.hikeCurrentPosition=pos;const p=[pos.coords.latitude,pos.coords.longitude];if(!exploreMap||!window.L)return;const heading=Number.isFinite(pos.coords.heading)&&pos.coords.heading>=0?pos.coords.heading:0;if(exploreUserMarker)exploreUserMarker.setLatLng(p).setIcon(arrowIcon(heading));else exploreUserMarker=L.marker(p,{icon:arrowIcon(heading),zIndexOffset:2000}).addTo(exploreMap);}
+let exploreAccuracyCircle=null;let exploreLocationRequested=false;
+function updateExploreUserPosition(pos){
+  if(!pos?.coords)return;
+  window.hikeCurrentPosition=pos;
+  const lat=Number(pos.coords.latitude),lon=Number(pos.coords.longitude);
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)||!exploreMap||!window.L)return;
+  const p=[lat,lon];
+  const heading=Number.isFinite(pos.coords.heading)&&pos.coords.heading>=0?pos.coords.heading:0;
+  if(exploreUserMarker) exploreUserMarker.setLatLng(p).setIcon(arrowIcon(heading));
+  else exploreUserMarker=L.marker(p,{icon:arrowIcon(heading),zIndexOffset:2000}).addTo(exploreMap);
+  const accuracy=Number(pos.coords.accuracy)||0;
+  if(accuracy>0){
+    if(exploreAccuracyCircle) exploreAccuracyCircle.setLatLng(p).setRadius(Math.min(accuracy,200));
+    else exploreAccuracyCircle=L.circle(p,{radius:Math.min(accuracy,200),color:'#fc4c02',weight:1,fillColor:'#fc4c02',fillOpacity:.10,interactive:false}).addTo(exploreMap);
+  }
+}
 let initialLocationWatchId=null;
 function requestInitialLocation(){
   if(!navigator.geolocation)return;
+  if(exploreLocationRequested)return;
+  exploreLocationRequested=true;
   const opts={enableHighAccuracy:true,maximumAge:0,timeout:20000};
-  navigator.geolocation.getCurrentPosition(updateExploreUserPosition,()=>{},opts);
-}
-function stopInitialLocationWatch(){
-  if(initialLocationWatchId!==null&&navigator.geolocation){
-    try{navigator.geolocation.clearWatch(initialLocationWatchId)}catch(e){}
-    initialLocationWatchId=null;
+  navigator.geolocation.getCurrentPosition(updateExploreUserPosition,()=>{exploreLocationRequested=false;},opts);
+  if(initialLocationWatchId===null){
+    initialLocationWatchId=navigator.geolocation.watchPosition(updateExploreUserPosition,()=>{},opts);
   }
 }
 function enter(afterCreate=false){user=db.profiles[db.current];if(!user)return;user.xp=Math.min(MAX_BETA_XP,Math.max(0,Number(user.xp)||0));user.level=Math.min(MAX_BETA_LEVEL,levelFromXp(user.xp));if(!Array.isArray(user.grades))user.grades=gradeForLevel(user.level||1).map((_,i)=>i);if(![5,10,15,20,30,35,60].includes(Number(user.countdownDuration)))user.countdownDuration=20;user.language='fr';db.profiles[db.current]=user;persist();applyTheme();$('auth').classList.remove('active');$('app').classList.add('active');render('home');requestInitialLocation();if(afterCreate){setTimeout(showTutorial,3900)}}
@@ -769,26 +779,28 @@ function startSelectedHike(h){
 function drawExploreMarkers(){if(!exploreMap||!window.L)return;exploreMarkers.forEach(m=>exploreMap.removeLayer(m));exploreMarkers=[];const arr=mancheFiltered();arr.forEach(h=>{const m=L.marker([h.lat,h.lon],{icon:markerIcon(h),title:h.name}).addTo(exploreMap);m.on('click',()=>openHikeSheet(h));exploreMarkers.push(m)});$('exploreCount').textContent=`${arr.length} randonnée${arr.length>1?'s':''} affichée${arr.length>1?'s':''}`;}
 function locateExplore(){
   if(!navigator.geolocation)return toast('GPS indisponible sur cet appareil');
-  const btn=$('exploreLocate');
-  if(btn){btn.disabled=true;btn.textContent='…';}
-  const done=()=>{if(btn){btn.disabled=false;btn.textContent='⌖';}};
+  const opts={enableHighAccuracy:true,maximumAge:0,timeout:20000};
   navigator.geolocation.getCurrentPosition(pos=>{
     updateExploreUserPosition(pos);
     const p=[pos.coords.latitude,pos.coords.longitude];
-    if(exploreMap)exploreMap.setView(p,16,{animate:true});
-    toast('Position GPS affichée');
-    done();
+    if(exploreMap){exploreMap.setView(p,15,{animate:true});toast('Votre position est affichée')}
   },err=>{
-    done();
-    const msg=err&&err.code===1
-      ?'Autorise la localisation pour HIKE+ dans les réglages de ton navigateur'
-      :err&&err.code===3
-        ?'GPS trop long à répondre — réessaie à l’extérieur'
-        :'Position GPS indisponible — réessaie';
+    const msg=err?.code===1?'Autorisation de localisation refusée':err?.code===2?'Position GPS indisponible':'Localisation trop longue';
     toast(msg);
-  },{enableHighAccuracy:true,maximumAge:0,timeout:20000});
+  },opts);
+  if(initialLocationWatchId===null)initialLocationWatchId=navigator.geolocation.watchPosition(updateExploreUserPosition,()=>{},opts);
 }
-function initExploreMap(){if(!window.L)return loadLeafletFallback();const container=$("exploreMap");if(!container)return;if(exploreMap){const oldContainer=exploreMap.getContainer?.();if(oldContainer!==container){try{exploreMap.remove()}catch(e){}exploreMap=null;exploreMarkers=[];exploreUserMarker=null;exploreSelected=null}}if(exploreMap){setTimeout(()=>{try{exploreMap.invalidateSize(true)}catch(e){}},50);drawExploreMarkers();if(window.hikeCurrentPosition)updateExploreUserPosition(window.hikeCurrentPosition);return}exploreMap=L.map(container,{zoomControl:true,attributionControl:true}).setView([49.63,-1.55],10);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(exploreMap);drawExploreMarkers();if(window.hikeCurrentPosition)updateExploreUserPosition(window.hikeCurrentPosition);setTimeout(()=>{try{exploreMap.invalidateSize(true)}catch(e){}},100);}
+function initExploreMap(){
+  if(!window.L)return loadLeafletFallback();
+  const container=$("exploreMap");if(!container)return;
+  if(exploreMap){const oldContainer=exploreMap.getContainer?.();if(oldContainer!==container){try{exploreMap.remove()}catch(e){}exploreMap=null;exploreMarkers=[];exploreUserMarker=null;exploreAccuracyCircle=null;exploreSelected=null}}
+  if(exploreMap){setTimeout(()=>{try{exploreMap.invalidateSize(true)}catch(e){}},50);drawExploreMarkers();if(window.hikeCurrentPosition)updateExploreUserPosition(window.hikeCurrentPosition);else requestInitialLocation();return}
+  exploreMap=L.map(container,{zoomControl:true,attributionControl:true}).setView([49.63,-1.55],10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(exploreMap);
+  drawExploreMarkers();
+  if(window.hikeCurrentPosition)updateExploreUserPosition(window.hikeCurrentPosition);else requestInitialLocation();
+  setTimeout(()=>{try{exploreMap.invalidateSize(true)}catch(e){}},100);
+}
 let countdownTimer=null;function updateCountdown(){}
 function showTutorial(){
   let step=0;
