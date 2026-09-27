@@ -1354,22 +1354,19 @@ function hikeSocialInitials(name){return String(name||'?').split(/\s+/).map(x=>x
 function hikeSocialAvatar(profile){
   return profile.avatar?`<img src="${profile.avatar}" alt="">`:`<span>${hikeSocialInitials(profile.name)}</span>`;
 }
-function hikeSocialRenderComment(c){return `<div class="socialComment"><b>${c[0]}</b> ${c[1]}</div>`}
+function hikeSocialRenderComment(c){const certified=Array.isArray(c)&&c[2]===true;return `<div class="socialComment"><b>${c[0]}</b>${certified?'<span class="certBadge small" title="Profil certifié">✓</span>':''} ${c[1]}</div>`}
 function hikeSocialRender(db){
   const posts=[...db.posts].sort((a,b)=>b.id.localeCompare(a.id));
-  const hikeOptions=HIKE_SOCIAL_TEST_HIKES.map(h=>`<option>${h}</option>`).join('');
   return `<div class="socialWrap">
     <div class="socialHead">
       <div><div class="socialEyebrow">HIKE+ · Communauté</div><h1>Le fil des randonneurs</h1></div>
-      <span class="socialBadge">TEST · ${db.profiles.length} profils</span>
     </div>
     <div class="socialComposer">
       <div class="socialComposerTop">
         <div class="socialAvatar">${user?.avatar?`<img src="${user.avatar}" alt="">`:hikeSocialInitials(user?.name||'Moi')}</div>
-        <div style="flex:1"><b>Publier une sortie</b><div style="font-size:10px;color:#858a84;margin-top:2px">Photo + randonnée + message</div></div>
+        <div style="flex:1"><b>Publier une sortie</b><div style="font-size:10px;color:#858a84;margin-top:2px">Photo + message</div></div>
       </div>
       <textarea id="socialCaptionInput" placeholder="Raconte ta randonnée…"></textarea>
-      <select id="socialHikeSelect">${hikeOptions}</select>
       <input id="socialPhotoInput" type="file" accept="image/*" capture="environment" hidden>
       <div class="socialPhotoPreview" id="socialPhotoPreview"><img id="socialPhotoPreviewImg" alt="Aperçu"></div>
       <div class="socialComposerActions">
@@ -1385,10 +1382,10 @@ function hikeSocialRender(db){
         return `<article class="socialPost" data-social-post="${p.id}">
           <div class="socialPostHead">
             <div class="socialAvatar">${hikeSocialAvatar(prof)}</div>
-            <div style="min-width:0;flex:1"><div class="socialPostName">${prof.name}</div><div class="socialPostMeta">${prof.city} · il y a ${i+1} h</div></div>
+            <div style="min-width:0;flex:1"><div class="socialPostName">${prof.name}${p.profile==='self' && user?.certified?'<span class="certBadge small" title="Profil certifié">✓</span>':''}</div><div class="socialPostMeta">${prof.city} · il y a ${i+1} h</div></div>
           </div>
-          <div style="padding:0 15px 9px"><div class="socialPostHike">🥾 ${p.hike}</div></div>
-          <img class="socialPostPhoto" src="${p.photo}" alt="Photo publiée pour ${p.hike}" loading="lazy">
+          ${p.hike?`<div style="padding:0 15px 9px"><div class="socialPostHike">🥾 ${p.hike}</div></div>`:''}
+          <img class="socialPostPhoto" src="${p.photo}" alt="Photo publiée par ${prof.name}" loading="lazy">
           <div class="socialPostBody">
             <div class="socialCaption">${p.caption}</div>
             <div class="socialStats"><span>❤️ ${likeCount}</span><span>💬 ${p.comments.length}</span></div>
@@ -1416,9 +1413,8 @@ function hikeSocialBind(){
   };
   if($('socialPublish'))$('socialPublish').onclick=()=>{
     const caption=String($('socialCaptionInput').value||'').trim();
-    const hike=String($('socialHikeSelect').value||'');
     if(!caption&&!selectedPhoto){toast('Ajoute une photo ou un message.');return}
-    db.posts.unshift({id:'u'+Date.now(),profile:'self',hike,photo:selectedPhoto||HIKE_SOCIAL_PHOTOS[0],caption:caption||'Nouvelle sortie 🥾',likes:0,comments:[]});
+    db.posts.unshift({id:'u'+Date.now(),profile:'self',hike:'',photo:selectedPhoto||HIKE_SOCIAL_PHOTOS[0],caption:caption||'Nouvelle sortie 🥾',likes:0,comments:[]});
     if(!db.profiles.some(p=>p.id==='self'))db.profiles.unshift({id:'self',name:user?.name||'Moi',avatar:user?.avatar||'',city:'Ma communauté'});
     hikeSocialSave(db);render('community',true);toast('Publication ajoutée');
   };
@@ -1432,7 +1428,7 @@ function hikeSocialBind(){
     const text=prompt('Ton commentaire :');
     if(!text?.trim())return;
     const p=db.posts.find(x=>x.id===id);if(!p)return;
-    p.comments.push([user?.name||'Moi',text.trim()]);
+    p.comments.push([user?.name||'Moi',text.trim(),true]);
     hikeSocialSave(db);render('community',true);
   });
 }
