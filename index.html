@@ -587,19 +587,19 @@ html.darkMode, html.darkMode body { background-color:#101210 !important; }
 #hikeplusMaintenanceOverlay{position:fixed;inset:0;z-index:2147483647;display:none;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:rgba(8,15,30,.97);color:#fff;text-align:center;font-family:inherit}
 #hikeplusMaintenanceOverlay.show{display:flex}
 #hikeplusMaintenanceOverlay .hm-card{width:min(560px,100%);padding:34px 28px;border-radius:22px;background:#111c31;box-shadow:0 20px 70px rgba(0,0,0,.45)}
-#hikeplusMaintenanceOverlay .hm-icon{font-size:46px;margin-bottom:12px}
+#hikeplusMaintenanceOverlay .hm-logo{display:block;width:96px;height:96px;object-fit:contain;margin:0 auto 18px;border-radius:20px}\n#hikeplusMaintenanceOverlay .hm-icon{font-size:46px;margin-bottom:12px}
 #hikeplusMaintenanceOverlay h1{margin:0 0 12px;font-size:26px}
 #hikeplusMaintenanceOverlay p{margin:0;line-height:1.55;opacity:.9}
 </style>
 <div id="hikeplusMaintenanceOverlay" role="dialog" aria-modal="true">
-<div class="hm-card"><div class="hm-icon">🔧</div><h1>HIKE+ est actuellement en maintenance</h1><p>L'application est temporairement indisponible.<br>Nous effectuons actuellement une maintenance afin d'améliorer votre expérience.<br><br>Merci de patienter et de réessayer plus tard.</p></div>
+<div class="hm-card"><img class="hm-logo" src="hike-logo.png" alt="HIKE+"><div class="hm-icon">🔧</div><h1>HIKE+ est actuellement en maintenance</h1><p>L'application est temporairement indisponible.<br>Nous effectuons actuellement une maintenance afin d'améliorer votre expérience.<br><br>Merci de patienter et de réessayer plus tard.</p></div>
 </div>
 <script>
 /* HIKEPLUS_AUTO_MAINTENANCE_V1: 27/09/2026 13:05-13:10 Europe/Paris */
 (function(){
 const START=Date.parse('2026-09-27T13:05:00+02:00');
 const END=Date.parse('2026-09-27T13:10:00+02:00');
-function update(){const active=Date.now()>=START&&Date.now()<END;const el=document.getElementById('hikeplusMaintenanceOverlay');if(el)el.classList.toggle('show',active);document.documentElement.style.overflow=active?'hidden':'';if(document.body)document.body.style.overflow=active?'hidden':'';}
+function update(){const scheduled=Date.now()>=START&&Date.now()<END;let inHike=false;try{inHike=!!(localStorage.getItem('hikeplus_active_hike')||localStorage.getItem('activeHike')||localStorage.getItem('hikeActive'));}catch(e){};const active=scheduled&&!inHike;const el=document.getElementById('hikeplusMaintenanceOverlay');if(el)el.classList.toggle('show',active);document.documentElement.style.overflow=active?'hidden':'';if(document.body)document.body.style.overflow=active?'hidden':'';}
 update();setInterval(update,1000);
 })();
 </script>
