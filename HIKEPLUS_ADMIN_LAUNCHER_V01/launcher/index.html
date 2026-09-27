@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>HIKE+ Admin</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(160deg,#07101f,#101d34);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:min(430px,100%);padding:30px 22px;border-radius:28px;background:rgba(20,32,54,.92);box-shadow:0 25px 80px #0008;text-align:center}
+.logo{width:92px;height:92px;object-fit:contain;border-radius:22px;margin-bottom:14px}
+h1{font-size:29px;margin:4px 0 4px}.sub{opacity:.72;margin:0 0 26px}
+.status{padding:12px 14px;border-radius:14px;background:#0d1728;margin-bottom:18px;font-size:14px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#37d67a;margin-right:7px}
+button{width:100%;border:0;border-radius:16px;padding:16px;font-size:17px;font-weight:700;background:#fff;color:#0b1220;cursor:pointer}
+.small{margin-top:18px;font-size:12px;opacity:.5}
+</style>
+</head>
+<body>
+<main class="card">
+<img class="logo" src="hike-logo.png" id="logo" alt="HIKE+">
+<h1>HIKE+ Admin</h1>
+<p class="sub">Launcher administrateur</p>
+<div class="status"><span class="dot"></span><span id="status">Vérification...</span></div>
+<button id="open">Ouvrir HIKE+ Admin</button>
+<div class="small" id="version">Launcher V01.0</div>
+</main>
+<script>
+const ADMIN_URL = '../admin/index.html';
+const MAINT_START = Date.parse('2026-09-27T13:05:00+02:00');
+const MAINT_END   = Date.parse('2026-09-27T13:10:00+02:00');
+const statusEl=document.getElementById('status'), btn=document.getElementById('open');
+function update(){
+  const maintenance=Date.now()>=MAINT_START && Date.now()<MAINT_END;
+  if(maintenance){statusEl.textContent='Maintenance en cours';btn.disabled=true;btn.style.opacity='.45';}
+  else{statusEl.textContent='Application disponible';btn.disabled=false;btn.style.opacity='1';}
+}
+btn.onclick=()=>{if(!btn.disabled) location.href=ADMIN_URL};
+update();setInterval(update,1000);
+</script>
+</body>
+</html>
