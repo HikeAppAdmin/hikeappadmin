@@ -1,5 +1,5 @@
 {
-  "name": "HIKE+ · V.01",
+  "name": "HIKE+ · 31 jours",
   "short_name": "HIKE+",
   "start_url": "./index.html",
   "scope": "./",
@@ -15,5 +15,5 @@
       "purpose": "any maskable"
     }
   ],
-  "description": "HIKE+ · Application de randonnée · Navigation · Progression"
+  "description": "HIKE+ · Bêta ouverte · Randonnée · Navigation · Progression · Météo"
 }

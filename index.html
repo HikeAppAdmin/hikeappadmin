@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#101210"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default" id="appleStatusBarStyle"><meta name="color-scheme" content="light dark">
-<link rel="manifest" href="manifest.json"><title>HIKE+ · Pré-bêta</title>
+<link rel="manifest" href="manifest.json"><title>HIKE+ · Bêta ouverte</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
 :root{--bg:#f6f6f3;--card:#fff;--ink:#151515;--muted:#777;--line:#e3e3df;--orange:#fc4c02;--danger:#d52f3e}
@@ -115,400 +115,34 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro D
 .offroute.show{animation:offrouteIn .28s ease both}.offroute{line-height:1.3}.offroute small{display:block;font-size:9px;font-weight:700;opacity:.86;margin-top:3px}@keyframes offrouteIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 .todoGrid{display:grid;gap:12px}.todoCard{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 26px #00000008}.todoPhoto{height:150px;background:center/cover no-repeat}.todoBody{padding:14px}.todoBody h3{margin:0 0 5px;font-size:16px}.todoBody p{margin:0;color:#777;font-size:11px}.todoActions{display:flex;gap:8px;margin-top:11px}.todoActions button{flex:1;border:0;border-radius:9px;padding:10px;font-weight:900}.todoActions .todoGo{background:#171717;color:#fff}.todoDone{font-size:9px;color:#16844f;font-weight:900;margin-top:7px}
 
-/* HIKE+ — LES 30 JOURS — ADMIN TEST */
-.days30Wrap{max-width:850px;margin:0 auto;padding:0 0 48px}
-.days30Hero{position:relative;overflow:hidden;border-radius:24px;padding:22px;color:#fff;background:linear-gradient(145deg,#173f2f,#2c694f);box-shadow:0 12px 30px rgba(20,61,45,.16)}
-.days30Eyebrow{font-size:10px;font-weight:950;letter-spacing:.16em;opacity:.72;text-transform:uppercase}
-.days30Hero h1{margin:6px 0 5px;font-size:clamp(28px,7vw,42px);letter-spacing:-1.4px}
-.days30Hero p{margin:0;max-width:620px;font-size:12px;line-height:1.5;opacity:.86}
-.days30Timer{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.11)}
-.days30Timer small{display:block;font-size:9px;opacity:.7;text-transform:uppercase;letter-spacing:.08em}
-.days30Timer b{font-size:22px;letter-spacing:-.5px}
-.days30Xp{font-size:11px;font-weight:900}
-.days30Today{margin-top:12px;border:1px solid #e1e6e0;background:#fff;border-radius:20px;padding:16px;box-shadow:0 8px 24px rgba(22,43,33,.055)}
-.days30TodayHead{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.days30DayTag{font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#6d756f}
-.days30Status{font-size:10px;font-weight:900;border-radius:999px;padding:6px 9px;background:#eef5f0;color:#24563f}
-.days30Status.done{background:#e6f5e9;color:#18703a}
-.days30Status.expired{background:#fff0ed;color:#a33a2c}
-.days30Challenge{margin-top:8px;font-size:23px;font-weight:950;letter-spacing:-.7px}
-.days30Desc{margin-top:5px;font-size:12px;color:#707770;line-height:1.45}
-.days30Progress{height:9px;border-radius:99px;background:#edf0ec;overflow:hidden;margin-top:13px}
-.days30Progress i{display:block;height:100%;width:0;background:#285d48;border-radius:99px;transition:width .3s}
-.days30ProgressMeta{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:#7c837d}
-.days30GridTitle{margin:20px 2px 9px;font-size:13px;font-weight:950}
-.days30Grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
-.days30Cell{min-height:62px;border:1px solid #e1e6e0;border-radius:13px;background:#fff;padding:8px;text-align:left;position:relative}
-.days30Cell .n{font-size:10px;font-weight:950;color:#777f79}
-.days30Cell .ico{font-size:16px;margin-top:5px}
-.days30Cell.locked{opacity:.48}
-.days30Cell.current{border:2px solid #285d48;padding:7px}
-.days30Cell.done{background:#eef8f0;border-color:#bfe2c6}
-.days30Cell.expired{background:#fff6f3;border-color:#f0c9c0}
-.days30Cell .miniXp{position:absolute;right:7px;top:7px;font-size:8px;font-weight:950;color:#6d756f}
-.days30Test{margin-top:12px;border:1px dashed #c9d0ca;border-radius:16px;padding:12px;background:#fafcf9;font-size:11px;color:#697169}
-.days30Test button{margin-top:8px;border:0;border-radius:11px;background:#173f2f;color:#fff;padding:9px 12px;font-weight:900}
-.darkMode .days30Today,.darkMode .days30Cell,.darkMode .days30Test{background:#1b1f1c;color:#eee;border-color:#303631}
-@media(max-width:650px){.days30Grid{grid-template-columns:repeat(5,1fr)}}
-@media(max-width:430px){.days30Grid{grid-template-columns:repeat(4,1fr)}.days30Challenge{font-size:20px}}
-
-
-/* HIKE+ mobile visual refresh — logic untouched */
-@media (max-width:600px){
-  .referenceHome{padding-left:14px!important;padding-right:14px!important;padding-bottom:calc(30px + env(safe-area-inset-bottom))!important}
-  .referenceHome .homeProfileRow{padding:4px 2px 12px}
-  .referenceHome .refOutdoor{border-radius:26px!important;min-height:260px!important;overflow:hidden!important;box-shadow:0 16px 34px rgba(20,61,45,.14)!important}
-  .referenceHome .refMontInner{padding:22px!important}
-  .referenceHome .refMontInner h2{font-size:34px!important;line-height:.98!important;letter-spacing:-1.5px!important}
-  .referenceHome .refActionGrid{gap:8px!important}
-  .referenceHome .refAction{min-height:82px!important;border-radius:18px!important;padding:13px!important}
-  .referenceHome .refActionTitle{font-size:11px!important}
-  .referenceHome .refActionSub{font-size:9px!important;line-height:1.25!important}
-  .referenceHome .refSection{margin-top:18px!important}
-  .referenceHome .refRecommendation{border-radius:20px!important;overflow:hidden!important}
-}
-
-
-
-/* HIKE+ V10 — premium modern mobile home */
-.h9Home{
-  max-width:760px;
-  margin:0 auto;
-  padding:4px 0 38px;
-  background:#f6f7f4;
-  color:#17201a;
-}
-.h9Header{
-  height:56px;
-  display:grid;
-  grid-template-columns:40px 1fr 40px;
-  align-items:center;
-}
-.h9Menu{
-  width:38px;height:38px;border:0;background:#fff;border-radius:13px;
-  color:#344039;font-size:16px;box-shadow:0 4px 14px rgba(20,32,24,.06);
-}
-.h9Logo{
-  justify-self:center;font-size:18px;font-weight:950;letter-spacing:-1px;
-}
-.h9Logo span{color:#ea7650}
-.h9Avatar{
-  width:38px!important;height:38px!important;border:2px solid #fff!important;
-  box-shadow:0 4px 14px rgba(20,32,24,.10);
-}
-.h9Avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-
-.h9Greeting{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  padding:18px 1px 9px;
-}
-.h9Greeting small,.h9SectionHead small{
-  font-size:7px;letter-spacing:.16em;color:#8a938d;font-weight:900;
-}
-.h9Greeting h1{
-  font-size:29px;line-height:1.02;margin:7px 0 4px;
-  letter-spacing:-1.5px;font-weight:450;
-}
-.h9Greeting h1 b{font-weight:950}
-.h9Greeting p{font-size:9px;color:#8b938d;margin:0}
-.h9Level{
-  width:57px;height:57px;border-radius:19px;background:#dceca9;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  box-shadow:inset 0 0 0 1px rgba(70,90,45,.06);
-}
-.h9Level strong{font-size:19px;line-height:1}.h9Level span{font-size:6px;font-weight:950;margin-top:3px}
-
-.h9Chips{
-  display:flex;gap:7px;overflow-x:auto;padding:9px 0 17px;scrollbar-width:none;
-}
-.h9Chips::-webkit-scrollbar{display:none}
-.h9Chips span{
-  white-space:nowrap;background:#fff;border:0;border-radius:10px;
-  padding:9px 11px;font-size:7px;color:#626c65;font-weight:850;
-  box-shadow:0 3px 12px rgba(24,38,28,.045);
-}
-
-.h9Section{margin-top:20px}
-.h9SectionHead{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  margin-bottom:11px;
-}
-.h9SectionHead h2{
-  font-size:18px;line-height:1;margin:5px 0 0;
-  letter-spacing:-.75px;font-weight:850;
-}
-.h9SectionHead button,.h9SectionHead>span{
-  border:0;background:none;color:#e47750;font-size:7px;font-weight:950;padding:0;
-}
-
-.h9CircleRow{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
-}
-.h9CircleItem{
-  border:0;background:#fff;border-radius:18px;padding:11px 5px 10px;
-  text-align:center;min-width:0;box-shadow:0 5px 16px rgba(22,35,26,.045);
-}
-.h9Circle{
-  width:52px;height:52px;margin:0 auto 8px;border-radius:16px;
-  display:grid;place-items:center;font-size:22px;border:0;
-}
-.h9Circle.c1{background:#e4f0e4}.h9Circle.c2{background:#f7e4d8}
-.h9Circle.c3{background:#edf0d4}.h9Circle.c4{background:#e2edf3}
-.h9CircleItem b{
-  display:block;font-size:8.5px;white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis;
-}
-.h9CircleItem small{
-  display:block;font-size:6.5px;color:#909891;margin-top:3px;
-}
-
-.h9Feature{
-  background:#fff;border:0;border-radius:22px;overflow:hidden;
-  box-shadow:0 8px 25px rgba(23,38,28,.07);
-}
-.h9FeatureVisual{
-  height:164px;position:relative;overflow:hidden;
-  background:
-    radial-gradient(circle at 78% 18%,rgba(255,255,255,.24),transparent 19%),
-    linear-gradient(145deg,#8ea893 0%,#5e7d62 48%,#294032 100%);
-}
-.h9FeatureVisual:before{
-  content:"";position:absolute;left:-8%;right:-8%;bottom:-34px;height:95px;
-  background:rgba(26,52,34,.43);transform:rotate(-5deg);
-}
-.h9FeatureVisual:after{
-  content:"🥾";position:absolute;right:23px;bottom:24px;font-size:43px;
-  transform:rotate(-8deg);filter:drop-shadow(0 8px 7px rgba(0,0,0,.2));
-}
-.h9FeatureVisual span{
-  position:absolute;z-index:2;top:13px;left:13px;
-  background:rgba(255,255,255,.94);border-radius:99px;padding:7px 9px;
-  font-size:6px;font-weight:950;letter-spacing:.12em;
-}
-.h9FeatureVisual i{
-  position:absolute;z-index:2;right:13px;top:12px;width:34px;height:34px;
-  border-radius:50%;background:rgba(255,255,255,.94);
-  display:grid;place-items:center;font-style:normal;font-size:14px;
-}
-.h9FeatureBody{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px;
-}
-.h9FeatureBody b{display:block;font-size:12px;font-weight:900}
-.h9FeatureBody small{
-  display:block;font-size:7.5px;color:#8b938d;margin-top:4px;max-width:285px;
-}
-.h9FeatureBody button{
-  border:0;border-radius:13px;background:#1e4032;color:#fff;
-  font-size:8px;font-weight:950;padding:11px 13px;white-space:nowrap;
-}
-
-.h9XP{
-  display:flex;gap:12px;align-items:center;background:#1c2b24;color:#fff;
-  border-radius:21px;padding:13px;box-shadow:0 8px 22px rgba(20,37,28,.12);
-}
-.h9XPBadge{
-  width:54px;height:54px;border-radius:17px;background:#dceca9;color:#273328;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-}
-.h9XPBadge strong{font-size:18px}.h9XPBadge span{font-size:6px;font-weight:950}
-.h9XPInfo{flex:1}.h9XPInfo>b{font-size:15px}.h9XPInfo>small{display:block;color:#aeb9b1;font-size:7px;margin:3px 0 9px}
-.h9XPInfo>div{height:6px;background:#44534a;border-radius:99px;overflow:hidden}
-.h9XPInfo i{display:block;height:100%;background:#ea7650;border-radius:99px}
-
-.h9Stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.h9Stats div{
-  background:#fff;border:0;border-radius:18px;text-align:center;padding:13px 8px;
-  box-shadow:0 5px 16px rgba(22,35,26,.045);
-}
-.h9Stats span{font-size:17px}.h9Stats b{display:block;font-size:15px;margin-top:4px}.h9Stats small{font-size:6.5px;color:#8d968f}
-.h9Recommendation{margin-top:9px;min-height:70px;border-radius:17px;overflow:hidden}
-
-@media(max-width:600px){
-  .h9Home{padding-left:13px!important;padding-right:13px!important}
-  .h9Greeting h1{font-size:25px}
-  .h9FeatureVisual{height:150px}
-}
-@media(max-width:370px){
-  .h9CircleRow{gap:5px}
-  .h9CircleItem{padding-left:3px;padding-right:3px}
-  .h9Circle{width:48px;height:48px}
-  .h9CircleItem small{display:none}
-}
-
-/* V11 — single, structured navigation */
-.hikeBottomNav{
- position:fixed;z-index:25000;left:50%;bottom:max(10px,env(safe-area-inset-bottom));
- transform:translateX(-50%);width:min(94vw,520px);height:66px;padding:6px;
- display:grid;grid-template-columns:repeat(5,1fr);gap:3px;
- background:rgba(255,255,255,.94);border:1px solid rgba(30,45,35,.08);
- border-radius:23px;box-shadow:0 12px 38px rgba(22,35,27,.15);
- backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
-}
-.hikeBottomNav button{border:0;background:transparent;border-radius:17px;color:#89918b;
- display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
- font-family:inherit;cursor:pointer;min-width:0;transition:.16s ease}
-.hikeBottomNav button span{width:28px;height:25px;display:grid;place-items:center;font-size:18px;line-height:1}
-.hikeBottomNav button b{font-size:6.5px;font-weight:900;white-space:nowrap}
-.hikeBottomNav button.active{background:#173f2f;color:#fff;box-shadow:0 5px 14px rgba(23,63,47,.22)}
-.hikeBottomNav button:active{transform:scale(.94)}
-.homeHeaderSpacer{width:38px;height:38px}
-#app .view{padding-bottom:96px!important}
-#app .homeHeader{justify-content:center!important}
-.homeMenu{display:none!important}
-.sideMenu,.menuBackdrop{display:none!important}
-@media(max-width:600px){
- .hikeBottomNav{width:calc(100vw - 22px);height:64px;bottom:max(7px,env(safe-area-inset-bottom));border-radius:21px}
- .hikeBottomNav button span{font-size:17px}.hikeBottomNav button b{font-size:6.3px}
-}
-html.darkMode .hikeBottomNav{background:rgba(25,29,25,.94);border-color:rgba(255,255,255,.07)}
-html.darkMode .hikeBottomNav button{color:#929b93}
-html.darkMode .hikeBottomNav button.active{background:#dceca9;color:#243126}
-
-
-/* V12 — polished home hierarchy */
-.homeHeader{
-  height:56px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  padding:0 1px!important;
-}
-.homeBrand{margin:0 auto;font-size:18px!important}
-.homeHeaderProfile{
-  width:38px;height:38px;border-radius:50%;
-  border:3px solid #1b4a37;
-  background:
-    radial-gradient(circle at 50% 50%,#dce7d9 0 58%,transparent 59%),
-    linear-gradient(145deg,#edf3ec,#a8b9aa);
-  box-shadow:0 0 0 2px #fff,0 5px 14px rgba(20,45,31,.13);
-  position:absolute;right:0;top:9px;
-}
-.homeHeaderProfile:before{
-  content:"";position:absolute;inset:-5px;border-radius:50%;
-  border:1px solid rgba(37,104,74,.20);
-}
-.homeHeaderProfile:after{
-  content:"";position:absolute;inset:6px;border-radius:50%;
-  background:radial-gradient(circle at 50% 36%,#fff 0 13%,transparent 14%),
-             radial-gradient(ellipse at 50% 82%,#fff 0 28%,transparent 29%);
-  opacity:.85;
-}
-/* hide legacy top announcement/status bars */
-#app>div:first-child[class*="banner"],
-#app>.topbar,#app>.statusbar,#app>.announcement,
-.topBanner,.preBetaBanner,.testBanner{display:none!important}
-
-/* bottom navigation: compact, floating and animated */
-.hikeBottomNav{
-  position:fixed!important;
-  left:50%!important;bottom:max(10px,env(safe-area-inset-bottom))!important;
-  transform:translateX(-50%)!important;
-  width:min(92vw,500px)!important;height:58px!important;
-  padding:4px!important;display:grid!important;
-  background:rgba(255,255,255,.91)!important;
-  border:1px solid rgba(31,50,40,.09)!important;
-  border-radius:20px!important;
-  box-shadow:0 12px 35px rgba(22,38,28,.16)!important;
-  backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;
-}
-.hikeBottomNav button{
-  position:relative!important;border:0!important;background:transparent!important;
-  border-radius:16px!important;color:#8a938d!important;
-  transition:transform .22s cubic-bezier(.2,.8,.2,1),color .22s ease,background .22s ease!important;
-}
-.hikeBottomNav button span{transition:transform .22s cubic-bezier(.2,.8,.2,1)!important}
-.hikeBottomNav button.active{
-  background:#173f2f!important;color:#fff!important;
-  box-shadow:0 5px 15px rgba(23,63,47,.22)!important;
-}
-.hikeBottomNav button.active span{transform:translateY(-2px) scale(1.08)!important}
-.hikeBottomNav button:active{transform:scale(.91)!important}
-.hikeBottomNav button:after{
-  content:"";position:absolute;left:50%;bottom:3px;width:4px;height:4px;
-  border-radius:50%;background:#e8794d;transform:translateX(-50%) scale(0);
-  transition:transform .22s ease;
-}
-.hikeBottomNav button.active:after{transform:translateX(-50%) scale(1)}
-#app .view{padding-bottom:82px!important}
-
-/* Home hierarchy: progression sits immediately below the three chips */
-.h9Greeting{padding-bottom:7px!important}
-.h9Chips{padding-bottom:5px!important}
-.h9ProgressHome{
-  margin-top:9px;
-}
-.h9Section.explorerSection{margin-top:22px!important}
-
-/* premium feature card with image area */
-.h9FeatureVisual{
-  height:172px!important;
-  background-image:
-    linear-gradient(180deg,rgba(20,50,31,.05),rgba(20,50,31,.35)),
-    url("hike-logo.png")!important;
-  background-size:cover!important;
-  background-position:center!important;
-}
-.h9FeatureVisual:before{background:linear-gradient(0deg,rgba(20,43,29,.55),transparent 55%)!important}
-.h9FeatureVisual:after{font-size:36px!important}
-
-/* progress card moved earlier gets tighter spacing */
-.h9XP{border-radius:19px!important}
-
-
-/* V13 — clean app chrome: no top strip, no hamburger, no duplicate profile */
-html,body{margin:0!important;padding:0!important}
-body:before,body:after{display:none!important}
-
-/* legacy site/pre-beta top bars */
-.topbar,.top-bar,.statusbar,.status-bar,.announcement,.announcementBar,
-.preBetaBanner,.pre-beta-banner,.testBanner,.test-banner,
-.betaBanner,.beta-banner,.siteBanner,.site-banner,
-#topBanner,#topbar,#statusbar,#announcement,
-#app>.topbar,#app>.top-bar,#app>.statusbar,#app>.status-bar{
-  display:none!important;height:0!important;min-height:0!important;
-  padding:0!important;margin:0!important;border:0!important;
-}
-
-/* legacy hamburger/menu control */
-button#homeMenu,.homeMenu,[aria-label="Menu"],[aria-label="menu"],
-.menuButton,.menu-button,.hamburger,.hamburgerButton{
-  display:none!important;visibility:hidden!important;
-}
-
-/* the old header row must not create a second white strip */
-.header.homeHeader{
-  height:48px!important;min-height:48px!important;
-  padding:0!important;margin:0!important;
-  border:0!important;background:transparent!important;
-  box-shadow:none!important;
-  position:relative!important;
-}
-.header.homeHeader .homeBrand{
-  position:absolute!important;left:50%!important;top:50%!important;
-  transform:translate(-50%,-50%)!important;
-  margin:0!important;
-}
-.homeHeaderProfile{display:none!important}
-
-/* remove any stray first header/brand row generated by old shell */
-#app>header:not(.homeHeader){display:none!important}
-body>header:not(.homeHeader){display:none!important}
-
-/* prevent the app from leaving a blank top band */
-#app{padding-top:0!important;margin-top:0!important}
-#app .view{padding-top:0!important}
-
-/* keep the home content aligned after the cleanup */
-.homeScreen,.homePage{margin-top:0!important}
-
-
-/* V14 — clean single header + reliable hike selection */
-.header.homeHeader{display:none!important}
-.h9Header{height:62px!important;min-height:62px!important;display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;background:rgba(247,248,246,.96)!important;border:0!important;box-shadow:none!important;padding:0 20px!important}
-.h9Menu,.h9Avatar,.homeProfileAvatar{display:none!important}
-.h9Logo{position:static!important;margin:0!important;font-size:17px!important;letter-spacing:-.03em!important}
-.h9Logo span{color:#ff5a1f!important}
-.h9Header + .view{padding-top:0!important}
+/* HIKE+ — 31 jours de HIKE+ */
+.days31Wrap{height:100%;overflow:auto;padding:24px 16px 120px;background:linear-gradient(180deg,#f7f8f5 0%,#eef2ec 100%)}
+.days31Inner{width:min(760px,100%);margin:0 auto}
+.days31Hero{position:relative;overflow:hidden;border-radius:28px;padding:26px 22px;color:#fff;background:linear-gradient(135deg,#123f2f 0%,#1b5b43 55%,#102c22 100%);box-shadow:0 18px 50px rgba(15,54,39,.18)}
+.days31Hero:after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;right:-65px;top:-75px;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(255,255,255,0) 68%);pointer-events:none}
+.days31Eyebrow{font-size:9px;font-weight:950;letter-spacing:.16em;text-transform:uppercase;opacity:.72}
+.days31Hero h1{margin:8px 0 5px;font-size:31px;letter-spacing:-.055em;line-height:1.02}
+.days31Hero p{margin:0;max-width:530px;font-size:12px;line-height:1.5;opacity:.82}
+.days31Countdown{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.days31Time{min-width:70px;padding:9px 11px;border-radius:14px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px)}
+.days31Time b{display:block;font-size:19px;line-height:1}.days31Time span{font-size:8px;opacity:.68;text-transform:uppercase;letter-spacing:.08em}
+.days31Status{margin-top:15px;padding:11px 12px;border-radius:14px;background:rgba(255,255,255,.10);font-size:11px;font-weight:750}
+.days31Current{margin:16px 0 0;padding:18px;border-radius:22px;background:#fff;border:1px solid #e2e7e1;box-shadow:0 12px 34px rgba(22,37,28,.08)}
+.days31CurrentTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.days31DayPill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#e9f3df;color:#24472f;font-size:9px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
+.days31Xp{font-size:13px;font-weight:950;color:#e05a22}
+.days31Current h2{margin:11px 0 4px;font-size:23px;letter-spacing:-.04em}.days31Current p{margin:0;color:#70776f;font-size:11px;line-height:1.45}
+.days31Progress{height:7px;border-radius:999px;background:#e8ece7;margin:15px 0 12px;overflow:hidden}.days31Progress i{display:block;height:100%;border-radius:inherit;background:#173f2f}
+.days31Action{width:100%;min-height:46px;border-radius:14px;background:#173f2f;color:#fff;font-weight:900;font-size:12px;transition:transform .16s ease,opacity .16s ease}.days31Action:active{transform:scale(.98)}.days31Action[disabled]{opacity:.42;cursor:not-allowed}
+.days31Auto{margin-top:9px;color:#7d847d;font-size:9px;text-align:center}
+.days31CalendarTitle{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:24px 2px 10px}.days31CalendarTitle h2{margin:0;font-size:19px;letter-spacing:-.035em}.days31CalendarTitle span{font-size:9px;color:#858b85}
+.days31Grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.days31Card{position:relative;min-height:128px;padding:13px;border-radius:19px;background:#fff;border:1px solid #e4e8e3;box-shadow:0 7px 20px rgba(25,35,28,.055);overflow:hidden}
+.days31Card .num{font-size:9px;font-weight:950;letter-spacing:.09em;color:#8a9089;text-transform:uppercase}.days31Card .icon{font-size:23px;margin:9px 0 4px}.days31Card b{display:block;font-size:11px;line-height:1.2}.days31Card small{display:block;margin-top:5px;color:#8a9089;font-size:8px;line-height:1.25}
+.days31Card.locked{background:#f0f2ef;color:#9ca29c}.days31Card.locked .icon{filter:grayscale(1);opacity:.48}.days31Card.active{border:2px solid #173f2f;box-shadow:0 12px 28px rgba(23,63,47,.13);transform:translateY(-1px)}.days31Card.done{background:linear-gradient(145deg,#173f2f,#245d46);color:#fff;border-color:#173f2f}.days31Card.expired{background:#f5f2ef;color:#8f8b86;border-style:dashed}.days31Card.expired .icon{opacity:.55}.days31Card.expired small{color:#a09b95}.days31Card.done .num,.days31Card.done small{color:rgba(255,255,255,.66)}
+.days31Check{position:absolute;right:10px;top:10px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#dff0cf;color:#173f2f;font-size:12px;font-weight:950}.days31Card.done .days31Check{background:#dff0cf}
+.days31Footer{margin-top:14px;padding:13px 14px;border-radius:16px;background:rgba(255,255,255,.7);border:1px solid #e3e8e2;color:#777f77;font-size:9px;line-height:1.45}
+@media(max-width:520px){.days31Wrap{padding:18px 12px 110px}.days31Hero{border-radius:23px;padding:22px 17px}.days31Hero h1{font-size:28px}.days31Grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.days31Card{min-height:122px}.days31Time{min-width:64px}}
 
 </style>
 <style>
@@ -1107,24 +741,7 @@ html.darkMode .socialComments{background:#151815!important}
 </head>
 <body><!-- HIKEPLUS_V01.3_DESIGN_V3 -->
 
-<div id="launchGate" class="launchGate">
-  <div class="launchGateBg"></div>
-  <div class="launchGateCard">
-    <img class="launchGateLogo" src="./hike-logo.png" alt="HIKE+">
-    <div class="launchGateBrand">HIKE+</div>
-    <div class="launchGateEyebrow">OUVERTURE OFFICIELLE</div>
-    <div class="launchGateTitle">L’aventure commence bientôt.</div>
-    <p class="launchGateSub">HIKE+ sera accessible à tous le <strong>samedi 3 octobre à 10h00</strong>.</p>
-    <div class="launchCountdown" aria-label="Compte à rebours avant l'ouverture">
-      <div class="launchUnit"><b id="launchDays">00</b><span>JOURS</span></div>
-      <div class="launchUnit"><b id="launchHours">00</b><span>HEURES</span></div>
-      <div class="launchUnit"><b id="launchMinutes">00</b><span>MIN</span></div>
-      <div class="launchUnit"><b id="launchSeconds">00</b><span>SEC</span></div>
-    </div>
-    <button id="preBetaBtn" class="preBetaBtn" type="button">Pré-bêta</button>
-    <div class="launchGateFoot">Accès anticipé réservé aux personnes disposant du mot de passe pré-bêta.</div>
-  </div>
-</div>
+
 <div id="preBetaModal" class="preBetaModal" aria-hidden="true">
   <div class="preBetaCard">
     <h2>Accès pré-bêta</h2>
@@ -1135,22 +752,22 @@ html.darkMode .socialComments{background:#151815!important}
 </div>
 
 <div id="appSplash" class="appSplash"><div class="splashBg"></div><div class="splashInner"><div class="splashMark"><img src="./hike-logo.png" alt="HIKE+" /></div><div class="splashName">HIKE+</div><div class="splashSub">Tracez votre chemin. Vivez l’aventure.</div><div class="splashBeta">BÊTA</div><div class="splashLine"><i></i></div></div></div>
-<section id="auth" class="screen active"><div class="auth"><div class="brand">HIKE+</div><h1 id="authTitle">Bienvenue.</h1><div class="sub" id="authSub">Reprends ton aventure là où tu l’as laissée.</div><form id="authForm"><div class="authField"><label>ADRESSE E-MAIL</label><input id="email" type="email" required autocomplete="email" placeholder="ton@email.com"></div><div class="authCreateOnly" id="authCreateOnly"><div class="authField createPseudoField"><label>PSEUDO</label><input id="pseudo" minlength="2" maxlength="24" autocomplete="nickname" placeholder="Ton pseudo"></div><div class="authField createPasswordField"><label>MOT DE PASSE</label><input id="password" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••••"><button class="authEye" id="passwordEye" type="button" aria-label="Afficher le mot de passe">◉</button></div><div class="authField"><label>CONFIRMER LE MOT DE PASSE</label><input id="passwordConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Retape ton mot de passe"></div><div class="regAvatarWrap" id="regAvatarWrap"><div class="regAvatarRow"><div class="regAvatarPreview" id="regAvatarPreview">?</div><div><b style="font-size:12px">Photo de profil</b><div style="font-size:10px;color:#888;margin:3px 0 7px">Optionnel · tu peux la changer plus tard dans Paramètres.</div><button class="regAvatarBtn" id="regAvatarBtn" type="button">Choisir une photo</button><input id="regAvatarFile" type="file" accept="image/*" hidden></div></div></div></div><div class="authLoginPassword" id="authLoginPassword"><div class="authField"><label>MOT DE PASSE</label><input id="passwordLogin" type="password" minlength="6" autocomplete="current-password" placeholder="••••••••"><button class="authEye" id="passwordLoginEye" type="button" aria-label="Afficher le mot de passe">◉</button></div></div><button class="primary" id="authSubmit">Se connecter</button></form><button class="link" id="switchAuth" type="button">Créer un compte</button><div class="authSwitchHint"><span>HIKE+ · PRÉ-BÊTA</span></div><div class="note">Version Pré-bêta · de nouvelles randonnées et fonctionnalités seront bientôt disponibles.</div></div></section>
-<section id="app" class="screen"><header class="header homeHeader"><div class="brand homeBrand"><span>HIKE</span><b>+</b></div><div class="homeHeaderProfile" id="homeHeaderProfile"></div></header><main id="view" class="view"></main><nav class="hikeBottomNav" id="hikeBottomNav" aria-label="Navigation principale"><button data-bottom-view="home"><span>⌂</span><b>Accueil</b></button><button data-bottom-view="hikes"><span>⌕</span><b>Randos</b></button><button data-bottom-view="days30"><span>★</span><b>Défis</b></button><button data-bottom-view="progress"><span>◎</span><b>Progression</b></button><button data-bottom-view="weather"><span>☁</span><b>Météo</b></button></nav></section>
-<section id="navScreen" class="screen"><div id="map"></div><div><b id="instruction">Préparation…</b><div class="turnDistance" id="turnDistance">—</div></div></div></div><button class="roundBtn" id="centerBtn">◎</button></div><div class="offroute" id="offroute">⚠️ Vous êtes éloigné du tracé<small>Rejoignez le parcours pour continuer la randonnée.</small></div><div class="routeConfirm" id="routeConfirm"><div class="ok">✓</div><div><b>Bonne route !</b><small id="routeConfirmText">Checkpoint 1 atteint</small></div></div><div class="navPanel"><div class="navName"><span id="navName" hidden></span><span id="remaining">9,78 km restants</span></div><div class="cpbar" id="cpbar"></div><div class="navstats"><div><b id="time">00:00</b><small>TEMPS</small></div><div><b id="distance">0.00</b><small>KM</small></div><div><b id="dplus">0</b><small>D+</small></div><div><b id="gpsAcc">—</b><small>GPS</small></div></div><button class="stop" id="stopBtn">Terminer la randonnée</button></div></section>
+<section id="auth" class="screen active"><div class="auth"><div class="brand">HIKE+</div><h1 id="authTitle">Bienvenue.</h1><div class="sub" id="authSub">Reprends ton aventure là où tu l’as laissée.</div><form id="authForm"><div class="authField"><label>ADRESSE E-MAIL</label><input id="email" type="email" required autocomplete="email" placeholder="ton@email.com"></div><div class="authCreateOnly" id="authCreateOnly"><div class="authField createPseudoField"><label>PSEUDO</label><input id="pseudo" minlength="2" maxlength="24" autocomplete="nickname" placeholder="Ton pseudo"></div><div class="authField createPasswordField"><label>MOT DE PASSE</label><input id="password" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••••"><button class="authEye" id="passwordEye" type="button" aria-label="Afficher le mot de passe">◉</button></div><div class="authField"><label>CONFIRMER LE MOT DE PASSE</label><input id="passwordConfirm" type="password" minlength="6" autocomplete="new-password" placeholder="Retape ton mot de passe"></div><div class="regAvatarWrap" id="regAvatarWrap"><div class="regAvatarRow"><div class="regAvatarPreview" id="regAvatarPreview">?</div><div><b style="font-size:12px">Photo de profil</b><div style="font-size:10px;color:#888;margin:3px 0 7px">Optionnel · tu peux la changer plus tard dans Paramètres.</div><button class="regAvatarBtn" id="regAvatarBtn" type="button">Choisir une photo</button><input id="regAvatarFile" type="file" accept="image/*" hidden></div></div></div></div><div class="authLoginPassword" id="authLoginPassword"><div class="authField"><label>MOT DE PASSE</label><input id="passwordLogin" type="password" minlength="6" autocomplete="current-password" placeholder="••••••••"><button class="authEye" id="passwordLoginEye" type="button" aria-label="Afficher le mot de passe">◉</button></div></div><button class="primary" id="authSubmit">Se connecter</button></form><button class="link" id="switchAuth" type="button">Créer un compte</button><div class="authSwitchHint"><span>HIKE+ · BÊTA OUVERTE</span></div><div class="note">Version Bêta ouverte · découvre HIKE+ et pars à la découverte de nouvelles randonnées.</div></div></section>
+<section id="app" class="screen"><div class="betaTopBanner"><span class="betaTopDot" id="betaTopDot">PRÉ-BÊTA</span><span id="betaTopStatus">· HIKE+ est actuellement en phase de test</span><span class="betaTopSep">·</span><span id="betaTopNew">De nouvelles randonnées bientôt disponibles</span></div><header class="header homeHeader"><button class="homeMenu" id="homeMenu" aria-label="Menu">☰</button><div class="brand homeBrand"><span>HIKE</span><b>+</b></div></header><main id="view" class="view"></main></section>
+<section id="navScreen" class="screen"><div id="map"></div><div class="navTop"><div class="instruction"><small id="navStatus">NAVIGATION · GPS</small><div class="instructionRow"><div class="navArrow" id="navArrow">↑</div><div><b id="instruction">Préparation…</b><div class="turnDistance" id="turnDistance">—</div></div></div></div><button class="roundBtn" id="centerBtn">◎</button></div><div class="offroute" id="offroute">⚠️ Vous êtes éloigné du tracé<small>Rejoignez le parcours pour continuer la randonnée.</small></div><div class="routeConfirm" id="routeConfirm"><div class="ok">✓</div><div><b>Bonne route !</b><small id="routeConfirmText">Checkpoint 1 atteint</small></div></div><div class="navPanel"><div class="navName"><span id="navName" hidden></span><span id="remaining">9,78 km restants</span></div><div class="cpbar" id="cpbar"></div><div class="navstats"><div><b id="time">00:00</b><small>TEMPS</small></div><div><b id="distance">0.00</b><small>KM</small></div><div><b id="dplus">0</b><small>D+</small></div><div><b id="gpsAcc">—</b><small>GPS</small></div></div><button class="stop" id="stopBtn">Terminer la randonnée</button></div></section>
 <div class="startCountdownOverlay" id="startCountdownOverlay" aria-hidden="true"><div class="startCountdownCard"><div class="startCountdownEyebrow">PRÊT POUR LA RANDONNÉE</div><div class="startCountdownNumber" id="startCountdownNumber">20</div><div class="startCountdownTitle" id="startCountdownTitle">Départ dans…</div><div class="startCountdownSub">Le GPS et le chrono démarreront après le compte à rebours.</div></div></div><div class="toast" id="toast"></div><section class="finish" id="finish"><div class="finishCard"><div class="finishEmoji">🏁</div><div class="eyebrow">RANDONNÉE TERMINÉE</div><h1>Bien joué.</h1><div class="finishStats"><div><b id="finishKm">0.00</b><small>KM</small></div><div><b id="finishDplus">0</b><small>D+</small></div><div class="finishXpStat"><b id="finishXp">+0</b><small>XP GAGNÉS</small></div></div><div class="finishXpBox"><div class="finishXpHead"><span>Progression XP <span id="finishXpMultiplier"></span></span><b id="finishXpTotal">0 XP</b></div><div class="finishXpBar"><i id="finishXpBar"></i></div><div class="finishXpMeta"><span>Niveau <b id="finishLevel">1</b></span><span id="finishXpGain">+0 XP</span></div><div id="finishLevelUp" class="finishLevelUp"></div></div><div id="finishGradeUnlock" class="finishGradeUnlock"></div><button class="primary" id="finishBtn">Continuer</button></div></section>
 
 <div class="feedbackModal" id="feedbackModal" hidden aria-hidden="true"><div class="feedbackCard" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle"><div id="feedbackBody"><div class="feedbackHeader"><div class="feedbackEyebrow">TON AVIS COMPTE</div><h2 id="feedbackTitle">Aide-nous à améliorer HIKE+</h2><p class="feedbackIntro">Ton retour nous aide à peaufiner l’expérience avant le lancement.</p></div><div class="feedbackContent"><div class="feedbackQ"><label class="qtitle">1. Comment évalues-tu ton expérience générale ?</label><div class="feedbackOptions"><label><input type="radio" name="fb_q1" value="1"><span>1 / 5</span></label><label><input type="radio" name="fb_q1" value="2"><span>2 / 5</span></label><label><input type="radio" name="fb_q1" value="3"><span>3 / 5</span></label><label><input type="radio" name="fb_q1" value="4"><span>4 / 5</span></label><label><input type="radio" name="fb_q1" value="5"><span>5 / 5</span></label></div></div><div class="feedbackQ"><label class="qtitle">2. Comment trouves-tu la navigation GPS ?</label><div class="feedbackOptions"><label><input type="radio" name="fb_q2" value="Très bonne"><span>Très bonne</span></label><label><input type="radio" name="fb_q2" value="Bonne"><span>Bonne</span></label><label><input type="radio" name="fb_q2" value="Moyenne"><span>Moyenne</span></label><label><input type="radio" name="fb_q2" value="Mauvaise"><span>Mauvaise</span></label></div></div><div class="feedbackQ"><label class="qtitle">3. L'application est-elle facile à utiliser ?</label><div class="feedbackOptions"><label><input type="radio" name="fb_q3" value="Très facile"><span>Très facile</span></label><label><input type="radio" name="fb_q3" value="Facile"><span>Facile</span></label><label><input type="radio" name="fb_q3" value="Moyenne"><span>Moyenne</span></label><label><input type="radio" name="fb_q3" value="Difficile"><span>Difficile</span></label></div></div><div class="feedbackQ"><label class="qtitle">4. Qu'as-tu le plus aimé ?</label><div class="feedbackOptions"><label><input type="radio" name="fb_q4" value="GPS"><span>GPS</span></label><label><input type="radio" name="fb_q4" value="Carte / parcours"><span>Carte / parcours</span></label><label><input type="radio" name="fb_q4" value="XP / progression"><span>XP / progression</span></label><label><input type="radio" name="fb_q4" value="Présentation"><span>Présentation</span></label><label><input type="radio" name="fb_q4" value="Randonnées"><span>Randonnées</span></label><label><input type="radio" name="fb_q4" value="Autre"><span>Autre</span></label></div></div><div class="feedbackQ"><label class="qtitle">5. As-tu rencontré des bugs ou problèmes ?</label><div class="feedbackOptions"><label><input type="radio" name="fb_q5" value="Non"><span>Non</span></label><label><input type="radio" name="fb_q5" value="Oui"><span>Oui</span></label></div><textarea class="feedbackText" id="fbBug" placeholder="Si oui, décris le problème…" style="margin-top:8px"></textarea></div><div class="feedbackQ"><label class="qtitle">6. Qu'aimerais-tu améliorer ou ajouter ?</label><textarea class="feedbackText" id="fbImprove" placeholder="Ton idée, une fonctionnalité, une amélioration…"></textarea></div><div class="feedbackQ"><label class="qtitle">7. Recommanderais-tu HIKE+ ?</label><div class="feedbackOptions"><label><input type="radio" name="fb_q7" value="Non"><span>Non</span></label><label><input type="radio" name="fb_q7" value="Peut-être"><span>Peut-être</span></label><label><input type="radio" name="fb_q7" value="Oui"><span>Oui</span></label></div></div><div class="feedbackQ"><label class="qtitle">8. Une dernière remarque ?</label><textarea class="feedbackText" id="fbFinal" placeholder="Ton avis libre…"></textarea></div></div><div class="feedbackActions"><button class="feedbackLater" id="feedbackLater" type="button">Répondre plus tard</button><button class="feedbackSubmit" id="feedbackSubmit" type="button">✓ Valider</button></div></div></div></div><div class="appModal" id="appModal" hidden aria-hidden="true"><div class="appModalCard" role="dialog" aria-modal="true"><div class="appModalIcon" id="appModalIcon">ℹ️</div><div class="appModalTitle" id="appModalTitle"></div><div class="appModalText" id="appModalText"></div><input class="appModalInput" id="appModalInput" type="password" autocomplete="current-password" style="display:none"><div class="appModalActions"><button class="appModalBtn cancel" id="appModalCancel">Annuler</button><button class="appModalBtn primary" id="appModalConfirm">Confirmer</button></div></div></div><div class="tutorial" id="tutorial"><div class="tutorialCard"><div class="eyebrow" id="tutorialEyebrow">VISITE GUIDÉE</div><h2 id="tutorialTitle" style="margin:7px 0">Découvre les menus</h2><p class="sub" id="tutorialText">Une petite visite pour découvrir les principaux menus de HIKE+.</p><div class="tutorialDots" id="tutorialDots"></div><div class="tutorialActions"><button class="primary" id="tutorialNext" type="button">Suivant</button><button class="link" id="tutorialSkip" type="button">Passer le tutoriel</button></div></div></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
 let GPX="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\" creator=\"Cirkwi\"><metadata><name><![CDATA[La route des forts]]></name><desc><![CDATA[Entre ville et nature, ce parcours permet une découverte du patrimoine historique de la commune déléguée d’Equeurdreville-Hainneville. Partez pour une balade aux multiples paysages entre ville, campagne et parcs. Cette randonnée prend rapidement de la hauteur et offre différents points de vue sur la rade de Cherbourg. Partez du parking du centre aquatique, suivez la piste cyclable du parc de la Bonde à l'est du centre aquatique (Équeurdreville-Hainneville, Cherbourg-en-Cotentin). Départ possible du parking de la salle AGORA, rue du Thivet. Coordonnées GPS : 49°39’25.2’’N; 1°40’13.7’’W Suivez le circuit selon le sens inverse des aiguilles d'une montre. Le balisage est de couleur bleu.  Vous retrouverez ce circuit dans le topoguide \"Cherbourg-en-cotentin\" de l'Office de tourisme du Cotentin.   Départ accessible avec le réseau de bus Cap Cotentin à l'arrêt \"Centre aquatique\" desservie par les lignes A et 2 (plus d'infos sur capcotentin.fr)]]></desc><author><name><![CDATA[Cotentin unique]]></name></author><link href=\"http://fichier0.cirkwi.com/image/photo/circuit/1300x1300/816331/fr/0.jpg\"><text><![CDATA[|Aymeric Picot]]></text></link><link href=\"http://fichier0.cirkwi.com/image/photo/circuit/1300x1300/816331/fr/1.jpg\"><text><![CDATA[|Alix Anger Valognes]]></text></link><link href=\"http://fichier0.cirkwi.com/image/photo/circuit/1300x1300/816331/fr/2.jpg\"><text><![CDATA[|Alix Anger Valognes]]></text></link><time>2026-07-16T08:10:59Z</time></metadata><trk><trkseg><trkpt lat=\"49.64042\" lon=\"-1.66146\"><ele>76.35</ele></trkpt><trkpt lat=\"49.64044\" lon=\"-1.66127\"><ele>75.85</ele></trkpt><trkpt lat=\"49.64044\" lon=\"-1.66123\"><ele>75.75</ele></trkpt><trkpt lat=\"49.64046\" lon=\"-1.66118\"><ele>75.63</ele></trkpt><trkpt lat=\"49.64051\" lon=\"-1.66104\"><ele>75.42</ele></trkpt><trkpt lat=\"49.64057\" lon=\"-1.66087\"><ele>75.12</ele></trkpt><trkpt lat=\"49.64058\" lon=\"-1.66086\"><ele>74.97</ele></trkpt><trkpt lat=\"49.64066\" lon=\"-1.66064\"><ele>74.55</ele></trkpt><trkpt lat=\"49.64074\" lon=\"-1.66044\"><ele>73.95</ele></trkpt><trkpt lat=\"49.64077\" lon=\"-1.66043\"><ele>73.81</ele></trkpt><trkpt lat=\"49.6408\" lon=\"-1.66043\"><ele>73.89</ele></trkpt><trkpt lat=\"49.64085\" lon=\"-1.66045\"><ele>74.09</ele></trkpt><trkpt lat=\"49.641\" lon=\"-1.66049\"><ele>74.74</ele></trkpt><trkpt lat=\"49.64128\" lon=\"-1.6606\"><ele>75.04</ele></trkpt><trkpt lat=\"49.64132\" lon=\"-1.66041\"><ele>74.74</ele></trkpt><trkpt lat=\"49.64136\" lon=\"-1.66022\"><ele>73.88</ele></trkpt><trkpt lat=\"49.64132\" lon=\"-1.66021\"><ele>73.93</ele></trkpt><trkpt lat=\"49.64119\" lon=\"-1.66016\"><ele>73.72</ele></trkpt><trkpt lat=\"49.64089\" lon=\"-1.66004\"><ele>72.31</ele></trkpt><trkpt lat=\"49.64083\" lon=\"-1.66002\"><ele>72.13</ele></trkpt><trkpt lat=\"49.64085\" lon=\"-1.65997\"><ele>71.93</ele></trkpt><trkpt lat=\"49.64087\" lon=\"-1.65994\"><ele>71.82</ele></trkpt><trkpt lat=\"49.64095\" lon=\"-1.65974\"><ele>70.69</ele></trkpt><trkpt lat=\"49.64105\" lon=\"-1.6595\"><ele>69.76</ele></trkpt><trkpt lat=\"49.64114\" lon=\"-1.65926\"><ele>68.44</ele></trkpt><trkpt lat=\"49.64126\" lon=\"-1.65891\"><ele>66.87</ele></trkpt><trkpt lat=\"49.64128\" lon=\"-1.65888\"><ele>66.69</ele></trkpt><trkpt lat=\"49.64126\" lon=\"-1.65891\"><ele>66.87</ele></trkpt><trkpt lat=\"49.6411\" lon=\"-1.65871\"><ele>67.63</ele></trkpt><trkpt lat=\"49.64093\" lon=\"-1.65845\"><ele>66.71</ele></trkpt><trkpt lat=\"49.64054\" lon=\"-1.65786\"><ele>61.59</ele></trkpt><trkpt lat=\"49.64051\" lon=\"-1.65791\"><ele>61.71</ele></trkpt><trkpt lat=\"49.64054\" lon=\"-1.65786\"><ele>61.59</ele></trkpt><trkpt lat=\"49.64047\" lon=\"-1.65775\"><ele>60.58</ele></trkpt><trkpt lat=\"49.64048\" lon=\"-1.65689\"><ele>55.5</ele></trkpt><trkpt lat=\"49.64041\" lon=\"-1.65687\"><ele>55.08</ele></trkpt><trkpt lat=\"49.64038\" lon=\"-1.65678\"><ele>54.66</ele></trkpt><trkpt lat=\"49.64036\" lon=\"-1.65679\"><ele>54.69</ele></trkpt><trkpt lat=\"49.64038\" lon=\"-1.65678\"><ele>54.66</ele></trkpt><trkpt lat=\"49.64039\" lon=\"-1.65672\"><ele>54.68</ele></trkpt><trkpt lat=\"49.64041\" lon=\"-1.65666\"><ele>54.76</ele></trkpt><trkpt lat=\"49.64042\" lon=\"-1.65667\"><ele>54.78</ele></trkpt><trkpt lat=\"49.6408\" lon=\"-1.65603\"><ele>48.65</ele></trkpt><trkpt lat=\"49.64096\" lon=\"-1.65586\"><ele>45.88</ele></trkpt><trkpt lat=\"49.64088\" lon=\"-1.65581\"><ele>44.17</ele></trkpt><trkpt lat=\"49.64092\" lon=\"-1.65572\"><ele>42.65</ele></trkpt><trkpt lat=\"49.64082\" lon=\"-1.6557\"><ele>39.64</ele></trkpt><trkpt lat=\"49.64085\" lon=\"-1.65559\"><ele>38.95</ele></trkpt><trkpt lat=\"49.64016\" lon=\"-1.65626\"><ele>42.06</ele></trkpt><trkpt lat=\"49.63977\" lon=\"-1.65544\"><ele>39.72</ele></trkpt><trkpt lat=\"49.63982\" lon=\"-1.65538\"><ele>39.44</ele></trkpt><trkpt lat=\"49.6399\" lon=\"-1.65532\"><ele>38.21</ele></trkpt><trkpt lat=\"49.63993\" lon=\"-1.65531\"><ele>37.63</ele></trkpt><trkpt lat=\"49.64044\" lon=\"-1.65511\"><ele>34.3</ele></trkpt><trkpt lat=\"49.64054\" lon=\"-1.65499\"><ele>34.04</ele></trkpt><trkpt lat=\"49.64058\" lon=\"-1.65494\"><ele>34.08</ele></trkpt><trkpt lat=\"49.64069\" lon=\"-1.65482\"><ele>34.06</ele></trkpt><trkpt lat=\"49.64074\" lon=\"-1.65477\"><ele>34.09</ele></trkpt><trkpt lat=\"49.64078\" lon=\"-1.65475\"><ele>33.98</ele></trkpt><trkpt lat=\"49.64079\" lon=\"-1.65473\"><ele>33.98</ele></trkpt><trkpt lat=\"49.64079\" lon=\"-1.65476\"><ele>33.98</ele></trkpt><trkpt lat=\"49.64077\" lon=\"-1.65475\"><ele>34.09</ele></trkpt><trkpt lat=\"49.6408\" lon=\"-1.65459\"><ele>35.28</ele></trkpt><trkpt lat=\"49.64102\" lon=\"-1.65431\"><ele>38.06</ele></trkpt><trkpt lat=\"49.64106\" lon=\"-1.65421\"><ele>39.53</ele></trkpt><trkpt lat=\"49.6411\" lon=\"-1.65406\"><ele>40.94</ele></trkpt><trkpt lat=\"49.64116\" lon=\"-1.65394\"><ele>42.92</ele></trkpt><trkpt lat=\"49.64124\" lon=\"-1.65379\"><ele>42.57</ele></trkpt><trkpt lat=\"49.64127\" lon=\"-1.6537\"><ele>42.62</ele></trkpt><trkpt lat=\"49.6413\" lon=\"-1.6536\"><ele>43.14</ele></trkpt><trkpt lat=\"49.64136\" lon=\"-1.65365\"><ele>40.54</ele></trkpt><trkpt lat=\"49.64143\" lon=\"-1.65348\"><ele>40.55</ele></trkpt><trkpt lat=\"49.64148\" lon=\"-1.65332\"><ele>42.39</ele></trkpt><trkpt lat=\"49.64155\" lon=\"-1.6532\"><ele>42.26</ele></trkpt><trkpt lat=\"49.64163\" lon=\"-1.65307\"><ele>40.29</ele></trkpt><trkpt lat=\"49.64171\" lon=\"-1.65287\"><ele>37.97</ele></trkpt><trkpt lat=\"49.64178\" lon=\"-1.65276\"><ele>36.31</ele></trkpt><trkpt lat=\"49.64183\" lon=\"-1.65272\"><ele>35.5</ele></trkpt><trkpt lat=\"49.64186\" lon=\"-1.65271\"><ele>34.78</ele></trkpt><trkpt lat=\"49.64185\" lon=\"-1.65267\"><ele>35.45</ele></trkpt><trkpt lat=\"49.64219\" lon=\"-1.65195\"><ele>33.91</ele></trkpt><trkpt lat=\"49.64232\" lon=\"-1.65138\"><ele>30.83</ele></trkpt><trkpt lat=\"49.64237\" lon=\"-1.65139\"><ele>30.21</ele></trkpt><trkpt lat=\"49.64248\" lon=\"-1.65131\"><ele>29.76</ele></trkpt><trkpt lat=\"49.64259\" lon=\"-1.65127\"><ele>28.82</ele></trkpt><trkpt lat=\"49.64278\" lon=\"-1.65113\"><ele>27.61</ele></trkpt><trkpt lat=\"49.64298\" lon=\"-1.65094\"><ele>26.43</ele></trkpt><trkpt lat=\"49.6431\" lon=\"-1.65075\"><ele>25.24</ele></trkpt><trkpt lat=\"49.64313\" lon=\"-1.65074\"><ele>25.24</ele></trkpt><trkpt lat=\"49.64319\" lon=\"-1.65075\"><ele>24.55</ele></trkpt><trkpt lat=\"49.64316\" lon=\"-1.6508\"><ele>24.89</ele></trkpt><trkpt lat=\"49.64319\" lon=\"-1.65075\"><ele>24.55</ele></trkpt><trkpt lat=\"49.64339\" lon=\"-1.65026\"><ele>23.89</ele></trkpt><trkpt lat=\"49.64347\" lon=\"-1.65001\"><ele>23.67</ele></trkpt><trkpt lat=\"49.64366\" lon=\"-1.64912\"><ele>23.31</ele></trkpt><trkpt lat=\"49.64366\" lon=\"-1.64906\"><ele>23.4</ele></trkpt><trkpt lat=\"49.64366\" lon=\"-1.64905\"><ele>23.4</ele></trkpt><trkpt lat=\"49.64363\" lon=\"-1.64891\"><ele>23.63</ele></trkpt><trkpt lat=\"49.64342\" lon=\"-1.64826\"><ele>25.24</ele></trkpt><trkpt lat=\"49.64343\" lon=\"-1.64825\"><ele>25.24</ele></trkpt><trkpt lat=\"49.64342\" lon=\"-1.64826\"><ele>25.24</ele></trkpt><trkpt lat=\"49.6434\" lon=\"-1.6482\"><ele>25.26</ele></trkpt><trkpt lat=\"49.64334\" lon=\"-1.64801\"><ele>25.86</ele></trkpt><trkpt lat=\"49.64327\" lon=\"-1.64765\"><ele>25.98</ele></trkpt><trkpt lat=\"49.64326\" lon=\"-1.64759\"><ele>25.95</ele></trkpt><trkpt lat=\"49.64324\" lon=\"-1.64749\"><ele>25.72</ele></trkpt><trkpt lat=\"49.64315\" lon=\"-1.64707\"><ele>24.7</ele></trkpt><trkpt lat=\"49.64311\" lon=\"-1.64674\"><ele>23.25</ele></trkpt><trkpt lat=\"49.64317\" lon=\"-1.6468\"><ele>23.53</ele></trkpt><trkpt lat=\"49.64324\" lon=\"-1.64682\"><ele>23.19</ele></trkpt><trkpt lat=\"49.64388\" lon=\"-1.6472\"><ele>20.38</ele></trkpt><trkpt lat=\"49.64436\" lon=\"-1.64748\"><ele>18.24</ele></trkpt><trkpt lat=\"49.64439\" lon=\"-1.6475\"><ele>18.11</ele></trkpt><trkpt lat=\"49.64498\" lon=\"-1.64783\"><ele>17.92</ele></trkpt><trkpt lat=\"49.64515\" lon=\"-1.64795\"><ele>18.06</ele></trkpt><trkpt lat=\"49.64537\" lon=\"-1.64817\"><ele>17.99</ele></trkpt><trkpt lat=\"49.64551\" lon=\"-1.64834\"><ele>17.97</ele></trkpt><trkpt lat=\"49.6461\" lon=\"-1.64909\"><ele>18.15</ele></trkpt><trkpt lat=\"49.64637\" lon=\"-1.64944\"><ele>18.27</ele></trkpt><trkpt lat=\"49.64643\" lon=\"-1.64953\"><ele>18.38</ele></trkpt><trkpt lat=\"49.64631\" lon=\"-1.64963\"><ele>18.5</ele></trkpt><trkpt lat=\"49.64617\" lon=\"-1.64979\"><ele>18.94</ele></trkpt><trkpt lat=\"49.64615\" lon=\"-1.64981\"><ele>19.03</ele></trkpt><trkpt lat=\"49.64601\" lon=\"-1.65011\"><ele>20.05</ele></trkpt><trkpt lat=\"49.64577\" lon=\"-1.65061\"><ele>21.96</ele></trkpt><trkpt lat=\"49.64573\" lon=\"-1.65071\"><ele>22.49</ele></trkpt><trkpt lat=\"49.64563\" lon=\"-1.65097\"><ele>23.8</ele></trkpt><trkpt lat=\"49.64552\" lon=\"-1.65123\"><ele>25.37</ele></trkpt><trkpt lat=\"49.64547\" lon=\"-1.65137\"><ele>26.08</ele></trkpt><trkpt lat=\"49.64546\" lon=\"-1.65141\"><ele>26.24</ele></trkpt><trkpt lat=\"49.64536\" lon=\"-1.65167\"><ele>27.86</ele></trkpt><trkpt lat=\"49.64521\" lon=\"-1.65211\"><ele>30.25</ele></trkpt><trkpt lat=\"49.64524\" lon=\"-1.65212\"><ele>30.39</ele></trkpt><trkpt lat=\"49.64524\" lon=\"-1.65211\"><ele>30.25</ele></trkpt><trkpt lat=\"49.64524\" lon=\"-1.65212\"><ele>30.39</ele></trkpt><trkpt lat=\"49.64526\" lon=\"-1.65212\"><ele>29.97</ele></trkpt><trkpt lat=\"49.64538\" lon=\"-1.65209\"><ele>28.96</ele></trkpt><trkpt lat=\"49.64559\" lon=\"-1.65199\"><ele>27.62</ele></trkpt><trkpt lat=\"49.64601\" lon=\"-1.65178\"><ele>25.19</ele></trkpt><trkpt lat=\"49.64615\" lon=\"-1.65178\"><ele>24.29</ele></trkpt><trkpt lat=\"49.64642\" lon=\"-1.6519\"><ele>23.31</ele></trkpt><trkpt lat=\"49.6465\" lon=\"-1.65198\"><ele>23.11</ele></trkpt><trkpt lat=\"49.64663\" lon=\"-1.65216\"><ele>22.83</ele></trkpt><trkpt lat=\"49.64664\" lon=\"-1.65219\"><ele>22.83</ele></trkpt><trkpt lat=\"49.64667\" lon=\"-1.65231\"><ele>22.84</ele></trkpt><trkpt lat=\"49.64669\" lon=\"-1.6524\"><ele>22.82</ele></trkpt><trkpt lat=\"49.64678\" lon=\"-1.6527\"><ele>22.65</ele></trkpt><trkpt lat=\"49.64692\" lon=\"-1.65313\"><ele>22.57</ele></trkpt><trkpt lat=\"49.64699\" lon=\"-1.65335\"><ele>22.47</ele></trkpt><trkpt lat=\"49.64714\" lon=\"-1.65385\"><ele>22.34</ele></trkpt><trkpt lat=\"49.64727\" lon=\"-1.65466\"><ele>22.8</ele></trkpt><trkpt lat=\"49.64732\" lon=\"-1.65481\"><ele>23.06</ele></trkpt><trkpt lat=\"49.64739\" lon=\"-1.6548\"><ele>23</ele></trkpt><trkpt lat=\"49.64749\" lon=\"-1.65475\"><ele>22.93</ele></trkpt><trkpt lat=\"49.64762\" lon=\"-1.65464\"><ele>22.74</ele></trkpt><trkpt lat=\"49.64792\" lon=\"-1.6542\"><ele>22.2</ele></trkpt><trkpt lat=\"49.64812\" lon=\"-1.6539\"><ele>21.47</ele></trkpt><trkpt lat=\"49.64824\" lon=\"-1.65373\"><ele>21.01</ele></trkpt><trkpt lat=\"49.64829\" lon=\"-1.65367\"><ele>20.64</ele></trkpt><trkpt lat=\"49.64833\" lon=\"-1.65361\"><ele>20.57</ele></trkpt><trkpt lat=\"49.6485\" lon=\"-1.65335\"><ele>19.8</ele></trkpt><trkpt lat=\"49.64862\" lon=\"-1.65317\"><ele>19.34</ele></trkpt><trkpt lat=\"49.64867\" lon=\"-1.65312\"><ele>19.23</ele></trkpt><trkpt lat=\"49.64869\" lon=\"-1.65315\"><ele>19.17</ele></trkpt><trkpt lat=\"49.64871\" lon=\"-1.65318\"><ele>19.17</ele></trkpt><trkpt lat=\"49.64873\" lon=\"-1.65319\"><ele>19.07</ele></trkpt><trkpt lat=\"49.64877\" lon=\"-1.65319\"><ele>18.96</ele></trkpt><trkpt lat=\"49.6488\" lon=\"-1.65318\"><ele>19</ele></trkpt><trkpt lat=\"49.64883\" lon=\"-1.65315\"><ele>18.85</ele></trkpt><trkpt lat=\"49.64885\" lon=\"-1.6531\"><ele>18.71</ele></trkpt><trkpt lat=\"49.64886\" lon=\"-1.65307\"><ele>18.71</ele></trkpt><trkpt lat=\"49.64889\" lon=\"-1.65308\"><ele>18.71</ele></trkpt><trkpt lat=\"49.649\" lon=\"-1.65313\"><ele>18.46</ele></trkpt><trkpt lat=\"49.6491\" lon=\"-1.65321\"><ele>18.22</ele></trkpt><trkpt lat=\"49.64915\" lon=\"-1.65328\"><ele>18.18</ele></trkpt><trkpt lat=\"49.64921\" lon=\"-1.65343\"><ele>18.32</ele></trkpt><trkpt lat=\"49.64924\" lon=\"-1.65353\"><ele>18.51</ele></trkpt><trkpt lat=\"49.64928\" lon=\"-1.65367\"><ele>18.83</ele></trkpt><trkpt lat=\"49.64928\" lon=\"-1.65378\"><ele>18.95</ele></trkpt><trkpt lat=\"49.64927\" lon=\"-1.65389\"><ele>19.26</ele></trkpt><trkpt lat=\"49.64926\" lon=\"-1.65399\"><ele>19.51</ele></trkpt><trkpt lat=\"49.64927\" lon=\"-1.65406\"><ele>19.63</ele></trkpt><trkpt lat=\"49.6495\" lon=\"-1.65461\"><ele>20.8</ele></trkpt><trkpt lat=\"49.64964\" lon=\"-1.65494\"><ele>21.43</ele></trkpt><trkpt lat=\"49.64981\" lon=\"-1.65535\"><ele>22.61</ele></trkpt><trkpt lat=\"49.65001\" lon=\"-1.65585\"><ele>24.17</ele></trkpt><trkpt lat=\"49.65004\" lon=\"-1.65591\"><ele>24.24</ele></trkpt><trkpt lat=\"49.65017\" lon=\"-1.65624\"><ele>25.21</ele></trkpt><trkpt lat=\"49.65019\" lon=\"-1.65631\"><ele>25.25</ele></trkpt><trkpt lat=\"49.65018\" lon=\"-1.65637\"><ele>25.46</ele></trkpt><trkpt lat=\"49.65022\" lon=\"-1.65636\"><ele>25.37</ele></trkpt><trkpt lat=\"49.65039\" lon=\"-1.65622\"><ele>24.41</ele></trkpt><trkpt lat=\"49.65059\" lon=\"-1.65596\"><ele>23.06</ele></trkpt><trkpt lat=\"49.65066\" lon=\"-1.65588\"><ele>22.48</ele></trkpt><trkpt lat=\"49.65089\" lon=\"-1.65622\"><ele>25.38</ele></trkpt><trkpt lat=\"49.65099\" lon=\"-1.6564\"><ele>25.96</ele></trkpt><trkpt lat=\"49.65101\" lon=\"-1.65644\"><ele>25.85</ele></trkpt><trkpt lat=\"49.6511\" lon=\"-1.65659\"><ele>25.72</ele></trkpt><trkpt lat=\"49.65094\" lon=\"-1.65678\"><ele>26.88</ele></trkpt><trkpt lat=\"49.65089\" lon=\"-1.65683\"><ele>27.29</ele></trkpt><trkpt lat=\"49.65097\" lon=\"-1.65699\"><ele>28.3</ele></trkpt><trkpt lat=\"49.65103\" lon=\"-1.65713\"><ele>29.26</ele></trkpt><trkpt lat=\"49.651\" lon=\"-1.65731\"><ele>31.31</ele></trkpt><trkpt lat=\"49.65096\" lon=\"-1.65747\"><ele>32.33</ele></trkpt><trkpt lat=\"49.65093\" lon=\"-1.65777\"><ele>34.51</ele></trkpt><trkpt lat=\"49.65085\" lon=\"-1.65834\"><ele>38.87</ele></trkpt><trkpt lat=\"49.6508\" lon=\"-1.65841\"><ele>38.92</ele></trkpt><trkpt lat=\"49.65075\" lon=\"-1.65861\"><ele>42.19</ele></trkpt><trkpt lat=\"49.65071\" lon=\"-1.65889\"><ele>44.74</ele></trkpt><trkpt lat=\"49.6507\" lon=\"-1.65914\"><ele>46.98</ele></trkpt><trkpt lat=\"49.65071\" lon=\"-1.65978\"><ele>52.46</ele></trkpt><trkpt lat=\"49.65071\" lon=\"-1.65981\"><ele>52.86</ele></trkpt><trkpt lat=\"49.65071\" lon=\"-1.66004\"><ele>54.46</ele></trkpt><trkpt lat=\"49.65072\" lon=\"-1.66009\"><ele>54.93</ele></trkpt><trkpt lat=\"49.65068\" lon=\"-1.66009\"><ele>55.08</ele></trkpt><trkpt lat=\"49.65072\" lon=\"-1.66009\"><ele>54.93</ele></trkpt><trkpt lat=\"49.65073\" lon=\"-1.66016\"><ele>56.11</ele></trkpt><trkpt lat=\"49.65085\" lon=\"-1.66057\"><ele>57.89</ele></trkpt><trkpt lat=\"49.65087\" lon=\"-1.66067\"><ele>57.74</ele></trkpt><trkpt lat=\"49.65099\" lon=\"-1.66117\"><ele>61.37</ele></trkpt><trkpt lat=\"49.65107\" lon=\"-1.66148\"><ele>63.2</ele></trkpt><trkpt lat=\"49.65115\" lon=\"-1.66176\"><ele>65.12</ele></trkpt><trkpt lat=\"49.65116\" lon=\"-1.66182\"><ele>65.3</ele></trkpt><trkpt lat=\"49.65115\" lon=\"-1.66184\"><ele>65.3</ele></trkpt><trkpt lat=\"49.6512\" lon=\"-1.66191\"><ele>66.09</ele></trkpt><trkpt lat=\"49.65118\" lon=\"-1.66194\"><ele>66.45</ele></trkpt><trkpt lat=\"49.6512\" lon=\"-1.66191\"><ele>66.09</ele></trkpt><trkpt lat=\"49.65115\" lon=\"-1.66184\"><ele>65.3</ele></trkpt><trkpt lat=\"49.65112\" lon=\"-1.66189\"><ele>65.44</ele></trkpt><trkpt lat=\"49.65102\" lon=\"-1.662\"><ele>65.65</ele></trkpt><trkpt lat=\"49.65074\" lon=\"-1.66224\"><ele>65.67</ele></trkpt><trkpt lat=\"49.65063\" lon=\"-1.66238\"><ele>66.58</ele></trkpt><trkpt lat=\"49.65061\" lon=\"-1.66244\"><ele>66.74</ele></trkpt><trkpt lat=\"49.6506\" lon=\"-1.66251\"><ele>66.87</ele></trkpt><trkpt lat=\"49.65057\" lon=\"-1.66251\"><ele>66.87</ele></trkpt><trkpt lat=\"49.65051\" lon=\"-1.66253\"><ele>67.11</ele></trkpt><trkpt lat=\"49.6505\" lon=\"-1.66254\"><ele>67.11</ele></trkpt><trkpt lat=\"49.65043\" lon=\"-1.66259\"><ele>67.65</ele></trkpt><trkpt lat=\"49.65037\" lon=\"-1.66266\"><ele>67.87</ele></trkpt><trkpt lat=\"49.65034\" lon=\"-1.66274\"><ele>68.14</ele></trkpt><trkpt lat=\"49.65034\" lon=\"-1.66277\"><ele>68.23</ele></trkpt><trkpt lat=\"49.65022\" lon=\"-1.66281\"><ele>68.92</ele></trkpt><trkpt lat=\"49.65017\" lon=\"-1.66283\"><ele>68.95</ele></trkpt><trkpt lat=\"49.65015\" lon=\"-1.66284\"><ele>68.95</ele></trkpt><trkpt lat=\"49.64991\" lon=\"-1.66293\"><ele>69.33</ele></trkpt><trkpt lat=\"49.64981\" lon=\"-1.66298\"><ele>69.27</ele></trkpt><trkpt lat=\"49.64965\" lon=\"-1.66336\"><ele>69.04</ele></trkpt><trkpt lat=\"49.64964\" lon=\"-1.6637\"><ele>69.99</ele></trkpt><trkpt lat=\"49.64964\" lon=\"-1.66375\"><ele>70.11</ele></trkpt><trkpt lat=\"49.64964\" lon=\"-1.66374\"><ele>69.99</ele></trkpt><trkpt lat=\"49.64965\" lon=\"-1.6641\"><ele>71.64</ele></trkpt><trkpt lat=\"49.64967\" lon=\"-1.66428\"><ele>72.7</ele></trkpt><trkpt lat=\"49.64969\" lon=\"-1.6644\"><ele>72.96</ele></trkpt><trkpt lat=\"49.64969\" lon=\"-1.66458\"><ele>73.24</ele></trkpt><trkpt lat=\"49.64969\" lon=\"-1.66472\"><ele>73.09</ele></trkpt><trkpt lat=\"49.64972\" lon=\"-1.66484\"><ele>73.07</ele></trkpt><trkpt lat=\"49.64978\" lon=\"-1.66502\"><ele>72.96</ele></trkpt><trkpt lat=\"49.6498\" lon=\"-1.66504\"><ele>72.87</ele></trkpt><trkpt lat=\"49.64984\" lon=\"-1.66508\"><ele>72.76</ele></trkpt><trkpt lat=\"49.64988\" lon=\"-1.6651\"><ele>72.7</ele></trkpt><trkpt lat=\"49.64996\" lon=\"-1.66513\"><ele>72.65</ele></trkpt><trkpt lat=\"49.65012\" lon=\"-1.66519\"><ele>72.74</ele></trkpt><trkpt lat=\"49.65017\" lon=\"-1.6652\"><ele>72.89</ele></trkpt><trkpt lat=\"49.65022\" lon=\"-1.66522\"><ele>72.85</ele></trkpt><trkpt lat=\"49.65037\" lon=\"-1.66535\"><ele>72.46</ele></trkpt><trkpt lat=\"49.65042\" lon=\"-1.66538\"><ele>72.27</ele></trkpt><trkpt lat=\"49.6506\" lon=\"-1.66535\"><ele>72.06</ele></trkpt><trkpt lat=\"49.65076\" lon=\"-1.66532\"><ele>72.09</ele></trkpt><trkpt lat=\"49.65083\" lon=\"-1.66531\"><ele>72</ele></trkpt><trkpt lat=\"49.65101\" lon=\"-1.66527\"><ele>71.47</ele></trkpt><trkpt lat=\"49.65121\" lon=\"-1.66526\"><ele>70.42</ele></trkpt><trkpt lat=\"49.65125\" lon=\"-1.66525\"><ele>70.42</ele></trkpt><trkpt lat=\"49.65131\" lon=\"-1.6652\"><ele>70.2</ele></trkpt><trkpt lat=\"49.65138\" lon=\"-1.66506\"><ele>69.79</ele></trkpt><trkpt lat=\"49.65149\" lon=\"-1.6646\"><ele>68.42</ele></trkpt><trkpt lat=\"49.65151\" lon=\"-1.66455\"><ele>68.05</ele></trkpt><trkpt lat=\"49.65154\" lon=\"-1.66453\"><ele>68.05</ele></trkpt><trkpt lat=\"49.65164\" lon=\"-1.66443\"><ele>65.78</ele></trkpt><trkpt lat=\"49.65172\" lon=\"-1.66429\"><ele>65.87</ele></trkpt><trkpt lat=\"49.65177\" lon=\"-1.66413\"><ele>64.9</ele></trkpt><trkpt lat=\"49.65179\" lon=\"-1.66391\"><ele>64.36</ele></trkpt><trkpt lat=\"49.65179\" lon=\"-1.66389\"><ele>64.36</ele></trkpt><trkpt lat=\"49.6518\" lon=\"-1.66387\"><ele>64.26</ele></trkpt><trkpt lat=\"49.65183\" lon=\"-1.66377\"><ele>63.92</ele></trkpt><trkpt lat=\"49.65189\" lon=\"-1.66362\"><ele>63.19</ele></trkpt><trkpt lat=\"49.65194\" lon=\"-1.66346\"><ele>62.26</ele></trkpt><trkpt lat=\"49.65197\" lon=\"-1.66341\"><ele>62.23</ele></trkpt><trkpt lat=\"49.65199\" lon=\"-1.66319\"><ele>61.94</ele></trkpt><trkpt lat=\"49.65203\" lon=\"-1.66307\"><ele>61.67</ele></trkpt><trkpt lat=\"49.65216\" lon=\"-1.6627\"><ele>61</ele></trkpt><trkpt lat=\"49.65221\" lon=\"-1.66256\"><ele>60.7</ele></trkpt><trkpt lat=\"49.65235\" lon=\"-1.66222\"><ele>59.25</ele></trkpt><trkpt lat=\"49.65237\" lon=\"-1.66221\"><ele>58.77</ele></trkpt><trkpt lat=\"49.65244\" lon=\"-1.66228\"><ele>58.38</ele></trkpt><trkpt lat=\"49.65246\" lon=\"-1.6623\"><ele>58.13</ele></trkpt><trkpt lat=\"49.65257\" lon=\"-1.66246\"><ele>57.18</ele></trkpt><trkpt lat=\"49.65258\" lon=\"-1.66242\"><ele>57.21</ele></trkpt><trkpt lat=\"49.65266\" lon=\"-1.66208\"><ele>55.51</ele></trkpt><trkpt lat=\"49.65265\" lon=\"-1.66189\"><ele>54.25</ele></trkpt><trkpt lat=\"49.65265\" lon=\"-1.66183\"><ele>53.81</ele></trkpt><trkpt lat=\"49.65266\" lon=\"-1.6618\"><ele>53.45</ele></trkpt><trkpt lat=\"49.65267\" lon=\"-1.66178\"><ele>52.99</ele></trkpt><trkpt lat=\"49.65278\" lon=\"-1.66162\"><ele>52.32</ele></trkpt><trkpt lat=\"49.65278\" lon=\"-1.66161\"><ele>52.32</ele></trkpt><trkpt lat=\"49.65276\" lon=\"-1.66163\"><ele>52.32</ele></trkpt><trkpt lat=\"49.653\" lon=\"-1.66228\"><ele>51.63</ele></trkpt><trkpt lat=\"49.65301\" lon=\"-1.66233\"><ele>51.59</ele></trkpt><trkpt lat=\"49.65308\" lon=\"-1.66252\"><ele>51.35</ele></trkpt><trkpt lat=\"49.65327\" lon=\"-1.66309\"><ele>50.43</ele></trkpt><trkpt lat=\"49.65329\" lon=\"-1.66315\"><ele>50.44</ele></trkpt><trkpt lat=\"49.65333\" lon=\"-1.66329\"><ele>50.52</ele></trkpt><trkpt lat=\"49.65336\" lon=\"-1.66339\"><ele>50.52</ele></trkpt><trkpt lat=\"49.65337\" lon=\"-1.66339\"><ele>50.52</ele></trkpt><trkpt lat=\"49.65334\" lon=\"-1.6633\"><ele>50.52</ele></trkpt><trkpt lat=\"49.65342\" lon=\"-1.66312\"><ele>49.72</ele></trkpt><trkpt lat=\"49.65354\" lon=\"-1.66286\"><ele>48.35</ele></trkpt><trkpt lat=\"49.65356\" lon=\"-1.6628\"><ele>48.21</ele></trkpt><trkpt lat=\"49.65365\" lon=\"-1.66264\"><ele>47.33</ele></trkpt><trkpt lat=\"49.65368\" lon=\"-1.66253\"><ele>46.74</ele></trkpt><trkpt lat=\"49.65386\" lon=\"-1.66206\"><ele>44.44</ele></trkpt><trkpt lat=\"49.65388\" lon=\"-1.66199\"><ele>44.15</ele></trkpt><trkpt lat=\"49.6539\" lon=\"-1.66192\"><ele>43.88</ele></trkpt><trkpt lat=\"49.65393\" lon=\"-1.66194\"><ele>44.02</ele></trkpt><trkpt lat=\"49.6549\" lon=\"-1.6622\"><ele>42.74</ele></trkpt><trkpt lat=\"49.65489\" lon=\"-1.66227\"><ele>43.04</ele></trkpt><trkpt lat=\"49.65504\" lon=\"-1.66233\"><ele>41.71</ele></trkpt><trkpt lat=\"49.65502\" lon=\"-1.66249\"><ele>43.47</ele></trkpt><trkpt lat=\"49.65503\" lon=\"-1.66255\"><ele>43.33</ele></trkpt><trkpt lat=\"49.65509\" lon=\"-1.66268\"><ele>43.54</ele></trkpt><trkpt lat=\"49.65517\" lon=\"-1.66274\"><ele>42.81</ele></trkpt><trkpt lat=\"49.65519\" lon=\"-1.66276\"><ele>42.61</ele></trkpt><trkpt lat=\"49.65522\" lon=\"-1.66282\"><ele>41.77</ele></trkpt><trkpt lat=\"49.65521\" lon=\"-1.66287\"><ele>41.61</ele></trkpt><trkpt lat=\"49.65513\" lon=\"-1.66299\"><ele>41.6</ele></trkpt><trkpt lat=\"49.65507\" lon=\"-1.66322\"><ele>41.6</ele></trkpt><trkpt lat=\"49.65506\" lon=\"-1.66332\"><ele>40.72</ele></trkpt><trkpt lat=\"49.65508\" lon=\"-1.66332\"><ele>39.86</ele></trkpt><trkpt lat=\"49.65513\" lon=\"-1.66335\"><ele>39.18</ele></trkpt><trkpt lat=\"49.65516\" lon=\"-1.66344\"><ele>37.7</ele></trkpt><trkpt lat=\"49.65519\" lon=\"-1.66347\"><ele>37.33</ele></trkpt><trkpt lat=\"49.65524\" lon=\"-1.66346\"><ele>36.39</ele></trkpt><trkpt lat=\"49.6553\" lon=\"-1.66343\"><ele>34.77</ele></trkpt><trkpt lat=\"49.65536\" lon=\"-1.66335\"><ele>34.31</ele></trkpt><trkpt lat=\"49.65538\" lon=\"-1.66336\"><ele>33.27</ele></trkpt><trkpt lat=\"49.65541\" lon=\"-1.66342\"><ele>33.16</ele></trkpt><trkpt lat=\"49.6554\" lon=\"-1.66345\"><ele>33.06</ele></trkpt><trkpt lat=\"49.65541\" lon=\"-1.66342\"><ele>33.16</ele></trkpt><trkpt lat=\"49.65545\" lon=\"-1.66343\"><ele>32.52</ele></trkpt><trkpt lat=\"49.65548\" lon=\"-1.66346\"><ele>31.57</ele></trkpt><trkpt lat=\"49.65552\" lon=\"-1.66356\"><ele>30.34</ele></trkpt><trkpt lat=\"49.65561\" lon=\"-1.6635\"><ele>28.8</ele></trkpt><trkpt lat=\"49.65565\" lon=\"-1.66353\"><ele>28.11</ele></trkpt><trkpt lat=\"49.65567\" lon=\"-1.66363\"><ele>27.65</ele></trkpt><trkpt lat=\"49.65569\" lon=\"-1.66364\"><ele>26.82</ele></trkpt><trkpt lat=\"49.65572\" lon=\"-1.66356\"><ele>26.1</ele></trkpt><trkpt lat=\"49.65574\" lon=\"-1.66354\"><ele>26.1</ele></trkpt><trkpt lat=\"49.65575\" lon=\"-1.66355\"><ele>26.1</ele></trkpt><trkpt lat=\"49.65577\" lon=\"-1.66368\"><ele>24.77</ele></trkpt><trkpt lat=\"49.65579\" lon=\"-1.66367\"><ele>24.77</ele></trkpt><trkpt lat=\"49.6558\" lon=\"-1.66358\"><ele>23.91</ele></trkpt><trkpt lat=\"49.65583\" lon=\"-1.66359\"><ele>23.91</ele></trkpt><trkpt lat=\"49.65585\" lon=\"-1.66369\"><ele>23.35</ele></trkpt><trkpt lat=\"49.65587\" lon=\"-1.66373\"><ele>23.18</ele></trkpt><trkpt lat=\"49.65603\" lon=\"-1.66389\"><ele>20.69</ele></trkpt><trkpt lat=\"49.65605\" lon=\"-1.664\"><ele>20.19</ele></trkpt><trkpt lat=\"49.65606\" lon=\"-1.66404\"><ele>19.79</ele></trkpt><trkpt lat=\"49.65604\" lon=\"-1.66409\"><ele>20.04</ele></trkpt><trkpt lat=\"49.65594\" lon=\"-1.66443\"><ele>20.08</ele></trkpt><trkpt lat=\"49.65589\" lon=\"-1.66464\"><ele>20.22</ele></trkpt><trkpt lat=\"49.65578\" lon=\"-1.66508\"><ele>19.75</ele></trkpt><trkpt lat=\"49.65572\" lon=\"-1.6654\"><ele>19.62</ele></trkpt><trkpt lat=\"49.65569\" lon=\"-1.66563\"><ele>19.59</ele></trkpt><trkpt lat=\"49.65559\" lon=\"-1.66599\"><ele>19.65</ele></trkpt><trkpt lat=\"49.65558\" lon=\"-1.66603\"><ele>20.03</ele></trkpt><trkpt lat=\"49.65552\" lon=\"-1.66626\"><ele>20.27</ele></trkpt><trkpt lat=\"49.65548\" lon=\"-1.66637\"><ele>20.34</ele></trkpt><trkpt lat=\"49.65545\" lon=\"-1.66663\"><ele>20.73</ele></trkpt><trkpt lat=\"49.65534\" lon=\"-1.66788\"><ele>23.41</ele></trkpt><trkpt lat=\"49.65534\" lon=\"-1.66818\"><ele>23.57</ele></trkpt><trkpt lat=\"49.6554\" lon=\"-1.66856\"><ele>22.26</ele></trkpt><trkpt lat=\"49.65535\" lon=\"-1.66858\"><ele>22.85</ele></trkpt><trkpt lat=\"49.65535\" lon=\"-1.66863\"><ele>22.9</ele></trkpt><trkpt lat=\"49.65535\" lon=\"-1.66858\"><ele>22.85</ele></trkpt><trkpt lat=\"49.65502\" lon=\"-1.66865\"><ele>27.52</ele></trkpt><trkpt lat=\"49.6549\" lon=\"-1.66882\"><ele>29.01</ele></trkpt><trkpt lat=\"49.65485\" lon=\"-1.66893\"><ele>29.78</ele></trkpt><trkpt lat=\"49.65479\" lon=\"-1.66907\"><ele>29.22</ele></trkpt><trkpt lat=\"49.65479\" lon=\"-1.66923\"><ele>28.32</ele></trkpt><trkpt lat=\"49.6548\" lon=\"-1.66939\"><ele>27.2</ele></trkpt><trkpt lat=\"49.65479\" lon=\"-1.6695\"><ele>26.32</ele></trkpt><trkpt lat=\"49.65474\" lon=\"-1.66957\"><ele>26.02</ele></trkpt><trkpt lat=\"49.65471\" lon=\"-1.66982\"><ele>23.89</ele></trkpt><trkpt lat=\"49.65466\" lon=\"-1.67001\"><ele>21.97</ele></trkpt><trkpt lat=\"49.65461\" lon=\"-1.67018\"><ele>20.58</ele></trkpt><trkpt lat=\"49.65449\" lon=\"-1.67044\"><ele>18.31</ele></trkpt><trkpt lat=\"49.65436\" lon=\"-1.67072\"><ele>14.1</ele></trkpt><trkpt lat=\"49.65428\" lon=\"-1.67088\"><ele>11.66</ele></trkpt><trkpt lat=\"49.65425\" lon=\"-1.67103\"><ele>10.14</ele></trkpt><trkpt lat=\"49.65424\" lon=\"-1.67121\"><ele>10.23</ele></trkpt><trkpt lat=\"49.65429\" lon=\"-1.6712\"><ele>10.16</ele></trkpt><trkpt lat=\"49.65447\" lon=\"-1.67127\"><ele>10.6</ele></trkpt><trkpt lat=\"49.65452\" lon=\"-1.67129\"><ele>9.79</ele></trkpt><trkpt lat=\"49.65458\" lon=\"-1.67131\"><ele>9.95</ele></trkpt><trkpt lat=\"49.65462\" lon=\"-1.67131\"><ele>10.17</ele></trkpt><trkpt lat=\"49.65484\" lon=\"-1.67125\"><ele>9.55</ele></trkpt><trkpt lat=\"49.65488\" lon=\"-1.67124\"><ele>9.43</ele></trkpt><trkpt lat=\"49.6549\" lon=\"-1.67124\"><ele>9.28</ele></trkpt><trkpt lat=\"49.65492\" lon=\"-1.67115\"><ele>9.06</ele></trkpt><trkpt lat=\"49.65494\" lon=\"-1.6711\"><ele>9</ele></trkpt><trkpt lat=\"49.65496\" lon=\"-1.67104\"><ele>8.89</ele></trkpt><trkpt lat=\"49.65501\" lon=\"-1.67101\"><ele>8.56</ele></trkpt><trkpt lat=\"49.65507\" lon=\"-1.67093\"><ele>9.54</ele></trkpt><trkpt lat=\"49.65507\" lon=\"-1.67091\"><ele>9.54</ele></trkpt><trkpt lat=\"49.65512\" lon=\"-1.6709\"><ele>9.15</ele></trkpt><trkpt lat=\"49.65516\" lon=\"-1.67091\"><ele>8.75</ele></trkpt><trkpt lat=\"49.65519\" lon=\"-1.67094\"><ele>8.75</ele></trkpt><trkpt lat=\"49.65525\" lon=\"-1.67103\"><ele>8.17</ele></trkpt><trkpt lat=\"49.65529\" lon=\"-1.67107\"><ele>7.94</ele></trkpt><trkpt lat=\"49.65534\" lon=\"-1.67109\"><ele>7.77</ele></trkpt><trkpt lat=\"49.65541\" lon=\"-1.67109\"><ele>7.79</ele></trkpt><trkpt lat=\"49.65543\" lon=\"-1.67107\"><ele>7.95</ele></trkpt><trkpt lat=\"49.65544\" lon=\"-1.67106\"><ele>7.95</ele></trkpt><trkpt lat=\"49.65554\" lon=\"-1.67096\"><ele>8.23</ele></trkpt><trkpt lat=\"49.6556\" lon=\"-1.67087\"><ele>8.48</ele></trkpt><trkpt lat=\"49.65565\" lon=\"-1.67082\"><ele>8.72</ele></trkpt><trkpt lat=\"49.65573\" lon=\"-1.67074\"><ele>8.73</ele></trkpt><trkpt lat=\"49.65585\" lon=\"-1.67068\"><ele>8.76</ele></trkpt><trkpt lat=\"49.65595\" lon=\"-1.67064\"><ele>8.7</ele></trkpt><trkpt lat=\"49.65607\" lon=\"-1.67056\"><ele>8.79</ele></trkpt><trkpt lat=\"49.65615\" lon=\"-1.67049\"><ele>8.79</ele></trkpt><trkpt lat=\"49.65619\" lon=\"-1.67043\"><ele>9.18</ele></trkpt><trkpt lat=\"49.65625\" lon=\"-1.67035\"><ele>9.5</ele></trkpt><trkpt lat=\"49.65629\" lon=\"-1.67028\"><ele>9.54</ele></trkpt><trkpt lat=\"49.6563\" lon=\"-1.67028\"><ele>9.54</ele></trkpt><trkpt lat=\"49.65634\" lon=\"-1.67024\"><ele>9.53</ele></trkpt><trkpt lat=\"49.65647\" lon=\"-1.67014\"><ele>9.19</ele></trkpt><trkpt lat=\"49.6568\" lon=\"-1.66988\"><ele>8.39</ele></trkpt><trkpt lat=\"49.65686\" lon=\"-1.66985\"><ele>8.37</ele></trkpt><trkpt lat=\"49.6569\" lon=\"-1.66984\"><ele>8.25</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.66982\"><ele>7.79</ele></trkpt><trkpt lat=\"49.657\" lon=\"-1.66985\"><ele>7.83</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.66991\"><ele>7.68</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.6702\"><ele>7.57</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.6709\"><ele>7.21</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.67095\"><ele>7.2</ele></trkpt><trkpt lat=\"49.65707\" lon=\"-1.67095\"><ele>7.02</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.67095\"><ele>7.2</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.67121\"><ele>7.1</ele></trkpt><trkpt lat=\"49.65701\" lon=\"-1.67138\"><ele>7</ele></trkpt><trkpt lat=\"49.65695\" lon=\"-1.67165\"><ele>6.98</ele></trkpt><trkpt lat=\"49.65692\" lon=\"-1.67181\"><ele>7</ele></trkpt><trkpt lat=\"49.6569\" lon=\"-1.67194\"><ele>7.16</ele></trkpt><trkpt lat=\"49.65687\" lon=\"-1.67207\"><ele>7.12</ele></trkpt><trkpt lat=\"49.65687\" lon=\"-1.67214\"><ele>6.87</ele></trkpt><trkpt lat=\"49.65686\" lon=\"-1.67227\"><ele>6.87</ele></trkpt><trkpt lat=\"49.65686\" lon=\"-1.67245\"><ele>6.43</ele></trkpt><trkpt lat=\"49.65685\" lon=\"-1.67252\"><ele>6.08</ele></trkpt><trkpt lat=\"49.65683\" lon=\"-1.67259\"><ele>6.09</ele></trkpt><trkpt lat=\"49.65677\" lon=\"-1.67274\"><ele>6.21</ele></trkpt><trkpt lat=\"49.65677\" lon=\"-1.67281\"><ele>6.15</ele></trkpt><trkpt lat=\"49.65673\" lon=\"-1.67281\"><ele>6.37</ele></trkpt><trkpt lat=\"49.65667\" lon=\"-1.67284\"><ele>6.7</ele></trkpt><trkpt lat=\"49.65666\" lon=\"-1.6728\"><ele>6.7</ele></trkpt><trkpt lat=\"49.65666\" lon=\"-1.67284\"><ele>6.7</ele></trkpt><trkpt lat=\"49.65654\" lon=\"-1.67292\"><ele>7.01</ele></trkpt><trkpt lat=\"49.65644\" lon=\"-1.67285\"><ele>7.07</ele></trkpt><trkpt lat=\"49.65629\" lon=\"-1.67275\"><ele>7.25</ele></trkpt><trkpt lat=\"49.6562\" lon=\"-1.67263\"><ele>7.33</ele></trkpt><trkpt lat=\"49.65605\" lon=\"-1.67237\"><ele>7.49</ele></trkpt><trkpt lat=\"49.65592\" lon=\"-1.67214\"><ele>7.78</ele></trkpt><trkpt lat=\"49.65589\" lon=\"-1.67211\"><ele>7.87</ele></trkpt><trkpt lat=\"49.65594\" lon=\"-1.67199\"><ele>7.58</ele></trkpt><trkpt lat=\"49.65598\" lon=\"-1.67189\"><ele>6.55</ele></trkpt><trkpt lat=\"49.65599\" lon=\"-1.67186\"><ele>6.55</ele></trkpt><trkpt lat=\"49.65588\" lon=\"-1.67183\"><ele>7.1</ele></trkpt><trkpt lat=\"49.65577\" lon=\"-1.67174\"><ele>7.78</ele></trkpt><trkpt lat=\"49.65566\" lon=\"-1.67173\"><ele>8.4</ele></trkpt><trkpt lat=\"49.65559\" lon=\"-1.67175\"><ele>8.55</ele></trkpt><trkpt lat=\"49.65554\" lon=\"-1.67177\"><ele>8.78</ele></trkpt><trkpt lat=\"49.65552\" lon=\"-1.6717\"><ele>8.91</ele></trkpt><trkpt lat=\"49.65547\" lon=\"-1.67165\"><ele>9.08</ele></trkpt><trkpt lat=\"49.65546\" lon=\"-1.67163\"><ele>8.91</ele></trkpt><trkpt lat=\"49.65541\" lon=\"-1.67159\"><ele>9.2</ele></trkpt><trkpt lat=\"49.65536\" lon=\"-1.67159\"><ele>9.37</ele></trkpt><trkpt lat=\"49.6553\" lon=\"-1.67165\"><ele>9.4</ele></trkpt><trkpt lat=\"49.65518\" lon=\"-1.67169\"><ele>10.02</ele></trkpt><trkpt lat=\"49.65514\" lon=\"-1.67169\"><ele>10.01</ele></trkpt><trkpt lat=\"49.65512\" lon=\"-1.67173\"><ele>9.91</ele></trkpt><trkpt lat=\"49.65509\" lon=\"-1.67175\"><ele>9.85</ele></trkpt><trkpt lat=\"49.65506\" lon=\"-1.67174\"><ele>9.81</ele></trkpt><trkpt lat=\"49.65503\" lon=\"-1.6717\"><ele>10.08</ele></trkpt><trkpt lat=\"49.655\" lon=\"-1.67165\"><ele>9.84</ele></trkpt><trkpt lat=\"49.65499\" lon=\"-1.67163\"><ele>9.77</ele></trkpt><trkpt lat=\"49.65496\" lon=\"-1.67163\"><ele>9.88</ele></trkpt><trkpt lat=\"49.65482\" lon=\"-1.67153\"><ele>10.05</ele></trkpt><trkpt lat=\"49.6548\" lon=\"-1.67156\"><ele>10.33</ele></trkpt><trkpt lat=\"49.6548\" lon=\"-1.67168\"><ele>10.39</ele></trkpt><trkpt lat=\"49.65482\" lon=\"-1.67185\"><ele>10.14</ele></trkpt><trkpt lat=\"49.65468\" lon=\"-1.67188\"><ele>10.7</ele></trkpt><trkpt lat=\"49.65457\" lon=\"-1.67195\"><ele>11.16</ele></trkpt><trkpt lat=\"49.65454\" lon=\"-1.67185\"><ele>11.38</ele></trkpt><trkpt lat=\"49.65457\" lon=\"-1.67195\"><ele>11.16</ele></trkpt><trkpt lat=\"49.65454\" lon=\"-1.67197\"><ele>11.33</ele></trkpt><trkpt lat=\"49.65441\" lon=\"-1.67197\"><ele>11.8</ele></trkpt><trkpt lat=\"49.65429\" lon=\"-1.67191\"><ele>12.19</ele></trkpt><trkpt lat=\"49.65415\" lon=\"-1.67272\"><ele>13.04</ele></trkpt><trkpt lat=\"49.65411\" lon=\"-1.67265\"><ele>12.78</ele></trkpt><trkpt lat=\"49.65411\" lon=\"-1.67249\"><ele>12.08</ele></trkpt><trkpt lat=\"49.65415\" lon=\"-1.67223\"><ele>11.4</ele></trkpt><trkpt lat=\"49.65422\" lon=\"-1.67183\"><ele>11.2</ele></trkpt><trkpt lat=\"49.65403\" lon=\"-1.67174\"><ele>12.13</ele></trkpt><trkpt lat=\"49.65383\" lon=\"-1.67164\"><ele>12.72</ele></trkpt><trkpt lat=\"49.65345\" lon=\"-1.67151\"><ele>14.07</ele></trkpt><trkpt lat=\"49.65315\" lon=\"-1.67141\"><ele>14.79</ele></trkpt><trkpt lat=\"49.65315\" lon=\"-1.67142\"><ele>14.79</ele></trkpt><trkpt lat=\"49.65315\" lon=\"-1.67141\"><ele>14.79</ele></trkpt><trkpt lat=\"49.65311\" lon=\"-1.67139\"><ele>15.12</ele></trkpt><trkpt lat=\"49.65296\" lon=\"-1.67133\"><ele>15.58</ele></trkpt><trkpt lat=\"49.65267\" lon=\"-1.67123\"><ele>16.26</ele></trkpt><trkpt lat=\"49.65262\" lon=\"-1.67126\"><ele>17.36</ele></trkpt><trkpt lat=\"49.65259\" lon=\"-1.67131\"><ele>18.25</ele></trkpt><trkpt lat=\"49.65256\" lon=\"-1.67137\"><ele>17.63</ele></trkpt><trkpt lat=\"49.65245\" lon=\"-1.67146\"><ele>18.99</ele></trkpt><trkpt lat=\"49.6524\" lon=\"-1.67148\"><ele>20.4</ele></trkpt><trkpt lat=\"49.65239\" lon=\"-1.67149\"><ele>20.4</ele></trkpt><trkpt lat=\"49.6522\" lon=\"-1.67154\"><ele>19.89</ele></trkpt><trkpt lat=\"49.65214\" lon=\"-1.67152\"><ele>19.78</ele></trkpt><trkpt lat=\"49.65199\" lon=\"-1.67148\"><ele>20.39</ele></trkpt><trkpt lat=\"49.65176\" lon=\"-1.67137\"><ele>20.33</ele></trkpt><trkpt lat=\"49.6516\" lon=\"-1.67131\"><ele>21.24</ele></trkpt><trkpt lat=\"49.65137\" lon=\"-1.67125\"><ele>22.82</ele></trkpt><trkpt lat=\"49.65127\" lon=\"-1.6712\"><ele>23.52</ele></trkpt><trkpt lat=\"49.65124\" lon=\"-1.67118\"><ele>24.36</ele></trkpt><trkpt lat=\"49.65119\" lon=\"-1.67114\"><ele>23.98</ele></trkpt><trkpt lat=\"49.65118\" lon=\"-1.67117\"><ele>25.57</ele></trkpt><trkpt lat=\"49.65118\" lon=\"-1.67114\"><ele>23.98</ele></trkpt><trkpt lat=\"49.65103\" lon=\"-1.67102\"><ele>24.56</ele></trkpt><trkpt lat=\"49.65091\" lon=\"-1.67096\"><ele>25.19</ele></trkpt><trkpt lat=\"49.65071\" lon=\"-1.67082\"><ele>24.84</ele></trkpt><trkpt lat=\"49.65054\" lon=\"-1.6707\"><ele>25.42</ele></trkpt><trkpt lat=\"49.65044\" lon=\"-1.67062\"><ele>25.36</ele></trkpt><trkpt lat=\"49.65021\" lon=\"-1.67044\"><ele>25.96</ele></trkpt><trkpt lat=\"49.64985\" lon=\"-1.67023\"><ele>27.13</ele></trkpt><trkpt lat=\"49.64963\" lon=\"-1.67002\"><ele>26.32</ele></trkpt><trkpt lat=\"49.64954\" lon=\"-1.66995\"><ele>25.6</ele></trkpt><trkpt lat=\"49.64945\" lon=\"-1.66993\"><ele>25.47</ele></trkpt><trkpt lat=\"49.64925\" lon=\"-1.67006\"><ele>24.96</ele></trkpt><trkpt lat=\"49.6492\" lon=\"-1.67009\"><ele>24.94</ele></trkpt><trkpt lat=\"49.6491\" lon=\"-1.67019\"><ele>24.63</ele></trkpt><trkpt lat=\"49.64897\" lon=\"-1.67038\"><ele>24.59</ele></trkpt><trkpt lat=\"49.64883\" lon=\"-1.67047\"><ele>24.61</ele></trkpt><trkpt lat=\"49.64847\" lon=\"-1.67082\"><ele>24.69</ele></trkpt><trkpt lat=\"49.64832\" lon=\"-1.67121\"><ele>27.45</ele></trkpt><trkpt lat=\"49.64828\" lon=\"-1.67141\"><ele>29.27</ele></trkpt><trkpt lat=\"49.64818\" lon=\"-1.67147\"><ele>30.36</ele></trkpt><trkpt lat=\"49.6481\" lon=\"-1.67144\"><ele>30.11</ele></trkpt><trkpt lat=\"49.64801\" lon=\"-1.67145\"><ele>30.12</ele></trkpt><trkpt lat=\"49.64797\" lon=\"-1.67147\"><ele>30.51</ele></trkpt><trkpt lat=\"49.64791\" lon=\"-1.6715\"><ele>30.34</ele></trkpt><trkpt lat=\"49.64786\" lon=\"-1.67153\"><ele>30.32</ele></trkpt><trkpt lat=\"49.64791\" lon=\"-1.6717\"><ele>34.26</ele></trkpt><trkpt lat=\"49.64786\" lon=\"-1.67153\"><ele>30.32</ele></trkpt><trkpt lat=\"49.64778\" lon=\"-1.67159\"><ele>30.47</ele></trkpt><trkpt lat=\"49.64773\" lon=\"-1.67168\"><ele>30.71</ele></trkpt><trkpt lat=\"49.64764\" lon=\"-1.67181\"><ele>30.93</ele></trkpt><trkpt lat=\"49.64748\" lon=\"-1.67206\"><ele>32.6</ele></trkpt><trkpt lat=\"49.6474\" lon=\"-1.67214\"><ele>33.04</ele></trkpt><trkpt lat=\"49.64735\" lon=\"-1.67216\"><ele>33.28</ele></trkpt><trkpt lat=\"49.64727\" lon=\"-1.67236\"><ele>33.76</ele></trkpt><trkpt lat=\"49.64715\" lon=\"-1.67271\"><ele>34.26</ele></trkpt><trkpt lat=\"49.647\" lon=\"-1.6733\"><ele>34.99</ele></trkpt><trkpt lat=\"49.6468\" lon=\"-1.67393\"><ele>36.37</ele></trkpt><trkpt lat=\"49.64651\" lon=\"-1.67462\"><ele>37.47</ele></trkpt><trkpt lat=\"49.64647\" lon=\"-1.67467\"><ele>37.64</ele></trkpt><trkpt lat=\"49.64639\" lon=\"-1.67478\"><ele>38.47</ele></trkpt><trkpt lat=\"49.64631\" lon=\"-1.67462\"><ele>38.3</ele></trkpt><trkpt lat=\"49.64627\" lon=\"-1.67457\"><ele>36.7</ele></trkpt><trkpt lat=\"49.64621\" lon=\"-1.6745\"><ele>33.52</ele></trkpt><trkpt lat=\"49.64618\" lon=\"-1.67447\"><ele>36.36</ele></trkpt><trkpt lat=\"49.64616\" lon=\"-1.67444\"><ele>36.36</ele></trkpt><trkpt lat=\"49.64612\" lon=\"-1.67435\"><ele>38.44</ele></trkpt><trkpt lat=\"49.64606\" lon=\"-1.67428\"><ele>38.59</ele></trkpt><trkpt lat=\"49.64601\" lon=\"-1.67422\"><ele>38.74</ele></trkpt><trkpt lat=\"49.64593\" lon=\"-1.67417\"><ele>38.99</ele></trkpt><trkpt lat=\"49.64582\" lon=\"-1.67412\"><ele>39.68</ele></trkpt><trkpt lat=\"49.64547\" lon=\"-1.67397\"><ele>42.02</ele></trkpt><trkpt lat=\"49.64536\" lon=\"-1.6739\"><ele>43.03</ele></trkpt><trkpt lat=\"49.64513\" lon=\"-1.67368\"><ele>44.99</ele></trkpt><trkpt lat=\"49.64492\" lon=\"-1.67349\"><ele>47.08</ele></trkpt><trkpt lat=\"49.6447\" lon=\"-1.67328\"><ele>49.78</ele></trkpt><trkpt lat=\"49.64468\" lon=\"-1.67325\"><ele>50.26</ele></trkpt><trkpt lat=\"49.64464\" lon=\"-1.67318\"><ele>51.04</ele></trkpt><trkpt lat=\"49.64462\" lon=\"-1.67313\"><ele>51.32</ele></trkpt><trkpt lat=\"49.64457\" lon=\"-1.67317\"><ele>51.36</ele></trkpt><trkpt lat=\"49.6445\" lon=\"-1.67317\"><ele>51.7</ele></trkpt><trkpt lat=\"49.64441\" lon=\"-1.67315\"><ele>50.5</ele></trkpt><trkpt lat=\"49.64414\" lon=\"-1.67307\"><ele>50.74</ele></trkpt><trkpt lat=\"49.64387\" lon=\"-1.67301\"><ele>51.93</ele></trkpt><trkpt lat=\"49.64371\" lon=\"-1.67297\"><ele>52.95</ele></trkpt><trkpt lat=\"49.64365\" lon=\"-1.67296\"><ele>54.29</ele></trkpt><trkpt lat=\"49.64357\" lon=\"-1.67295\"><ele>54.7</ele></trkpt><trkpt lat=\"49.64334\" lon=\"-1.67293\"><ele>57.42</ele></trkpt><trkpt lat=\"49.64332\" lon=\"-1.67293\"><ele>57.42</ele></trkpt><trkpt lat=\"49.64306\" lon=\"-1.67291\"><ele>59.5</ele></trkpt><trkpt lat=\"49.64296\" lon=\"-1.67288\"><ele>59.95</ele></trkpt><trkpt lat=\"49.64262\" lon=\"-1.67281\"><ele>60.29</ele></trkpt><trkpt lat=\"49.64258\" lon=\"-1.6728\"><ele>60.43</ele></trkpt><trkpt lat=\"49.64253\" lon=\"-1.6728\"><ele>60.54</ele></trkpt><trkpt lat=\"49.64235\" lon=\"-1.67282\"><ele>61.36</ele></trkpt><trkpt lat=\"49.64227\" lon=\"-1.67284\"><ele>61.57</ele></trkpt><trkpt lat=\"49.64213\" lon=\"-1.67282\"><ele>62.27</ele></trkpt><trkpt lat=\"49.64187\" lon=\"-1.67279\"><ele>64.27</ele></trkpt><trkpt lat=\"49.64182\" lon=\"-1.67279\"><ele>64.56</ele></trkpt><trkpt lat=\"49.64165\" lon=\"-1.67277\"><ele>65.4</ele></trkpt><trkpt lat=\"49.64162\" lon=\"-1.67278\"><ele>65.57</ele></trkpt><trkpt lat=\"49.64149\" lon=\"-1.67274\"><ele>65.68</ele></trkpt><trkpt lat=\"49.64145\" lon=\"-1.67273\"><ele>65.62</ele></trkpt><trkpt lat=\"49.64127\" lon=\"-1.67265\"><ele>64.79</ele></trkpt><trkpt lat=\"49.64099\" lon=\"-1.6725\"><ele>61.71</ele></trkpt><trkpt lat=\"49.64094\" lon=\"-1.67248\"><ele>61.29</ele></trkpt><trkpt lat=\"49.64135\" lon=\"-1.67114\"><ele>68.05</ele></trkpt><trkpt lat=\"49.6415\" lon=\"-1.6706\"><ele>69.29</ele></trkpt><trkpt lat=\"49.64152\" lon=\"-1.6705\"><ele>69.46</ele></trkpt><trkpt lat=\"49.64156\" lon=\"-1.67038\"><ele>69.91</ele></trkpt><trkpt lat=\"49.64157\" lon=\"-1.67036\"><ele>69.91</ele></trkpt><trkpt lat=\"49.64154\" lon=\"-1.67031\"><ele>70.06</ele></trkpt><trkpt lat=\"49.6415\" lon=\"-1.67023\"><ele>70.31</ele></trkpt><trkpt lat=\"49.64145\" lon=\"-1.67017\"><ele>70.54</ele></trkpt><trkpt lat=\"49.64136\" lon=\"-1.67006\"><ele>70.87</ele></trkpt><trkpt lat=\"49.64141\" lon=\"-1.66998\"><ele>70.88</ele></trkpt><trkpt lat=\"49.64139\" lon=\"-1.66993\"><ele>71</ele></trkpt><trkpt lat=\"49.64139\" lon=\"-1.66966\"><ele>71.54</ele></trkpt><trkpt lat=\"49.64136\" lon=\"-1.66957\"><ele>71.79</ele></trkpt><trkpt lat=\"49.64134\" lon=\"-1.66951\"><ele>71.83</ele></trkpt><trkpt lat=\"49.64125\" lon=\"-1.66945\"><ele>72.48</ele></trkpt><trkpt lat=\"49.64128\" lon=\"-1.66937\"><ele>72.51</ele></trkpt><trkpt lat=\"49.6413\" lon=\"-1.66925\"><ele>73</ele></trkpt><trkpt lat=\"49.64131\" lon=\"-1.66913\"><ele>73.09</ele></trkpt><trkpt lat=\"49.64132\" lon=\"-1.66902\"><ele>73.17</ele></trkpt><trkpt lat=\"49.64131\" lon=\"-1.66893\"><ele>73.22</ele></trkpt><trkpt lat=\"49.6413\" lon=\"-1.66885\"><ele>73.2</ele></trkpt><trkpt lat=\"49.64126\" lon=\"-1.66874\"><ele>73.29</ele></trkpt><trkpt lat=\"49.64124\" lon=\"-1.66864\"><ele>73.28</ele></trkpt><trkpt lat=\"49.64123\" lon=\"-1.66852\"><ele>73.03</ele></trkpt><trkpt lat=\"49.64123\" lon=\"-1.66838\"><ele>72.9</ele></trkpt><trkpt lat=\"49.64124\" lon=\"-1.66827\"><ele>72.92</ele></trkpt><trkpt lat=\"49.64126\" lon=\"-1.66805\"><ele>72.8</ele></trkpt><trkpt lat=\"49.64128\" lon=\"-1.6679\"><ele>72.77</ele></trkpt><trkpt lat=\"49.6413\" lon=\"-1.6678\"><ele>72.79</ele></trkpt><trkpt lat=\"49.64141\" lon=\"-1.66703\"><ele>74.01</ele></trkpt><trkpt lat=\"49.64152\" lon=\"-1.66624\"><ele>75.84</ele></trkpt><trkpt lat=\"49.6416\" lon=\"-1.66561\"><ele>76.36</ele></trkpt><trkpt lat=\"49.64162\" lon=\"-1.66544\"><ele>76.4</ele></trkpt><trkpt lat=\"49.6415\" lon=\"-1.6654\"><ele>76.39</ele></trkpt><trkpt lat=\"49.64142\" lon=\"-1.66538\"><ele>76.11</ele></trkpt><trkpt lat=\"49.6414\" lon=\"-1.6653\"><ele>76.24</ele></trkpt><trkpt lat=\"49.64137\" lon=\"-1.66522\"><ele>76.3</ele></trkpt><trkpt lat=\"49.64134\" lon=\"-1.66516\"><ele>76.37</ele></trkpt><trkpt lat=\"49.64131\" lon=\"-1.66511\"><ele>76.45</ele></trkpt><trkpt lat=\"49.64126\" lon=\"-1.66509\"><ele>76.43</ele></trkpt><trkpt lat=\"49.64122\" lon=\"-1.66509\"><ele>76.43</ele></trkpt><trkpt lat=\"49.64119\" lon=\"-1.66502\"><ele>76.51</ele></trkpt><trkpt lat=\"49.64115\" lon=\"-1.66498\"><ele>76.58</ele></trkpt><trkpt lat=\"49.64098\" lon=\"-1.66473\"><ele>76.65</ele></trkpt><trkpt lat=\"49.64097\" lon=\"-1.66471\"><ele>76.69</ele></trkpt><trkpt lat=\"49.64091\" lon=\"-1.66455\"><ele>76.83</ele></trkpt><trkpt lat=\"49.64086\" lon=\"-1.66435\"><ele>76.75</ele></trkpt><trkpt lat=\"49.64086\" lon=\"-1.66404\"><ele>76.83</ele></trkpt><trkpt lat=\"49.64092\" lon=\"-1.66384\"><ele>76.76</ele></trkpt><trkpt lat=\"49.64101\" lon=\"-1.66362\"><ele>76.62</ele></trkpt><trkpt lat=\"49.64094\" lon=\"-1.66343\"><ele>76.9</ele></trkpt><trkpt lat=\"49.64084\" lon=\"-1.66313\"><ele>77.84</ele></trkpt><trkpt lat=\"49.64076\" lon=\"-1.66289\"><ele>77.92</ele></trkpt><trkpt lat=\"49.64066\" lon=\"-1.66273\"><ele>77.91</ele></trkpt><trkpt lat=\"49.64059\" lon=\"-1.6626\"><ele>77.88</ele></trkpt><trkpt lat=\"49.64053\" lon=\"-1.66247\"><ele>77.8</ele></trkpt><trkpt lat=\"49.64048\" lon=\"-1.6623\"><ele>77.67</ele></trkpt><trkpt lat=\"49.64045\" lon=\"-1.66216\"><ele>77.59</ele></trkpt><trkpt lat=\"49.64043\" lon=\"-1.66205\"><ele>77.37</ele></trkpt><trkpt lat=\"49.64042\" lon=\"-1.662\"><ele>77.29</ele></trkpt><trkpt lat=\"49.64041\" lon=\"-1.66182\"><ele>76.96</ele></trkpt><trkpt lat=\"49.64041\" lon=\"-1.66165\"><ele>76.81</ele></trkpt><trkpt lat=\"49.64041\" lon=\"-1.66156\"><ele>76.66</ele></trkpt><trkpt lat=\"49.64042\" lon=\"-1.66146\"><ele>76.35</ele></trkpt><trkpt lat=\"49.64042\" lon=\"-1.66139\"><ele>76.24</ele></trkpt><trkpt lat=\"49.64042\" lon=\"-1.66145\"><ele>76.35</ele></trkpt><trkpt lat=\"49.64042\" lon=\"-1.66146\"><ele>76.35</ele></trkpt><trkpt lat=\"49.64042\" lon=\"-1.66151\"><ele>76.47</ele></trkpt><trkpt lat=\"49.64041\" lon=\"-1.66156\"><ele>76.66</ele></trkpt></trkseg></trk></gpx>\n";
-const HIKEPLUS_BUILD='V22-BETA-2026-09-21';
+const HIKEPLUS_BUILD='V01.7-31-JOURS-2026-09-28';
 const STORE='hikeplus_beta_v1';
 let db={profiles:{},current:''};try{db=JSON.parse(localStorage.getItem(STORE)||'{}');if(!db.profiles)db.profiles={}}catch(e){db={profiles:{},current:''}}
 const $=id=>document.getElementById(id);let mode='login',user=null;
 
 // HIKE+ V1.13 — verrouillage jusqu’à l’ouverture officielle + accès pré-bêta
-const HIKE_PUBLIC_OPEN_AT = new Date('2026-09-28T15:48:00+02:00').getTime();
+const HIKE_PUBLIC_OPEN_AT = new Date('2026-10-03T10:00:00+02:00').getTime();
 const HIKE_PREBETA_PASSWORD = 'PREBETA2026APPHIKE+';
 const HIKE_PREBETA_GATE_VERSION = 'v1.13';
 try{if(localStorage.getItem('hikeplus_prebeta_gate_version')!==HIKE_PREBETA_GATE_VERSION){localStorage.removeItem('hikeplus_prebeta_unlocked');localStorage.setItem('hikeplus_prebeta_gate_version',HIKE_PREBETA_GATE_VERSION)}}catch(e){}
@@ -1214,22 +831,9 @@ function initLaunchGate(){
 
 function showHomeArrival(){const old=document.querySelector('.homeArrival');if(old)old.remove();const el=document.createElement('div');el.className='homeArrival';el.innerHTML='<div class="homeArrivalBg"></div><div class="homeArrivalInner"><div class="homeArrivalMark">+</div><div class="homeArrivalTitle">HIKE+</div><div class="homeArrivalSub">Cap sur le hiking</div><div class="homeArrivalLine"><i></i></div></div>';document.body.appendChild(el);setTimeout(()=>el.remove(),3600)}
 function updateHomeCountdown(){const target=new Date('2028-09-01T00:00:00');const tick=()=>{const el=document.getElementById('homeCdDays');if(!el)return;let d=Math.max(0,target-Date.now());const days=Math.floor(d/86400000);d%=86400000;const h=Math.floor(d/3600000);d%=3600000;const m=Math.floor(d/60000);const sec=Math.floor((d%60000)/1000);el.textContent=days+' j';$('homeCdHours').textContent=h+' h';$('homeCdMin').textContent=m+' min';$('homeCdSec').textContent=sec+' s'};tick();clearInterval(window.homeCdTimer);window.homeCdTimer=setInterval(tick,1000)}
-function ensureSideMenu(){if(document.getElementById('sideMenu'))return;const wrap=document.createElement('div');wrap.innerHTML='<div class="menuBackdrop" id="menuBackdrop"></div><aside class="sideMenu" id="sideMenu"><div class="menuHead"><div class="menuLogo">HIKE+</div><button class="menuClose" id="menuClose">×</button></div><div class="menuUser"><div class="menuAvatar" id="menuAvatar"></div><div><b id="menuUserName"></b><small id="menuUserGoal">Objectif hiking</small><small id="menuUserProgress"></small></div></div><div class="menuLinks"><button class="menuLink" data-menu-view="home"><span>⌂</span>Accueil</button><button class="menuLink" data-menu-view="days30"><span>★</span>Les 30 jours de HIKE+</button><button class="menuLink" data-menu-view="hikes"><span>⌖</span>Randonnées</button><button class="menuLink" data-menu-view="progress"><span>↗</span>Ma progression</button><button class="menuLink" data-menu-view="weather" hidden><span>☁</span>Météo</button><button class="menuLink" data-menu-view="settings"><span>⚙</span>Paramètres</button></div><div class="menuFooter"><button class="menuLogout" id="menuLogout">Se déconnecter</button></div></aside>';document.body.appendChild(wrap);document.getElementById('menuBackdrop').onclick=closeSideMenu;document.getElementById('menuClose').onclick=closeSideMenu;document.querySelectorAll('.menuLink').forEach(b=>b.onclick=()=>{const v=b.dataset.menuView;if(v===currentView){closeSideMenu();return}closeSideMenu();render(v)});document.getElementById('menuLogout').onclick=()=>{closeSideMenu();logout()}}
+function ensureSideMenu(){if(document.getElementById('sideMenu'))return;const wrap=document.createElement('div');wrap.innerHTML='<div class="menuBackdrop" id="menuBackdrop"></div><aside class="sideMenu" id="sideMenu"><div class="menuHead"><div class="menuLogo">HIKE+</div><button class="menuClose" id="menuClose">×</button></div><div class="menuUser"><div class="menuAvatar" id="menuAvatar"></div><div><b id="menuUserName"></b><small id="menuUserGoal">Objectif hiking</small><small id="menuUserProgress"></small></div></div><div class="menuLinks"><button class="menuLink" data-menu-view="home"><span>⌂</span>Accueil</button><button class="menuLink days31MenuLink" data-menu-view="days31"><span>🔥</span>Les 31 jours de HIKE+</button><button class="menuLink" data-menu-view="hikes"><span>⌖</span>Randonnées</button><button class="menuLink" data-menu-view="progress"><span>↗</span>Ma progression</button><button class="menuLink" data-menu-view="settings"><span>⚙</span>Paramètres</button></div><div class="menuFooter"><button class="menuLogout" id="menuLogout">Se déconnecter</button></div></aside>';document.body.appendChild(wrap);document.getElementById('menuBackdrop').onclick=closeSideMenu;document.getElementById('menuClose').onclick=closeSideMenu;document.querySelectorAll('.menuLink').forEach(b=>b.onclick=()=>{const v=b.dataset.menuView;if(v===currentView){closeSideMenu();return}closeSideMenu();render(v)});document.getElementById('menuLogout').onclick=()=>{closeSideMenu();logout()}}
 function openSideMenu(){ensureSideMenu();$('menuAvatar').innerHTML=user?.avatar?`<img src="${user.avatar}" alt="">`:initials(user?.name);$('menuUserName').innerHTML=(user?.name||'Profil')+(user?.certified?'<span class="certBadge small" title="Profil certifié">✓</span>':'');if($('menuUserGoal'))$('menuUserGoal').textContent=t('hikingGoal');if($('menuUserProgress'))$('menuUserProgress').textContent=`${t('levelLabelMenu')} ${user?.level||1} · ${(user?.xp||0)} XP · ${Math.min(100,Math.round(((user?.xp||0)%500)/5))}%`;document.querySelectorAll('.menuLink').forEach(b=>{const active=b.dataset.menuView===currentView;b.classList.toggle('active',active);b.setAttribute('aria-current',active?'page':'false')});$('menuBackdrop').classList.add('show');$('sideMenu').classList.add('show')}
 function closeSideMenu(){const a=document.getElementById('menuBackdrop'),b=document.getElementById('sideMenu');if(a)a.classList.remove('show');if(b)b.classList.remove('show')}
-function initBottomNavigation(){
- document.querySelectorAll('.hikeBottomNav [data-bottom-view]').forEach(btn=>{
-  btn.onclick=()=>{ const target=btn.dataset.bottomView; if(target!==currentView) render(target); };
- });
- syncBottomNavigation();
-}
-function syncBottomNavigation(){
- document.querySelectorAll('.hikeBottomNav [data-bottom-view]').forEach(btn=>{
-  const active=btn.dataset.bottomView===currentView;
-  btn.classList.toggle('active',active); btn.setAttribute('aria-current',active?'page':'false');
- });
-}
-document.addEventListener('DOMContentLoaded',initBottomNavigation);
 function applyTheme(){const dark=!!user?.darkMode;document.documentElement.classList.toggle('darkMode',dark);document.documentElement.style.colorScheme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]')?.setAttribute('content',dark?'#101210':'#f5f6f4');const sb=document.getElementById('appleStatusBarStyle');if(sb)sb.setAttribute('content',dark?'black':'default');document.documentElement.style.backgroundColor=dark?'#101210':'#f5f6f4';document.body.style.backgroundColor=dark?'#101210':'#f5f6f4'}
 function persist(){try{localStorage.setItem(STORE,JSON.stringify(db));return true}catch(e){console.warn('HIKE+: sauvegarde impossible',e);toast('Photo trop lourde pour cet appareil.');return false}}
 function fileToAvatarDataURL(file,done){const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const max=512;const scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const w=Math.max(1,Math.round(img.naturalWidth*scale)),h=Math.max(1,Math.round(img.naturalHeight*scale));const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);done(c.toDataURL('image/jpeg',0.82))};img.onerror=()=>done(reader.result);img.src=reader.result};reader.readAsDataURL(file)}
@@ -1447,26 +1051,6 @@ function startSelectedHike(h){
   if($('exploreSheet'))$('exploreSheet').classList.remove('show');
   startNav();
 }
-
-function exploreSearchNorm(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
-function renderExploreList(){
- const list=$('exploreList'),q=exploreSearchNorm($('hikeSearch')?.value);if(!list)return;
- const all=MANCHE_HIKES.filter(h=>{
-  if(!h)return false;
-  if(exploreFilter==='easy'&&h.difficulty!=='Facile')return false;
-  if(exploreFilter==='moderate'&&h.difficulty!=='Modérée')return false;
-  if(exploreFilter==='hard'&&h.difficulty!=='Difficile')return false;
-  if(exploreFilter==='done'&&!isDone(h.name))return false;
-  return !q||exploreSearchNorm(h.name).includes(q)||exploreSearchNorm(h.city).includes(q)||exploreSearchNorm(h.region).includes(q);
- });
- list.innerHTML=`<div class="exploreListHead"><b>${all.length} randonnée${all.length>1?'s':''}</b><small>Appuie pour sélectionner</small></div>`+
- (all.length?all.map(h=>`<button class="exploreListItem" type="button" data-explore-name="${encodeURIComponent(h.name)}"><span class="exploreListPin">${h.difficulty==='Difficile'?'◆':h.difficulty==='Modérée'?'▲':'●'}</span><span><b>${escapeHtml(h.name)}</b><small>${escapeHtml(h.city||h.region||'France')} · ${Number(h.distance||0).toFixed(1)} km · ${escapeHtml(h.difficulty||'Facile')}</small></span></button>`).join(''):`<div style="padding:18px;text-align:center;color:#858a84;font-size:11px">Aucune randonnée trouvée.</div>`);
- list.querySelectorAll('.exploreListItem').forEach(btn=>btn.onclick=()=>{
-  const h=MANCHE_HIKES.find(x=>x.name===decodeURIComponent(btn.dataset.exploreName||''));if(!h)return;
-  list.classList.remove('show');openHikeSheet(h);
-  if(exploreMap&&Number.isFinite(Number(h.lat))&&Number.isFinite(Number(h.lon)))exploreMap.setView([Number(h.lat),Number(h.lon)],14,{animate:true});
- });
-}
 function drawExploreMarkers(){if(!exploreMap||!window.L)return;exploreMarkers.forEach(m=>exploreMap.removeLayer(m));exploreMarkers=[];const arr=mancheFiltered();arr.forEach(h=>{const m=L.marker([h.lat,h.lon],{icon:markerIcon(h),title:h.name}).addTo(exploreMap);m.on('click',()=>openHikeSheet(h));exploreMarkers.push(m)});$('exploreCount').textContent=`${arr.length} randonnée${arr.length>1?'s':''} affichée${arr.length>1?'s':''}`;}
 function locateExplore(){
   enableDeviceHeading();
@@ -1634,7 +1218,7 @@ function startHomeRecommendationTimer(){
 
 const I18N={
   fr:{menuHome:'Accueil',menuHikes:'Randonnées',menuProgress:'Ma progression',menuSettings:'Paramètres',logout:'Se déconnecter',
-    homeSub:'Prêt pour une nouvelle sortie ?',homeTag:'HIKE+ · PRÉ-BÊTA',betaStatus:'· HIKE+ est actuellement en phase de test',betaNew:'De nouvelles randonnées bientôt disponibles',levelLabelMenu:'Niveau',hikingGoal:'Objectif hiking',homeTitle:'Explore. Marche. Progresse.',homeDesc:'Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.',
+    homeSub:'Prêt pour une nouvelle sortie ?',homeTag:'HIKE+ · BÊTA OUVERTE',betaStatus:'· HIKE+ est actuellement en phase de test',betaNew:'De nouvelles randonnées bientôt disponibles',levelLabelMenu:'Niveau',hikingGoal:'Objectif hiking',homeTitle:'Explore. Marche. Progresse.',homeDesc:'Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.',
     search:'Rechercher une randonnée',searchSub:'Trouve un circuit autour de toi',map:'Voir ma carte',mapSub:'Les randonnées disponibles en France',progress:'Ma progression',hikes:'Mes randonnées',recommend:'Nos recommandations',forYou:'Pour toi',more:'Voir plus de randonnées →',start:'Voir la randonnée →',
     seasonNotice:'⚠️ Le compte sera supprimé lors du lancement de la bêta ouverte.',
     hikesSearch:'🔎 Ville, région ou randonnée…',all:'Toutes',easy:'Faciles',moderate:'Modérées',hard:'Difficiles',done:'✓ Déjà faites',sheetStart:'Aller au départ',sheetStartSub:'Ouvrir l’itinéraire dans votre GPS',sheetHike:'Commencer la randonnée',sheetHikeSub:'Lancer le suivi GPS de la randonnée',sheetGuide:'Vous pouvez commencer la randonnée à moins de 150 m du départ. Une fois la randonnée lancée, cette limite ne s’applique plus.',
@@ -1722,7 +1306,7 @@ function getHikeMeta(name){return (typeof MANCHE_HIKES!=='undefined'&&Array.isAr
     </div>
     ${hikes.length?hikes.map(item=>{const h=item.h;return `<article class="myHikeCard">
       <button class="myHikeDelete" type="button" data-hike-index="${item.index}" aria-label="Supprimer la randonnée" title="Supprimer la randonnée">×</button>
-      </div><div><span class="difficultyPill ${h.difficulty==='Difficile'?'difficult':(h.difficulty==='Modérée'?'moderate':'easy')}">${h.difficulty||'Facile'}</span><div class="myHikeXp">+${Number(h.xp||0)} XP</div></div></div>
+      <div class="myHikeTop"><div><h3>${h.name||'Randonnée'}</h3><div class="myHikeDate">${formatHikeDate(h.date)}</div></div><div><span class="difficultyPill ${h.difficulty==='Difficile'?'difficult':(h.difficulty==='Modérée'?'moderate':'easy')}">${h.difficulty||'Facile'}</span><div class="myHikeXp">+${Number(h.xp||0)} XP</div></div></div>
       <div class="myHikeMeta">
         <div><b>${Number(h.distance||0).toFixed(2)} km</b><small>distance</small></div>
         <div><b>+${Math.round(h.dplus||0)} m</b><small>D+</small></div>
@@ -1779,7 +1363,7 @@ function hikeSocialAvatar(profile){return profile?.avatar?`<img src="${profile.a
 function hikeSocialTime(ts){const d=Math.max(0,Date.now()-Number(ts||Date.now())),m=Math.floor(d/60000),h=Math.floor(m/60),day=Math.floor(h/24);if(m<1)return'à l’instant';if(m<60)return`il y a ${m} min`;if(h<24)return`il y a ${h} h`;if(day===1)return'hier';if(day<7)return`il y a ${day} jours`;return new Date(ts).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}
 function hikeSocialApplyGrowth(db){const now=Date.now();if(!db.growth)db.growth={};let changed=false;db.posts.filter(p=>p.profile==='self').forEach(p=>{if(!p.createdAt)p.createdAt=now;const age=Math.max(0,now-p.createdAt),la=Math.min(8,Math.floor(age/75000)),ca=Math.min(3,Math.floor(age/150000)),g=db.growth[p.id]||{likes:0,comments:0};if(la>g.likes){p.likes+=la-g.likes;g.likes=la;changed=true}if(ca>g.comments){for(let i=g.comments;i<ca;i++){const c=HIKE_SOCIAL_AUTO_COMMENTS[(i+p.id.length)%HIKE_SOCIAL_AUTO_COMMENTS.length];p.comments.push([c[0],c[1],false])}g.comments=ca;changed=true}db.growth[p.id]=g});if(changed)hikeSocialSave(db)}
 function hikeSocialRenderComment(c,db){const prof=db.profiles.find(p=>p.name===c[0]);const cert=Array.isArray(c)&&c[2]===true;return`<div class="socialComment"><div class="socialCommentAvatar">${hikeSocialAvatar(prof||{name:c[0]})}</div><div><b>${c[0]}</b>${cert?'<span class="certBadge small" title="Profil certifié">✓</span>':''} <span>${c[1]}</span></div></div>`}
-function hikeSocialRender(db){hikeSocialApplyGrowth(db);const posts=[...db.posts].sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));return`<div class="socialWrap"><div class="socialHead"><div><div class="socialEyebrow">HIKE+ · COMMUNAUTÉ</div><h1>Le fil des randonneurs</h1><p class="socialIntro">Partage tes sorties, découvre les aventures de la communauté.</p></div><div class="socialLive"><i></i> En direct</div></div><div class="socialComposer"><div style="flex:1"><b>${user?.name||'Moi'}${user?.certified?'<span class="certBadge small" title="Profil certifié">✓</span>':''}</b><div style="font-size:10px;color:#858a84;margin-top:2px">Publie une photo de ta randonnée</div></div></div><textarea id="socialCaptionInput" placeholder="Raconte ta randonnée…"></textarea><input id="socialPhotoInput" type="file" accept="image/*" capture="environment" hidden><div class="socialComposerActions"><button class="socialPhotoBtn" id="socialChoosePhoto" type="button">📷 Ajouter une photo</button><button class="socialPublishBtn" id="socialPublish" type="button">Publier</button></div></div><div class="socialFeed" id="socialFeed">${posts.map(p=>{const prof=hikeSocialProfile(p.profile,db),liked=!!db.liked[p.id],mine=p.profile==='self';return`<article class="socialPost"><div class="socialPostHead"><div class="socialAvatar">${hikeSocialAvatar(prof)}</div><div style="min-width:0;flex:1"><div class="socialPostName">${prof.name}${prof.certified?'<span class="certBadge small" title="Profil certifié">✓</span>':''}</div><div class="socialPostMeta">${prof.city||'HIKE+'} · ${hikeSocialTime(p.createdAt)}</div></div>${mine?`<button class="socialDelete" data-social-delete="${p.id}" title="Supprimer la publication">×</button>`:''}</div>${p.hike?`<div style="padding:0 15px 9px"><div class="socialPostHike">🥾 ${p.hike}</div></div>`:''}<img class="socialPostPhoto" src="${p.photo}" alt="Photo publiée par ${prof.name}" loading="lazy"><div class="socialPostBody"><div class="socialCaption">${p.caption}</div><div class="socialStats"><span>❤️ ${p.likes+(liked?1:0)}</span><span>💬 ${p.comments.length}</span></div><div class="socialActions"><button class="socialLike" data-social-like="${p.id}">${liked?'❤️ Aimé':'♡ J’aime'}</button><button class="socialCommentBtn" data-social-comment="${p.id}">💬 Commenter</button></div><div class="socialComments">${p.comments.map(c=>hikeSocialRenderComment(c,db)).join('')}</div></div></article>`}).join('')}</div></div>`}
+function hikeSocialRender(db){hikeSocialApplyGrowth(db);const posts=[...db.posts].sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));return`<div class="socialWrap"><div class="socialHead"><div><div class="socialEyebrow">HIKE+ · COMMUNAUTÉ</div><h1>Le fil des randonneurs</h1><p class="socialIntro">Partage tes sorties, découvre les aventures de la communauté.</p></div><div class="socialLive"><i></i> En direct</div></div><div class="socialComposer"><div class="socialComposerTop"><div class="socialAvatar">${user?.avatar?`<img src="${user.avatar}" alt="">`:hikeSocialInitials(user?.name||'Moi')}</div><div style="flex:1"><b>${user?.name||'Moi'}${user?.certified?'<span class="certBadge small" title="Profil certifié">✓</span>':''}</b><div style="font-size:10px;color:#858a84;margin-top:2px">Publie une photo de ta randonnée</div></div></div><textarea id="socialCaptionInput" placeholder="Raconte ta randonnée…"></textarea><input id="socialPhotoInput" type="file" accept="image/*" capture="environment" hidden><div class="socialPhotoPreview" id="socialPhotoPreview"><img id="socialPhotoPreviewImg" alt="Aperçu"></div><div class="socialComposerActions"><button class="socialPhotoBtn" id="socialChoosePhoto" type="button">📷 Ajouter une photo</button><button class="socialPublishBtn" id="socialPublish" type="button">Publier</button></div></div><div class="socialFeed" id="socialFeed">${posts.map(p=>{const prof=hikeSocialProfile(p.profile,db),liked=!!db.liked[p.id],mine=p.profile==='self';return`<article class="socialPost"><div class="socialPostHead"><div class="socialAvatar">${hikeSocialAvatar(prof)}</div><div style="min-width:0;flex:1"><div class="socialPostName">${prof.name}${prof.certified?'<span class="certBadge small" title="Profil certifié">✓</span>':''}</div><div class="socialPostMeta">${prof.city||'HIKE+'} · ${hikeSocialTime(p.createdAt)}</div></div>${mine?`<button class="socialDelete" data-social-delete="${p.id}" title="Supprimer la publication">×</button>`:''}</div>${p.hike?`<div style="padding:0 15px 9px"><div class="socialPostHike">🥾 ${p.hike}</div></div>`:''}<img class="socialPostPhoto" src="${p.photo}" alt="Photo publiée par ${prof.name}" loading="lazy"><div class="socialPostBody"><div class="socialCaption">${p.caption}</div><div class="socialStats"><span>❤️ ${p.likes+(liked?1:0)}</span><span>💬 ${p.comments.length}</span></div><div class="socialActions"><button class="socialLike" data-social-like="${p.id}">${liked?'❤️ Aimé':'♡ J’aime'}</button><button class="socialCommentBtn" data-social-comment="${p.id}">💬 Commenter</button></div><div class="socialComments">${p.comments.map(c=>hikeSocialRenderComment(c,db)).join('')}</div></div></article>`}).join('')}</div></div>`}
 function hikeSocialBind(){const db=hikeSocialSeed(),choose=$('socialChoosePhoto'),input=$('socialPhotoInput'),preview=$('socialPhotoPreview'),previewImg=$('socialPhotoPreviewImg');let selectedPhoto='';if(choose)choose.onclick=()=>input.click();if(input)input.onchange=()=>{const f=input.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{selectedPhoto=r.result;previewImg.src=selectedPhoto;preview.classList.add('show')};r.readAsDataURL(f)};if($('socialPublish'))$('socialPublish').onclick=()=>{const caption=String($('socialCaptionInput').value||'').trim();if(!caption&&!selectedPhoto)return toast('Ajoute une photo ou un message.');if(!db.profiles.some(p=>p.id==='self'))db.profiles.unshift({id:'self',name:user?.name||'Moi',avatar:user?.avatar||'',city:'Ma communauté',certified:!!user?.certified});db.posts.unshift({id:'u'+Date.now(),profile:'self',hike:'',photo:selectedPhoto||HIKE_SOCIAL_PHOTOS[0],caption:caption||'Nouvelle sortie 🥾',likes:0,comments:[],createdAt:Date.now()});hikeSocialSave(db);render('community',true);toast('Publication ajoutée')};document.querySelectorAll('[data-social-like]').forEach(b=>b.onclick=()=>{db.liked[b.dataset.socialLike]=!db.liked[b.dataset.socialLike];hikeSocialSave(db);render('community',true)});document.querySelectorAll('[data-social-delete]').forEach(b=>b.onclick=()=>{const id=b.dataset.socialDelete,p=db.posts.find(x=>x.id===id);if(!p||p.profile!=='self')return;if(!confirm('Supprimer cette publication ?'))return;db.posts=db.posts.filter(x=>x.id!==id);delete db.growth?.[id];hikeSocialSave(db);render('community',true);toast('Publication supprimée')});document.querySelectorAll('[data-social-comment]').forEach(b=>b.onclick=()=>{const p=db.posts.find(x=>x.id===b.dataset.socialComment),text=prompt('Ton commentaire :');if(!p||!text?.trim())return;p.comments.push([user?.name||'Moi',text.trim(),!!user?.certified]);hikeSocialSave(db);render('community',true)})}
 
 const HIKE_WEATHER_KEY='hikeplus_weather_v2';
@@ -1790,208 +1374,159 @@ function hwText(c){if(c===0)return'Ciel dégagé';if([1,2,3].includes(c))return'
 function hwFav(t,w,r){let s=100;if(r>60)s-=45;else if(r>35)s-=28;else if(r>20)s-=12;if(w>45)s-=35;else if(w>30)s-=20;else if(w>20)s-=8;if(t<0)s-=20;else if(t<5)s-=8;else if(t>32)s-=20;else if(t>27)s-=8;s=Math.max(0,Math.min(100,Math.round(s)));if(s>=75)return['🟢','Très favorable',s];if(s>=55)return['🟡','Favorable avec précautions',s];if(s>=35)return['🟠','Conditions difficiles',s];return['🔴','Déconseillé',s]}
 async function hwForecast(lat,lon){const params=new URLSearchParams({latitude:String(lat),longitude:String(lon),current:'temperature_2m,weather_code,wind_speed_10m',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',timezone:'auto',forecast_days:'7'});const r=await fetch('https://api.open-meteo.com/v1/forecast?'+params.toString(),{cache:'no-store'});if(!r.ok)throw Error('Météo indisponible');return r.json()}
 function hwEscape(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-async function hwLoad(){const sel=$('weatherHike'),box=$('weatherOutput'),index=Number(sel?.value),hs=hwHikes(),h=Number.isInteger(index)?hs[index]:null,c=hwCoords(h);if(!h||!c){box.innerHTML='<div class="weatherError">Choisis une randonnée pour afficher sa météo.</div>';return}box.innerHTML='<div class="weatherCard">🌦️ Chargement de la météo de la randonnée…</div>';try{const f=await hwForecast(c.lat,c.lon),t=Number(f.current.temperature_2m),w=Number(f.current.wind_speed_10m),r=Number(f.daily.precipitation_probability_max?.[0]||0),fv=hwFav(t,w,r),days=f.daily.time.slice(0,4).map((d,i)=>`<div class="weatherDay"><b>${new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'})}</b><div class="weatherDayIcon">${hwIcon(f.daily.weather_code[i])}</div><div class="weatherDayTemp">${Math.round(f.daily.temperature_2m_min[i])}° / ${Math.round(f.daily.temperature_2m_max[i])}°</div><div class="weatherDayRain">💧 ${f.daily.precipitation_probability_max[i]}%</div></div>`).join('');box.innerHTML=`<div class="weatherResult"><div class="weatherCondition">🥾 ${hwEscape(h.name)} · ${hwText(f.current.weather_code)}</div><div class="weatherCondition">📍 ${hwEscape(h.city||h.region||'Point de départ')}</div></div><div class="weatherScore">${fv[2]}/100</div></div><div class="weatherMetrics"><div class="weatherMetric"><b>${Math.round(t)}°C</b><span>TEMPÉRATURE</span></div><div class="weatherMetric"><b>${Math.round(w)} km/h</b><span>VENT</span></div><div class="weatherMetric"><b>${r}%</b><span>PLUIE</span></div><div class="weatherMetric"><b>${hwIcon(f.current.weather_code)}</b><span>CONDITIONS</span></div></div><div class="weatherAdvice">${r>35?'🌧️ Prévois une protection contre la pluie. ':''}${w>30?'💨 Attention au vent. ':''}${t<5?'🧥 Prévois des vêtements chauds. ':''}${t>27?'☀️ Pense à l’eau et à la protection solaire. ':''}${fv[2]>=75?'🥾 Les conditions sont globalement très bonnes pour cette randonnée !':'🥾 Adapte ton équipement aux conditions et vérifie la météo avant le départ.'}</div></div><div class="weatherCard"><span class="weatherLabel">Prévisions</span><div class="weatherDays">${days}</div></div>`;localStorage.setItem(HIKE_WEATHER_KEY,JSON.stringify({hike:h.name,index}))}catch(e){box.innerHTML='<div class="weatherError">Impossible de récupérer la météo pour cette randonnée. Vérifie ta connexion puis réessaie.</div>'}}
+async function hwLoad(){const sel=$('weatherHike'),box=$('weatherOutput'),index=Number(sel?.value),hs=hwHikes(),h=Number.isInteger(index)?hs[index]:null,c=hwCoords(h);if(!h||!c){box.innerHTML='<div class="weatherError">Choisis une randonnée pour afficher sa météo.</div>';return}box.innerHTML='<div class="weatherCard">🌦️ Chargement de la météo de la randonnée…</div>';try{const f=await hwForecast(c.lat,c.lon),t=Number(f.current.temperature_2m),w=Number(f.current.wind_speed_10m),r=Number(f.daily.precipitation_probability_max?.[0]||0),fv=hwFav(t,w,r),days=f.daily.time.slice(0,4).map((d,i)=>`<div class="weatherDay"><b>${new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'})}</b><div class="weatherDayIcon">${hwIcon(f.daily.weather_code[i])}</div><div class="weatherDayTemp">${Math.round(f.daily.temperature_2m_min[i])}° / ${Math.round(f.daily.temperature_2m_max[i])}°</div><div class="weatherDayRain">💧 ${f.daily.precipitation_probability_max[i]}%</div></div>`).join('');box.innerHTML=`<div class="weatherResult"><div class="weatherResultTop"><div><div class="weatherResultTitle">${fv[0]} ${fv[1]}</div><div class="weatherCondition">🥾 ${hwEscape(h.name)} · ${hwText(f.current.weather_code)}</div><div class="weatherCondition">📍 ${hwEscape(h.city||h.region||'Point de départ')}</div></div><div class="weatherScore">${fv[2]}/100</div></div><div class="weatherMetrics"><div class="weatherMetric"><b>${Math.round(t)}°C</b><span>TEMPÉRATURE</span></div><div class="weatherMetric"><b>${Math.round(w)} km/h</b><span>VENT</span></div><div class="weatherMetric"><b>${r}%</b><span>PLUIE</span></div><div class="weatherMetric"><b>${hwIcon(f.current.weather_code)}</b><span>CONDITIONS</span></div></div><div class="weatherAdvice">${r>35?'🌧️ Prévois une protection contre la pluie. ':''}${w>30?'💨 Attention au vent. ':''}${t<5?'🧥 Prévois des vêtements chauds. ':''}${t>27?'☀️ Pense à l’eau et à la protection solaire. ':''}${fv[2]>=75?'🥾 Les conditions sont globalement très bonnes pour cette randonnée !':'🥾 Adapte ton équipement aux conditions et vérifie la météo avant le départ.'}</div></div><div class="weatherCard"><span class="weatherLabel">Prévisions</span><div class="weatherDays">${days}</div></div>`;localStorage.setItem(HIKE_WEATHER_KEY,JSON.stringify({hike:h.name,index}))}catch(e){box.innerHTML='<div class="weatherError">Impossible de récupérer la météo pour cette randonnée. Vérifie ta connexion puis réessaie.</div>'}}
 function hikeWeatherRender(){let saved={};try{saved=JSON.parse(localStorage.getItem(HIKE_WEATHER_KEY)||'{}')}catch(e){}const hs=hwHikes(),opts=hs.length?hs.map((h,i)=>`<option value="${i}" ${saved.index===i?'selected':''}>${hwEscape(h.name)}${h.city?' · '+hwEscape(h.city):''}</option>`).join(''):'<option value="">Aucune randonnée disponible</option>';return `<div class="weatherWrap"><div class="weatherHero"><div class="weatherEyebrow">HIKE+ · CONDITIONS</div><h1>La météo pour randonner</h1><p>Choisis une randonnée pour connaître les conditions météo à son point de départ.</p></div><div class="weatherGrid"><div class="weatherCard"><span class="weatherLabel">🥾 Randonnée</span><input id="weatherHikeFilter" class="weatherInput" type="search" placeholder="Rechercher une randonnée…" autocomplete="off" aria-label="Rechercher une randonnée"><select id="weatherHike" class="weatherSelect" style="margin-top:8px">${opts}</select><div style="font-size:10px;opacity:.55;margin-top:7px">Écris le nom pour filtrer rapidement les randonnées. La météo est calculée au point de départ.</div><button id="weatherSearch" class="weatherBtn" style="margin-top:12px;width:100%">Voir la météo</button></div><div id="weatherOutput"></div></div></div>`}
 
-/* LES 30 JOURS DE HIKE+ — PUBLIC
-   Public: 24h per challenge, starting at 03/10/2026 10:00 Europe/Paris.
-*/
-const HIKE_DAYS30_START = new Date('2026-10-03T10:00:00+02:00').getTime();
-const HIKE_DAYS30_ADMIN_INTERVAL = 5 * 60 * 1000;
-const HIKE_DAYS30_PUBLIC_INTERVAL = 24 * 60 * 60 * 1000;
-const HIKE_DAYS30_COUNT = 31;
-const HIKE_DAYS30_KEY = 'hikeplus_30days_v1';
-
-const HIKE_DAYS30_CHALLENGES = [
-  ['Marche 1 km','Parcours au moins 1 km pendant une randonnée.',1,'km',50],
-  ['Marche 2 km','Parcours au moins 2 km pendant une randonnée.',2,'km',70],
-  ['Gagne 50 m de D+','Cumule au moins 50 m de dénivelé positif.',50,'dplus',80],
-  ['Marche 3 km','Parcours au moins 3 km pendant une randonnée.',3,'km',90],
-  ['Fais une randonnée','Termine au moins une randonnée.',1,'hike',100],
-  ['Marche 4 km','Parcours au moins 4 km pendant une randonnée.',4,'km',110],
-  ['Gagne 100 m de D+','Cumule au moins 100 m de dénivelé positif.',100,'dplus',120],
-  ['Marche 5 km','Parcours au moins 5 km pendant une randonnée.',5,'km',130],
-  ['Fais 20 min de randonnée','Termine une randonnée d’au moins 20 minutes.',20,'minutes',140],
-  ['Marche 2,5 km','Parcours au moins 2,5 km.',2.5,'km',100],
-  ['Gagne 150 m de D+','Cumule au moins 150 m de dénivelé positif.',150,'dplus',150],
-  ['Marche 6 km','Parcours au moins 6 km.',6,'km',160],
-  ['Fais une sortie','Termine une randonnée pendant la journée.',1,'hike',100],
-  ['Marche 3,5 km','Parcours au moins 3,5 km.',3.5,'km',120],
-  ['Gagne 200 m de D+','Cumule au moins 200 m de dénivelé positif.',200,'dplus',180],
-  ['Marche 7 km','Parcours au moins 7 km.',7,'km',190],
-  ['Fais 30 min de randonnée','Termine une randonnée d’au moins 30 minutes.',30,'minutes',170],
-  ['Marche 4 km','Parcours au moins 4 km.',4,'km',130],
-  ['Gagne 250 m de D+','Cumule au moins 250 m de dénivelé positif.',250,'dplus',200],
-  ['Marche 8 km','Parcours au moins 8 km.',8,'km',210],
-  ['Deux sorties','Termine 2 randonnées pendant la période du défi.',2,'hike2',220],
-  ['Marche 5 km','Parcours au moins 5 km.',5,'km',150],
-  ['Gagne 300 m de D+','Cumule au moins 300 m de dénivelé positif.',300,'dplus',230],
-  ['Marche 9 km','Parcours au moins 9 km.',9,'km',240],
-  ['Fais 45 min de randonnée','Termine une randonnée d’au moins 45 minutes.',45,'minutes',210],
-  ['Marche 6 km','Parcours au moins 6 km.',6,'km',170],
-  ['Gagne 400 m de D+','Cumule au moins 400 m de dénivelé positif.',400,'dplus',260],
-  ['Marche 10 km','Parcours au moins 10 km.',10,'km',280],
-  ['Trois sorties','Termine 3 randonnées pendant la période du défi.',3,'hike3',300],
-  ['Marche 12 km','Parcours au moins 12 km.',12,'km',320],
-  ['Défi final : 15 km','Parcours au moins 15 km. Termine les 30 jours en beauté !',15,'km',500]
+/* ==================== 31 JOURS DE HIKE+ ==================== */
+const HIKE31_KEY='hikeplus_31days_v1';
+const HIKE31_START=new Date(2026,9,3,10,0,0,0); // samedi 03 octobre 2026, 10:00
+const HIKE31_DAYS=31;
+const HIKE31_CHALLENGES=[
+  ['Marche 1 km','Parcours au moins 1 km aujourd’hui.','🥾',40,'distance',1],
+  ['Marche 2 km','Parcours au moins 2 km aujourd’hui.','🌿',50,'distance',2],
+  ['Une sortie aujourd’hui','Termine une randonnée HIKE+ aujourd’hui.','⛰️',60,'hike',1],
+  ['Marche 3 km','Parcours au moins 3 km aujourd’hui.','👟',60,'distance',3],
+  ['+100 m de D+','Cumule au moins 100 m de dénivelé positif.','📈',70,'dplus',100],
+  ['Marche 5 km','Parcours au moins 5 km aujourd’hui.','🔥',80,'distance',5],
+  ['Une randonnée facile','Termine une randonnée de niveau Facile.','🍃',60,'easy',1],
+  ['Marche 2 km','Parcours au moins 2 km aujourd’hui.','🌲',50,'distance',2],
+  ['+200 m de D+','Cumule au moins 200 m de dénivelé positif.','⛰️',80,'dplus',200],
+  ['Marche 4 km','Parcours au moins 4 km aujourd’hui.','🥾',70,'distance',4],
+  ['Deux sorties','Termine 2 randonnées aujourd’hui.','🏅',100,'hike',2],
+  ['Marche 3 km','Parcours au moins 3 km aujourd’hui.','🍂',60,'distance',3],
+  ['+150 m de D+','Cumule au moins 150 m de dénivelé positif.','📍',70,'dplus',150],
+  ['Marche 6 km','Parcours au moins 6 km aujourd’hui.','🔥',90,'distance',6],
+  ['Une randonnée modérée','Termine une randonnée de niveau Modérée.','🧭',80,'moderate',1],
+  ['Marche 2 km','Parcours au moins 2 km aujourd’hui.','🌳',50,'distance',2],
+  ['+250 m de D+','Cumule au moins 250 m de dénivelé positif.','⛰️',90,'dplus',250],
+  ['Marche 5 km','Parcours au moins 5 km aujourd’hui.','🥾',80,'distance',5],
+  ['Une sortie aujourd’hui','Termine une randonnée HIKE+ aujourd’hui.','🎒',60,'hike',1],
+  ['Marche 3 km','Parcours au moins 3 km aujourd’hui.','🌿',60,'distance',3],
+  ['+300 m de D+','Cumule au moins 300 m de dénivelé positif.','🏔️',100,'dplus',300],
+  ['Marche 7 km','Parcours au moins 7 km aujourd’hui.','🔥',100,'distance',7],
+  ['Une randonnée difficile','Termine une randonnée de niveau Difficile.','🏔️',120,'hard',1],
+  ['Marche 4 km','Parcours au moins 4 km aujourd’hui.','🍃',70,'distance',4],
+  ['+200 m de D+','Cumule au moins 200 m de dénivelé positif.','📈',80,'dplus',200],
+  ['Marche 5 km','Parcours au moins 5 km aujourd’hui.','👟',80,'distance',5],
+  ['Deux sorties','Termine 2 randonnées aujourd’hui.','🏆',110,'hike',2],
+  ['Marche 8 km','Parcours au moins 8 km aujourd’hui.','🔥',110,'distance',8],
+  ['+350 m de D+','Cumule au moins 350 m de dénivelé positif.','⛰️',120,'dplus',350],
+  ['Marche 10 km','Parcours au moins 10 km aujourd’hui.','🏅',140,'distance',10],
+  ['Le grand final','Termine une randonnée d’au moins 5 km.','🎉',200,'distance',5]
 ];
 
-function days30State(){
-  try{
-    const x=JSON.parse(localStorage.getItem(HIKE_DAYS30_KEY)||'{}');
-    return x&&typeof x==='object'?x:{};
-  }catch(e){return {}}
+function hike31Load(){
+  try{const x=JSON.parse(localStorage.getItem(HIKE31_KEY)||'{}');return x&&typeof x==='object'?x:{done:{},claimed:{}}}
+  catch(e){return {done:{},claimed:{}}}
 }
-function days30Save(s){try{localStorage.setItem(HIKE_DAYS30_KEY,JSON.stringify(s))}catch(e){}}
-function days30Interval(){return HIKE_DAYS30_PUBLIC_INTERVAL}
-function days30ChallengeIndex(now=Date.now()){
-  if(now<HIKE_DAYS30_START)return -1;
-  return Math.floor((now-HIKE_DAYS30_START)/days30Interval());
+function hike31Save(st){try{localStorage.setItem(HIKE31_KEY,JSON.stringify(st))}catch(e){}}
+function hike31DayStart(i){
+  const d=new Date(HIKE31_START);
+  d.setDate(d.getDate()+i);
+  return d;
 }
-function days30Window(i){
-  return {start:HIKE_DAYS30_START+i*days30Interval(),end:HIKE_DAYS30_START+(i+1)*days30Interval()};
+function hike31DayEnd(i){return hike31DayStart(i+1)}
+function hike31CurrentIndex(now=Date.now()){
+  if(now<HIKE31_START.getTime())return -1;
+  const idx=Math.floor((now-HIKE31_START.getTime())/86400000);
+  return idx>=HIKE31_DAYS?HIKE31_DAYS:idx;
 }
-function days30Stats(start,end){
-  const hs=Array.isArray(user?.hikes)?user.hikes:[];
-  const valid=hs.filter(h=>Number(h.date)>=start&&Number(h.date)<end);
-  return {
-    km:valid.reduce((s,h)=>s+Math.max(0,Number(h.distance)||0),0),
-    dplus:valid.reduce((s,h)=>s+Math.max(0,Number(h.dplus)||0),0),
-    hikes:valid.length,
-    maxMinutes:valid.reduce((m,h)=>Math.max(m,(Number(h.durationSec)||0)/60),0)
-  };
+function hike31Fmt(ms){
+  const total=Math.max(0,Math.floor(ms/1000)),d=Math.floor(total/86400),h=Math.floor((total%86400)/3600),m=Math.floor((total%3600)/60),s=total%60;
+  return {d,h,m,s};
 }
-function days30Progress(i){
-  if(i<0||i>=HIKE_DAYS30_COUNT)return {value:0,target:0,pct:0,done:false};
-  const [title,desc,target,type,xp]=HIKE_DAYS30_CHALLENGES[i];
-  const w=days30Window(i),s=days30Stats(w.start,w.end);
-  let value=type==='km'?s.km:type==='dplus'?s.dplus:type==='minutes'?s.maxMinutes:type==='hike'?s.hikes:type==='hike2'?s.hikes:type==='hike3'?s.hikes:0;
-  const actualTarget=type==='hike2'?2:type==='hike3'?3:target;
-  const done=value>=actualTarget;
-  return {value,target:actualTarget,pct:Math.min(100,Math.round((value/actualTarget)*100)),done,xp};
+function hike31DateLabel(i){
+  return hike31DayStart(i).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
 }
-function days30MaybeAward(i){
-  if(i<0||i>=HIKE_DAYS30_COUNT)return;
-  const s=days30State(),key='c'+i,p=days30Progress(i);
-  if(!p.done||s[key]?.awarded)return;
-  const xp=Math.max(0,Number(p.xp)||0),oldXp=Math.max(0,Number(user.xp)||0);
-  user.xp=oldXp+xp;user.level=levelFromXp(user.xp);
-  s[key]={awarded:true,completedAt:Date.now(),xp};
-  days30Save(s);
-  db.profiles[db.current]=user;persist();
-  toast('🎉 Défi réussi ! +'+xp+' XP');
+function hike31DayStats(i){
+  const start=hike31DayStart(i).getTime(),end=hike31DayEnd(i).getTime();
+  const hs=(user?.hikes||[]).filter(h=>Number(h.date)>=start&&Number(h.date)<end);
+  return {km:hs.reduce((a,h)=>a+Number(h.distance||0),0),dplus:hs.reduce((a,h)=>a+Number(h.dplus||0),0),count:hs.length,hikes:hs};
 }
-function days30Format(ms){
-  ms=Math.max(0,ms);const m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000);
-  if(m>=60){const h=Math.floor(m/60),mm=m%60;return `${String(h).padStart(2,'0')}h ${String(mm).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;}
-  return `${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+function hike31IsAchieved(i){
+  const c=HIKE31_CHALLENGES[i];if(!c)return false;
+  const st=hike31DayStats(i),type=c[4],target=Number(c[5]||1);
+  if(type==='distance')return st.km+1e-9>=target;
+  if(type==='dplus')return st.dplus+1e-9>=target;
+  if(type==='hike')return st.count>=target;
+  if(type==='easy')return st.hikes.some(h=>String(h.difficulty||'').toLowerCase()==='facile');
+  if(type==='moderate')return st.hikes.some(h=>String(h.difficulty||'').toLowerCase().includes('mod'));
+  if(type==='hard')return st.hikes.some(h=>String(h.difficulty||'').toLowerCase()==='difficile');
+  return false;
 }
-function days30Render(){
-  const now=Date.now(),idx=days30ChallengeIndex(now),state=days30State();
-  let currentTitle='Les défis arrivent bientôt',currentDesc='Le premier défi apparaîtra le samedi 3 octobre à 10h00.',timer=idx<0?HIKE_DAYS30_START-now:idx<HIKE_DAYS30_COUNT?days30Window(idx).end-now:0;
-  if(idx>=0&&idx<HIKE_DAYS30_COUNT){
-    days30MaybeAward(idx);
-    const c=HIKE_DAYS30_CHALLENGES[idx],p=days30Progress(idx),w=days30Window(idx),done=state['c'+idx]?.awarded||p.done;
-    currentTitle=c[0];currentDesc=c[1];
-  }else if(idx>=HIKE_DAYS30_COUNT){
-    currentTitle='Les 30 jours sont terminés 🎉';currentDesc='Merci d’avoir participé à l’aventure HIKE+ !';
-  }
-  const cards=HIKE_DAYS30_CHALLENGES.map((c,i)=>{
-    const passed=idx>i,cur=idx===i,p=days30Progress(i),st=state['c'+i],done=!!st?.awarded;
-    let cls='days30Cell '+(cur?'current ':'')+(done?'done ':'')+(passed&&!done?'expired ':'')+(i>idx?'locked':'');
-    return `<div class="${cls}"><span class="n">JOUR ${i+1}</span><span class="miniXp">+${c[4]} XP</span><div class="ico">${done?'✓':passed&&!done?'×':cur?'★':'🔒'}</div></div>`;
+function hike31AutoClaim(i){
+  if(i<0||i>=HIKE31_DAYS)return false;
+  const st=hike31Load();
+  if(st.claimed?.[i])return false;
+  if(!hike31IsAchieved(i))return false;
+  const c=HIKE31_CHALLENGES[i],xp=Number(c[3])||0;
+  user.xp=Math.max(0,Number(user.xp)||0)+xp;
+  user.level=levelFromXp(user.xp);
+  st.claimed=st.claimed||{};st.claimed[i]=Date.now();st.done=st.done||{};st.done[i]=true;
+  db.profiles[db.current]=user;persist();hike31Save(st);
+  return true;
+}
+function hike31SyncClaims(){
+  let changed=false;
+  for(let i=0;i<HIKE31_DAYS;i++){if(hike31AutoClaim(i))changed=true}
+  return changed;
+}
+function hike31CountdownTick(){
+  const now=Date.now(),idx=hike31CurrentIndex(now);
+  const el=$('days31Countdown');
+  if(!el)return;
+  let target,mode;
+  if(idx<0){target=HIKE31_START.getTime();mode='before'}
+  else if(idx<HIKE31_DAYS){target=hike31DayEnd(idx).getTime();mode='active'}
+  else{el.textContent='Les 31 jours de HIKE+ sont terminés.';return}
+  const f=hike31Fmt(target-now);
+  el.innerHTML=`<div class="days31Time"><b>${String(f.d).padStart(2,'0')}</b><span>jours</span></div><div class="days31Time"><b>${String(f.h).padStart(2,'0')}</b><span>heures</span></div><div class="days31Time"><b>${String(f.m).padStart(2,'0')}</b><span>minutes</span></div><div class="days31Time"><b>${String(f.s).padStart(2,'0')}</b><span>secondes</span></div>`;
+  const status=$('days31Status');
+  if(status)status.textContent=mode==='before'?'Le premier défi sera disponible le samedi 3 octobre à 10h00.':`Le défi du jour se termine à 10h00.`;
+}
+function render31Days(){
+  hike31SyncClaims();
+  const st=hike31Load(),idx=hike31CurrentIndex(),started=idx>=0,finished=idx>=HIKE31_DAYS;
+  const current=started&&!finished?HIKE31_CHALLENGES[idx]:null;
+  const currentDone=current?hike31IsAchieved(idx)||!!st.claimed?.[idx]:false;
+  const stat=current?hike31DayStats(idx):null;
+  const cards=HIKE31_CHALLENGES.map((c,i)=>{
+    const done=!!st.claimed?.[i]||hike31IsAchieved(i);
+    const expired=started&&i<idx&&!done, active=i===idx&&!finished,locked=idx<0||i>idx,cls=`days31Card ${done?'done ':''}${expired?'expired ':''}${active?'active ':''}${locked?'locked':''}`;
+    return `<div class="${cls}">
+      <div class="num">Jour ${i+1} · ${hike31DateLabel(i)}</div>
+      <div class="icon">${locked?'🔒':c[2]}</div>
+      <b>${c[0]}</b><small>+${c[3]} XP</small>
+      ${done?'<span class="days31Check">✓</span>':expired?'<span class="days31Check" style="background:#ece6df;color:#8f7f70">×</span>':''}
+    </div>`;
   }).join('');
-  const curP=idx>=0&&idx<HIKE_DAYS30_COUNT?days30Progress(idx):{value:0,target:1,pct:0};
-  const curState=idx>=0?state['c'+idx]:null;
-  const status=idx<0?'À VENIR':idx>=HIKE_DAYS30_COUNT?'TERMINÉ':curState?.awarded||curP.done?'DÉFI RÉUSSI':'EN COURS';
-  return `<div class="days30Wrap">
-    <div class="days30Hero">
-      <div class="days30Eyebrow">HIKE+ · BÊTA OUVERTE</div>
-      <h1>Les 30 jours de HIKE+</h1>
-      <p> Un nouveau défi apparaît chaque jour à 10h00.</p>
-      <div class="days30Timer"><div><small>Prochain défi</small><b id="days30Countdown">${days30Format(timer)}</b></div><div class="days30Xp">31 défis · jusqu’à +${HIKE_DAYS30_CHALLENGES.reduce((a,c)=>a+c[4],0)} XP</div></div>
-    </div>
-    <div class="days30Today">
-      <div class="days30TodayHead"><span class="days30DayTag">${idx>=0&&idx<HIKE_DAYS30_COUNT?'Jour '+(idx+1):'Calendrier'}</span><span class="days30Status ${status==='DÉFI RÉUSSI'?'done':''} ${status==='TERMINÉ'?'done':''}">${status}</span></div>
-      <div class="days30Challenge">${currentTitle}</div>
-      <div class="days30Desc">${currentDesc}</div>
-      ${idx>=0&&idx<HIKE_DAYS30_COUNT?`<div class="days30Progress"><i style="width:${curP.pct}%"></i></div><div class="days30ProgressMeta"><span>${curP.value.toFixed(curP.target<10?1:0)} / ${curP.target} ${HIKE_DAYS30_CHALLENGES[idx][3]==='dplus'?'m D+':HIKE_DAYS30_CHALLENGES[idx][3]==='minutes'?'min':HIKE_DAYS30_CHALLENGES[idx][3].startsWith('hike')?'sortie(s)':'km'}</span><span>+${HIKE_DAYS30_CHALLENGES[idx][4]} XP</span></div>`:''}
-      <div class="days30Test"><b>Les 30 jours de HIKE+</b><br>Un nouveau défi apparaît chaque jour à 10h00. La réussite est détectée automatiquement à partir des randonnées terminées pendant la fenêtre du défi.</div>
-    </div>
-    <div class="days30GridTitle">Calendrier des défis</div>
-    <div class="days30Grid">${cards}</div>
-  </div>`;
-}
-function days30Bind(){
-  const update=()=>{
-    if(currentView!=='days30')return;
-    const idx=days30ChallengeIndex();
-    if(idx>=0&&idx<HIKE_DAYS30_COUNT)days30MaybeAward(idx);
-    const el=$('days30Countdown');if(el){const now=Date.now(),ms=idx<0?HIKE_DAYS30_START-now:idx<HIKE_DAYS30_COUNT?days30Window(idx).end-now:0;el.textContent=days30Format(ms);}
-    if(currentView==='days30'&&idx!==window._days30LastIndex){window._days30LastIndex=idx;render('days30',true);}
-  };
-  clearInterval(window.days30Timer);window.days30Timer=setInterval(update,1000);update();
+  let heroStatus=idx<0?'Bientôt disponible':finished?'Événement terminé':`Jour ${idx+1} / ${HIKE31_DAYS}`;
+  let currentHtml='';
+  if(current){
+    const progressType=current[4];
+    let progressText='',progressPct=0;
+    if(progressType==='distance'){progressPct=Math.min(100,Math.round((stat.km/current[5])*100));progressText=`${progressPct}% · ${stat.km.toFixed(1)} / ${current[5]} km`;}
+    else if(progressType==='dplus'){progressPct=Math.min(100,Math.round((stat.dplus/current[5])*100));progressText=`${progressPct}% · ${Math.round(stat.dplus)} / ${current[5]} m D+`;}
+    else {progressPct=Math.min(100,Math.round((stat.count/current[5])*100));progressText=`${progressPct}% · ${stat.count} / ${current[5]} sortie${current[5]>1?'s':''}`;}
+    currentHtml=`<section class="days31Current"><div class="days31CurrentTop"><span class="days31DayPill">🔥 Défi du jour · Jour ${idx+1}</span><span class="days31Xp">+${current[3]} XP</span></div><h2>${current[2]} ${current[0]}</h2><p>${current[1]}</p><div class="days31Progress"><i style="width:${currentDone?100:progressPct}%"></i></div><button class="days31Action" id="days31Action" ${currentDone?'disabled':''}>${currentDone?'✓ Défi terminé':'Faire le défi'}</button><div class="days31Auto">${currentDone?'Les XP ont été ajoutés automatiquement à ta progression.':progressText}</div></section>`;
+  }else{
+    currentHtml=`<section class="days31Current"><div class="days31DayPill">${idx<0?'🗓️ Ouverture prochaine':'🏁 Événement terminé'}</div><h2>${idx<0?'Le calendrier arrive bientôt !':'Bravo pour ces 31 jours !'}</h2><p>${idx<0?'Prépare-toi : un nouveau défi apparaîtra chaque matin à 10h00.':'Tu as parcouru les 31 défis de HIKE+. Merci d’avoir participé à la bêta ouverte !'}</p></section>`;
+  }
+  return `<div class="days31Wrap"><div class="days31Inner"><section class="days31Hero"><div class="days31Eyebrow">HIKE+ · BÊTA OUVERTE</div><h1>Les 31 jours de HIKE+</h1><p>Un défi par jour. Marche, progresse et gagne de l’XP pendant toute la durée de l’événement.</p><div class="days31Countdown" id="days31Countdown"></div><div class="days31Status" id="days31Status">${heroStatus}</div></section>${currentHtml}<div class="days31CalendarTitle"><h2>Le calendrier</h2><span>31 défis · 31 jours</span></div><div class="days31Grid">${cards}</div><div class="days31Footer">⏱️ Chaque défi est disponible pendant sa journée, de 10h00 à 10h00 le lendemain. Les défis non réalisés expirent automatiquement.</div></div></div>`;
 }
 
-
-function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content h9Home">
-  <header class="h9Header">
-    <button class="h9Menu" aria-label="Menu">☰</button>
-    <div class="h9Logo">HIKE<span>+</span></div>
-    <div class="homeProfileAvatar h9Avatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div>
-  </header>
-
-  <section class="h9Greeting">
-    <div><small>TON ESPACE RANDONNÉE</small><h1>Bonjour <b>${user.name.split(' ')[0]}</b> 👋</h1><p>Prêt pour une nouvelle sortie ?</p></div>
-    <div class="h9Level"><strong>${user.level}</strong><span>NIV.</span></div>
-  </section>
-
-  <div class="h9Chips">
-    <span>🔥 ${user.hikes.length} sortie${user.hikes.length>1?'s':''}</span>
-    <span>⭐ ${user.xp} XP</span>
-    <span>🥾 Ton aventure</span>
-  </div>
-
-  <section class="h9Section h9ProgressHome"><section class="h9Section">
-    <div class="h9SectionHead"><div><small>TA PROGRESSION</small><h2>Continue comme ça !</h2></div><button id="h9Progress">Détails</button></div>
-    <div class="h9XP"><div class="h9XPBadge"><strong>${user.level}</strong><span>NIV.</span></div><div class="h9XPInfo"><b>${user.xp} XP</b><small>Continue tes randonnées</small><div><i style="width:${Math.min(100,Math.max(8,user.xp%100))}%"></i></div></div></div>
-  </section></section><section class="h9Section">
-    <div class="h9SectionHead"><div><small>EXPLORER</small><h2>Que veux-tu faire ?</h2></div><button id="refSearchTop">Voir tout</button></div>
-    <div class="h9CircleRow">
-      <button class="h9CircleItem" id="refMap"><div class="h9Circle c1">⌖</div><b>Carte</b><small>Explorer</small></button>
-      <button class="h9CircleItem" id="refSearch"><div class="h9Circle c2">⌕</div><b>Randonnées</b><small>Trouver</small></button>
-      <button class="h9CircleItem" id="refProgress"><div class="h9Circle c3">◎</div><b>Progression</b><small>${user.xp} XP</small></button>
-      <button class="h9CircleItem" id="refHikes"><div class="h9Circle c4">✓</div><b>Mes sorties</b><small>${user.hikes.length}</small></button>
-    </div>
-  </section>
-
-  <section class="h9Section">
-    <div class="h9SectionHead"><div><small>À LA UNE</small><h2>Une aventure pour toi</h2></div><span>HIKE+</span></div>
-    <div class="h9Feature">
-      <div class="h9FeatureVisual"><span>RECOMMANDATION</span><i>↗</i></div>
-      <div class="h9FeatureBody"><div><b>Découvre ta prochaine randonnée</b><small>Des parcours sélectionnés pour explorer et progresser.</small></div><button id="h9Explore">Explorer</button></div>
-    </div>
-  </section>
-
-  
-
-  <section class="h9Section">
-    <div class="h9SectionHead"><div><small>POUR AUJOURD'HUI</small><h2>Ton activité</h2></div><span id="homeRecTimer">05:00</span></div>
-    <div class="h9Stats"><div><span>🥾</span><b>${user.hikes.length}</b><small>sorties</small></div><div><span>⭐</span><b>${user.xp}</b><small>XP</small></div><div><span>🏆</span><b>${user.level}</b><small>niveau</small></div></div>
-    <div id="homeRecommendationCard" class="h9Recommendation"></div>
-  </section>
-</div>`;
-else if(v==='hikes')x=`<div class="exploreScreen"><div id="exploreMap"></div><div class="exploreFilters"><button class="exploreChip active" data-filter="all">Toutes</button><button class="exploreChip" data-filter="easy">Faciles</button><button class="exploreChip" data-filter="moderate">Modérées</button><button class="exploreChip" data-filter="hard">Difficiles</button><button class="exploreChip" data-filter="loop">↻ Boucles</button><button class="exploreChip" data-filter="done">✓ Déjà faites</button></div><div class="exploreInfo" id="exploreCount">Randonnées disponibles</div><div class="exploreSheet" id="exploreSheet"><div class="sheetHandle"></div><div class="sheetTitle" id="sheetTitle"></div><div class="sheetMeta" id="sheetMeta"></div></div><button class="sheetClose" id="sheetClose">×</button></div><div class="sheetMetrics"><div><b id="sheetDistance">—</b><small>KM</small></div><div><b id="sheetDplus">—</b><small>D+</small></div><div><b id="sheetDuration">—</b><small>DURÉE</small></div><div><b id="sheetDifficulty">—</b><small>NIVEAU</small></div></div><div class="sheetDone" id="sheetDone"></div><div class="sheetActions"><button class="sheetAction start" id="sheetStart"><span class="actionIcon">➤</span><span class="actionTitle">Aller au départ</span><span class="actionSub">Ouvrir l’itinéraire dans votre GPS</span><span class="actionArrow">›</span></button><button class="sheetAction hike" id="sheetHikeStart"><span class="actionIcon">▷</span><span class="actionTitle">Voir la randonnée</span><span class="actionSub">Lancer le suivi GPS de la randonnée</span><span class="actionArrow">›</span></button></div><div class="sheetGuide"><span class="sheetGuideIcon">i</span><span>Vous pouvez commencer la randonnée où que vous soyez. Le suivi GPS se lance immédiatement et vous guide sur le tracé.</span></div></div></div>`;
+function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}if(currentView==='days31'&&v!=='days31'){clearInterval(window.hike31Timer);window.hike31Timer=null}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content referenceHome"><div class="homeProfileRow"><div class="homeProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div><div><div class="refWelcome">Bonjour <strong>${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</strong> 👋</div><div class="homeProfileSub">Prêt pour une nouvelle sortie ?</div></div></div><div class="seasonNotice" id="seasonNotice">⚠️ Le compte sera supprimé lors du lancement de la Saison 1.</div><div class="refOutdoor" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=88')"><div class="refMontInner"><div class="refMontTag">HIKE+ · BÊTA OUVERTE</div><h2>Explore. Marche. Progresse.</h2><p>Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.</p></div></div><div class="refActionGrid"><button class="refAction orange" id="refSearch"><span class="refIcon">⌕</span><span><span class="refActionTitle">Rechercher une randonnée</span><span class="refActionSub">Trouve un circuit autour de toi</span></span></button><button class="refAction green" id="refMap"><span class="refIcon">⌖</span><span><span class="refActionTitle">Voir ma carte</span><span class="refActionSub">Les randonnées disponibles dans la Manche</span></span></button></div><div class="refActionGrid" style="margin-top:8px"><button class="refAction yellow" id="refProgress"><span class="refIcon">◎</span><span><span class="refActionTitle">Ma progression</span><span class="refActionSub">Niveau ${user.level} · ${user.xp} XP</span></span></button><button class="refAction lime" id="refHikes"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">${user.hikes.length} sortie${user.hikes.length>1?'s':''} enregistrée${user.hikes.length>1?'s':''}</span></span></button></div><div class="refSection"><h2>Nos recommandations</h2><div class="refSectionRight"><span>Pour toi</span><span class="refRecTimer" id="homeRecTimer">Nouvelle dans 05:00</span></div></div><div class="refRecommendation" id="homeRecommendationCard"></div></div>`;
+else if(v==='days31')x=render31Days();
+else if(v==='hikes')x=`<div class="exploreScreen"><div id="exploreMap"></div><div class="exploreTop"><input class="exploreSearch" id="hikeSearch" placeholder="🔎 Ville, région ou randonnée…"><button class="exploreLocate" id="exploreLocate">⌖</button></div><div class="exploreFilters"><button class="exploreChip active" data-filter="all">Toutes</button><button class="exploreChip" data-filter="easy">Faciles</button><button class="exploreChip" data-filter="moderate">Modérées</button><button class="exploreChip" data-filter="hard">Difficiles</button><button class="exploreChip" data-filter="loop">↻ Boucles</button><button class="exploreChip" data-filter="done">✓ Déjà faites</button></div><div class="exploreInfo" id="exploreCount">Randonnées disponibles</div><div class="exploreSheet" id="exploreSheet"><div class="sheetHandle"></div><div class="sheetTop"><div><div class="eyebrow" id="sheetEyebrow"></div><div class="sheetTitle" id="sheetTitle"></div><div class="sheetMeta" id="sheetMeta"></div></div><button class="sheetClose" id="sheetClose">×</button></div><div class="sheetMetrics"><div><b id="sheetDistance">—</b><small>KM</small></div><div><b id="sheetDplus">—</b><small>D+</small></div><div><b id="sheetDuration">—</b><small>DURÉE</small></div><div><b id="sheetDifficulty">—</b><small>NIVEAU</small></div></div><div class="sheetDone" id="sheetDone"></div><div class="sheetActions"><button class="sheetAction start" id="sheetStart"><span class="actionIcon">➤</span><span class="actionTitle">Aller au départ</span><span class="actionSub">Ouvrir l’itinéraire dans votre GPS</span><span class="actionArrow">›</span></button><button class="sheetAction hike" id="sheetHikeStart"><span class="actionIcon">▷</span><span class="actionTitle">Voir la randonnée</span><span class="actionSub">Lancer le suivi GPS de la randonnée</span><span class="actionArrow">›</span></button></div><div class="sheetGuide"><span class="sheetGuideIcon">i</span><span>Vous pouvez commencer la randonnée où que vous soyez. Le suivi GPS se lance immédiatement et vous guide sur le tracé.</span></div></div></div>`;
 else if(v==='progress')x=`<div class="content"><div class="eyebrow">Progression</div><h1>Ton parcours</h1><div class="progressProfile"><div class="progressProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="">`:initials(user.name)}</div><div><div class="progressProfileName">${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</div><div class="progressProfileTag">Ton profil · aventure outdoor</div></div></div><div class="xpHero"><div class="xpLabel">Expérience</div><div class="xpBig">${user.xp} XP</div><div class="xpMeta">Niveau ${user.level} · progression vers le prochain niveau</div><div class="xpBar"><i style="width:${levelProgress(user.xp).pct}%"></i></div></div><div class="stats"><div class="stat"><b>${totalKm().toFixed(1)} km</b><small>parcourus</small></div><div class="stat"><b>${Math.round(totalDplus())} m</b><small>D+ cumulé</small></div><div class="stat"><b>${user.hikes.length}</b><small>sorties</small></div><div class="stat"><b>${user.xp}</b><small>XP</small></div></div><button class="refAction lime progressMyHikesBtn" id="progressMyHikes" style="width:100%"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">Voir le récapitulatif de tes sorties</span></span></button><div class="section">Mes badges 🏆</div><div class="card seasonalBadgesCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Badges saisonniers</b><span class="gradeCount">Bêta ouverte</span></div><div class="badgeBetaLock">🔒 <span><b>Les badges arrivent avec la bêta ouverte</b><br>La pré-bêta ne comporte aucun badge.</span></div></div><div class="section" style="margin-top:14px">Archives des badges 📚</div><div class="card seasonalArchiveCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Mes anciennes saisons</b><span class="gradeCount">Historique</span></div><div class="seasonArchiveEmpty">Aucune saison terminée pour le moment.<br><small>À la fin de la bêta ouverte, un onglet <b>« Bêta ouverte »</b> conservera les badges que tu auras remportés.</small></div></div></div>`;
-else if(v==='myhikes')x=renderMyHikes();else if(v==='days30')x=days30Render();else if(v==='weather')x=hikeWeatherRender();
-else if(v==='settings')x=`<div class="content"><div class="eyebrow">Compte</div><h1>Paramètres</h1><div class="card"><div class="profileHead"><div class="profileAvatar" id="profileAvatar">${user.avatar?`<img src="${user.avatar}">`:initials(user.name)}</div><div><div style="font-size:24px;font-weight:950">${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</div><p style="margin:5px 0;color:#858a84">@${user.name}</p><button class="avatarEdit" id="avatarEdit">Changer la photo</button><button class="avatarDelete" id="avatarDelete" type="button">Supprimer</button><input id="avatarFile" type="file" accept="image/*" hidden></div></div><div class="settingsXp"><div><b>${user.xp} XP</b><small>Niveau ${user.level}</small></div><div class="settingsXpBar"><i style="width:${levelProgress(user.xp).pct}%"></i></div><small class="settingsXpMeta">${Math.round(levelProgress(user.xp).pct)}% vers le prochain niveau · ${Math.max(0,levelProgress(user.xp).next - user.xp)} XP restants</small></div></div><div class="card certCard">${user.certified?'<p style="margin:7px 0 0;color:#858a84;font-size:11px">Ce profil est bien certifié.</p>':'<button class="certBtn" id="certifyBtn">Obtenir une certification</button>'}</div><div class="countdownSetting"><div class="countdownSettingHead"><div><b>Compte à rebours de départ</b><small>Durée avant le démarrage officiel du GPS et du chrono.</small></div><select class="countdownSelect" id="countdownDuration"><option value="5" ${Number(user.countdownDuration||20)===5?'selected':''}>5 s</option><option value="10" ${Number(user.countdownDuration||20)===10?'selected':''}>10 s</option><option value="15" ${Number(user.countdownDuration||20)===15?'selected':''}>15 s</option><option value="20" ${Number(user.countdownDuration||20)===20?'selected':''}>20 s</option><option value="30" ${Number(user.countdownDuration||20)===30?'selected':''}>30 s</option><option value="35" ${Number(user.countdownDuration||20)===35?'selected':''}>35 s</option><option value="60" ${Number(user.countdownDuration||20)===60?'selected':''}>60 s</option></select></div></div><div class="card" style="margin-top:12px"><div class="settingsRow"><div class="settingsLabel"><b>Mode sombre</b><small>Adapter toute l'interface à un thème sombre.</small></div><button class="switch ${user.darkMode?'on':''}" id="darkModeToggle" aria-label="Mode sombre"></button></div></div><div class="settingsActions"><button class="settingsLogout" id="logout" type="button">Se déconnecter</button><button class="settingsRefresh" id="refRefresh" type="button">↻ Actualiser HIKE+</button><button class="settingsReset" id="reset" type="button">Réinitialiser les données</button></div></div>`;
+else if(v==='myhikes')x=renderMyHikes();else if(v==='weather')x=renderHome();
+else if(v==='settings')x=`<div class="content"><div class="eyebrow">Compte</div><h1>Paramètres</h1><div class="card"><div class="profileHead"><div class="profileAvatar" id="profileAvatar">${user.avatar?`<img src="${user.avatar}">`:initials(user.name)}</div><div><div style="font-size:24px;font-weight:950">${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</div><p style="margin:5px 0;color:#858a84">@${user.name}</p><button class="avatarEdit" id="avatarEdit">Changer la photo</button><button class="avatarDelete" id="avatarDelete" type="button">Supprimer</button><input id="avatarFile" type="file" accept="image/*" hidden></div></div><div class="settingsXp"><div><b>${user.xp} XP</b><small>Niveau ${user.level}</small></div><div class="settingsXpBar"><i style="width:${levelProgress(user.xp).pct}%"></i></div><small class="settingsXpMeta">${Math.round(levelProgress(user.xp).pct)}% vers le prochain niveau · ${Math.max(0,levelProgress(user.xp).next - user.xp)} XP restants</small></div></div><div class="card certCard"><div class="certStatus">${user.certified?'<span class="certBadge">✓</span> Profil certifié':'Profil non certifié'}</div>${user.certified?'<p style="margin:7px 0 0;color:#858a84;font-size:11px">Ce profil est bien certifié.</p>':'<button class="certBtn" id="certifyBtn">Obtenir une certification</button>'}</div><div class="countdownSetting"><div class="countdownSettingHead"><div><b>Compte à rebours de départ</b><small>Durée avant le démarrage officiel du GPS et du chrono.</small></div><select class="countdownSelect" id="countdownDuration"><option value="5" ${Number(user.countdownDuration||20)===5?'selected':''}>5 s</option><option value="10" ${Number(user.countdownDuration||20)===10?'selected':''}>10 s</option><option value="15" ${Number(user.countdownDuration||20)===15?'selected':''}>15 s</option><option value="20" ${Number(user.countdownDuration||20)===20?'selected':''}>20 s</option><option value="30" ${Number(user.countdownDuration||20)===30?'selected':''}>30 s</option><option value="35" ${Number(user.countdownDuration||20)===35?'selected':''}>35 s</option><option value="60" ${Number(user.countdownDuration||20)===60?'selected':''}>60 s</option></select></div></div><div class="card" style="margin-top:12px"><div class="settingsRow"><div class="settingsLabel"><b>Mode sombre</b><small>Adapter toute l'interface à un thème sombre.</small></div><button class="switch ${user.darkMode?'on':''}" id="darkModeToggle" aria-label="Mode sombre"></button></div></div><div class="settingsActions"><button class="settingsLogout" id="logout" type="button">Se déconnecter</button><button class="settingsRefresh" id="refRefresh" type="button">↻ Actualiser HIKE+</button><button class="settingsReset" id="reset" type="button">Réinitialiser les données</button></div></div>`;
 $('view').innerHTML=x;bindView(v);applyLanguage()}
 function bindView(v){
   if(v==='home'){
     updateCountdown();
     updateHomeCountdown();
-    const hp=$('homeHeaderProfile');
-      if(hp && user.avatar) hp.style.backgroundImage=`url("${user.avatar}")`, hp.style.backgroundSize='cover', hp.style.backgroundPosition='center'; const go=view=>{closeSideMenu();render(view)}; const h9Explore=$('h9Explore'); if(h9Explore)h9Explore.onclick=()=>go('hikes'); const h9Progress=$('h9Progress'); if(h9Progress)h9Progress.onclick=()=>go('progress');
+    const go=view=>{closeSideMenu();render(view)};
     $('refSearch').onclick=()=>go('hikes');
     $('refMap').onclick=()=>go('hikes');
     $('refProgress').onclick=()=>go('progress');
@@ -1999,9 +1534,26 @@ function bindView(v){
     startHomeRecommendationTimer();
     updateHomeRecommendation(true);
     bindHomeRecommendation();
-    
+    $('homeMenu').onclick=()=>openSideMenu();
     showHomeArrival();
     if(!feedbackAlreadyAnswered())feedbackOpenTimer=setTimeout(openFeedbackQuestionnaire,3750);
+  }
+  if(v==='days31'){
+    hike31CountdownTick();
+    clearInterval(window.hike31Timer);
+    window.hike31Timer=setInterval(()=>{
+      const before=hike31CurrentIndex();
+      hike31CountdownTick();
+      if(currentView==='days31' && before!==hike31CurrentIndex())render('days31',true);
+    },1000);
+    const action=$('days31Action');
+    if(action)action.onclick=()=>{
+      const idx=hike31CurrentIndex();
+      if(idx<0){toast('Le calendrier ouvre le 3 octobre à 10h00.');return}
+      if(idx>=HIKE31_DAYS){toast('Les 31 jours sont terminés.');return}
+      if(hike31AutoClaim(idx)){render('days31',true);toast('Défi terminé · XP ajoutés !')}
+      else toast('Le défi se valide automatiquement dès que tu remplis la condition.');
+    };
   }
   if(v==='hikes'){
     setTimeout(()=>{
@@ -2029,8 +1581,7 @@ function bindView(v){
   }
   if(v==='progress'){
     const b=$('progressMyHikes'); if(b)b.onclick=()=>render('myhikes');
-  }  if(v==='days30'){days30Bind();}
-
+  }
   if(v==='weather'){const b=$('weatherSearch');if(b)b.onclick=hwLoad;const filter=$('weatherHikeFilter'),sel=$('weatherHike');if(filter&&sel){const all=hwHikes();const norm=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();const rebuild=()=>{const q=norm(filter.value);const current=sel.value;const matches=all.map((h,i)=>({h,i})).filter(x=>!q||norm(x.h.name).includes(q)||(x.h.city&&norm(x.h.city).includes(q)));sel.innerHTML=matches.length?matches.map(x=>`<option value="${x.i}">${hwEscape(x.h.name)}${x.h.city?' · '+hwEscape(x.h.city):''}</option>`).join(''):'<option value="">Aucune randonnée trouvée</option>';if(matches.some(x=>String(x.i)===String(current)))sel.value=current;else if(matches.length===1)sel.value=String(matches[0].i)};filter.addEventListener('input',rebuild);}}
 
   if(v==='myhikes'){
@@ -2247,7 +1798,7 @@ function saveNavSession(){try{const active=document.getElementById('navScreen')?
 function clearNavSession(){try{localStorage.removeItem(NAV_SESSION_KEY)}catch(e){}}
 function refreshAfterBackground(){if(!$('navScreen')?.classList.contains('active'))return;if(map)setTimeout(()=>map.invalidateSize(true),50);cpbar();if(checkpointMarkers.length)refreshCheckpointMarkers();updateRouteGuidance(best||0);if(!simulating&&navigator.geolocation&&watchId===null){const opts={enableHighAccuracy:true,maximumAge:5000,timeout:15000};navigator.geolocation.getCurrentPosition(onGPS,gpsError,opts);watchId=navigator.geolocation.watchPosition(onGPS,gpsError,opts)}saveNavSession()}
 function stopWatch(){if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null}clearInterval(timerId);cancelAnimationFrame(simId);simulating=false;saveNavSession()}
-function finish(){clearNavSession();stopWatch();const km=Math.max(0,traveled/1000),baseXp=Math.max(50,Math.round(km*20)),difficultyMultiplierValue=difficultyMultiplier(routeData.difficulty),certMultiplier=user.certified?3:1,multiplier=difficultyMultiplierValue*certMultiplier,xp=baseXp*multiplier,oldXp=Math.max(0,Number(user.xp)||0),newXp=oldXp+xp;user.hikes.push({date:Date.now(),name:routeData.name,distance:km,dplus:Math.max(0,Math.round(dplus)),durationSec:Math.max(1,Math.round(elapsedSec||((Date.now()-startAt)/1000))),difficulty:routeData.difficulty||'Facile',multiplier:multiplier,xp:xp,city:routeData.city||'',region:routeData.region||''});user.xp=newXp;const oldLevel=levelFromXp(oldXp);const newLevel=levelFromXp(newXp);user.level=newLevel;const newGrades=ensureGrades(oldLevel,newLevel);db.profiles[db.current]=user;persist();$('finishKm').textContent=km.toFixed(2);$('finishDplus').textContent=Math.round(dplus);$('finishXp').textContent='+'+xp;$('finishXpTotal').textContent=newXp+' XP';$('finishXpGain').textContent='+'+xp+' XP';$('finishLevel').textContent=oldLevel;$('finishXpBar').style.width=levelProgress(oldXp).pct+'%';const multEl=$('finishXpMultiplier');if(multEl)multEl.innerHTML=`<span class="certXpBadge">${routeData.difficulty||'Facile'} · x${difficultyMultiplierValue}${user.certified?' · ✓ CERTIFIÉ ×3':''} XP</span>`;const gradeBox=$('finishGradeUnlock');if(gradeBox){gradeBox.classList.remove('show');gradeBox.innerHTML='';if(newGrades.length){const g=GRADES[newGrades[0]];if(g){gradeBox.innerHTML=`<div class="finishGradeBadge">${gradeIcon(newGrades[0])}</div><div><div class="gradeEyebrow">🏆 NOUVEAU GRADE DÉBLOQUÉ</div><div class="gradeName">${g[0]}</div><div class="gradeMeta">Niveau ${g[1]} · Grade ${newGrades[0]+1}/30${newGrades.length>1?` · +${newGrades.length-1} autre${newGrades.length>2?'s':''}`:''}</div></div>`;setTimeout(()=>gradeBox.classList.add('show'),900)}}}$('navScreen').classList.remove('active');$('finish').classList.add('show');confetti();xpBurst('+'+xp+' XP · x'+multiplier );animateFinishXP(oldXp,newXp,xp)}
+function finish(){clearNavSession();stopWatch();const km=Math.max(0,traveled/1000),baseXp=Math.max(50,Math.round(km*20)),difficultyMultiplierValue=difficultyMultiplier(routeData.difficulty),certMultiplier=user.certified?3:1,multiplier=difficultyMultiplierValue*certMultiplier,xp=baseXp*multiplier,oldXp=Math.max(0,Number(user.xp)||0),newXp=oldXp+xp;user.hikes.push({date:Date.now(),name:routeData.name,distance:km,dplus:Math.max(0,Math.round(dplus)),durationSec:Math.max(1,Math.round(elapsedSec||((Date.now()-startAt)/1000))),difficulty:routeData.difficulty||'Facile',multiplier:multiplier,xp:xp,city:routeData.city||'',region:routeData.region||''});user.xp=newXp;const __hike31Idx=hike31CurrentIndex();if(__hike31Idx>=0&&__hike31Idx<HIKE31_DAYS)hike31AutoClaim(__hike31Idx);const oldLevel=levelFromXp(oldXp);const newLevel=levelFromXp(newXp);user.level=newLevel;const newGrades=ensureGrades(oldLevel,newLevel);db.profiles[db.current]=user;persist();$('finishKm').textContent=km.toFixed(2);$('finishDplus').textContent=Math.round(dplus);$('finishXp').textContent='+'+xp;$('finishXpTotal').textContent=newXp+' XP';$('finishXpGain').textContent='+'+xp+' XP';$('finishLevel').textContent=oldLevel;$('finishXpBar').style.width=levelProgress(oldXp).pct+'%';const multEl=$('finishXpMultiplier');if(multEl)multEl.innerHTML=`<span class="certXpBadge">${routeData.difficulty||'Facile'} · x${difficultyMultiplierValue}${user.certified?' · ✓ CERTIFIÉ ×3':''} XP</span>`;const gradeBox=$('finishGradeUnlock');if(gradeBox){gradeBox.classList.remove('show');gradeBox.innerHTML='';if(newGrades.length){const g=GRADES[newGrades[0]];if(g){gradeBox.innerHTML=`<div class="finishGradeBadge">${gradeIcon(newGrades[0])}</div><div><div class="gradeEyebrow">🏆 NOUVEAU GRADE DÉBLOQUÉ</div><div class="gradeName">${g[0]}</div><div class="gradeMeta">Niveau ${g[1]} · Grade ${newGrades[0]+1}/30${newGrades.length>1?` · +${newGrades.length-1} autre${newGrades.length>2?'s':''}`:''}</div></div>`;setTimeout(()=>gradeBox.classList.add('show'),900)}}}$('navScreen').classList.remove('active');$('finish').classList.add('show');confetti();xpBurst('+'+xp+' XP · x'+multiplier );animateFinishXP(oldXp,newXp,xp)}
 function animateFinishXP(oldXp,newXp,xp){const totalEl=$('finishXpTotal'),gainEl=$('finishXpGain'),gainStat=$('finishXp'),bar=$('finishXpBar'),levelEl=$('finishLevel');if(!totalEl||!gainEl||!gainStat||!bar)return;const duration=2300,start=performance.now(),startLevel=levelFromXp(oldXp),endLevel=levelFromXp(newXp);function frame(now){const t=Math.min(1,(now-start)/duration),ease=1-Math.pow(1-t,3),value=Math.round(oldXp+(newXp-oldXp)*ease),gain=Math.round(xp*ease),lp=levelProgress(value);gainStat.textContent='+'+gain;gainEl.textContent='+'+gain+' XP';totalEl.textContent=value+' XP';levelEl.textContent=lp.level;bar.style.width=lp.pct+'%';if(t<1){requestAnimationFrame(frame)}else{gainStat.textContent='+'+xp;gainEl.textContent='+'+xp+' XP';totalEl.textContent=newXp+' XP';levelEl.textContent=endLevel;bar.style.width=levelProgress(newXp).pct+'%';const pill=$('finishLevelUp');if(pill){if(endLevel>startLevel){pill.textContent='🎉 Niveau '+endLevel+' atteint !';pill.classList.add('show')}else pill.classList.remove('show')}if(endLevel>startLevel){const queuedGrades=(user.grades||[]).filter(i=>GRADES[i]&&GRADES[i][1]>startLevel&&GRADES[i][1]<=endLevel&&GRADES[i][1]<=newXp);setTimeout(()=>{showLevelUp(startLevel,endLevel,newXp);if(queuedGrades.length)setTimeout(()=>showGradeQueue(queuedGrades),4100)},450)}}}requestAnimationFrame(frame)}
 $('stopBtn').onclick=()=>{const modal=$('appModal');if(!modal){return}const titleEl=$('appModalTitle'),textEl=$('appModalText'),iconEl=$('appModalIcon'),cancel=$('appModalCancel'),confirm=$('appModalConfirm');iconEl.textContent='🏁';titleEl.textContent='Terminer la randonnée';textEl.textContent=t('confirmStop');confirm.textContent=t('confirmYes');confirm.className='appModalBtn danger';cancel.textContent=t('confirmNo');modal.removeAttribute('hidden');modal.classList.add('show');modal.setAttribute('aria-hidden','false');const close=()=>{modal.classList.remove('show');modal.setAttribute('aria-hidden','true');modal.setAttribute('hidden','')};cancel.onclick=()=>close();confirm.onclick=()=>{close();stopWatch();$('navScreen').classList.remove('active');$('app').classList.add('active');render('home')};};$('centerBtn').onclick=()=>{if(userMarker)map.setView(userMarker.getLatLng(),17)};$('finishBtn').onclick=()=>{$('finish').classList.remove('show');const gb=$('finishGradeUnlock');if(gb){gb.classList.remove('show');gb.innerHTML=''}$('app').classList.add('active');render('home')};
 initLaunchGate();
@@ -2262,7 +1813,7 @@ const ADMIN_FRANCE_PACK_B64="UEsDBBQAAAAIAO1lNl0CkyRuzgAAACABAAAKAAAAUkVBRE1FLnR
 function adminFranceModal(){
  if(document.getElementById('adminFrancePackModal')) return;
  const d=document.createElement('div');d.id='adminFrancePackModal';d.hidden=true;
- d.innerHTML=`<div class="adminFranceCard" role="dialog" aria-modal="true"><div class="adminFranceTitle">Pack France disponible</div><div class="adminFranceText">Installe ou remplace le pack France (175 randonnées de 3 à 30 km, dont des boucles supplémentaires) pour les afficher ensuite sur la carte.</div></div><div class="adminFranceBody"><div class="adminFranceStats"><div class="adminFranceStat"><b>175</b><small>RANDONNÉES DU PACK</small></div><div class="adminFranceStat"><b id="adminFranceCount">0</b><small>AJOUTÉES</small></div></div><div class="adminFranceProgress"><i id="adminFranceBar"></i></div><div class="adminFranceActions"><button class="adminFranceBtn cancel" id="adminFranceLater">Plus tard</button><button class="adminFranceBtn primary" id="adminFranceInstall">Décompresser / remplacer le pack</button></div><div class="adminFranceDone" id="adminFranceDone" hidden>✓ Les randonnées sont maintenant visibles sur la carte.</div><div class="adminFranceErr" id="adminFranceErr"></div></div></div>`;
+ d.innerHTML=`<div class="adminFranceCard" role="dialog" aria-modal="true"><div class="adminFranceTop"><div class="adminFranceIcon">🥾</div><div class="adminFranceTitle">Pack France disponible</div><div class="adminFranceText">Installe ou remplace le pack France (175 randonnées de 3 à 30 km, dont des boucles supplémentaires) pour les afficher ensuite sur la carte.</div></div><div class="adminFranceBody"><div class="adminFranceStats"><div class="adminFranceStat"><b>175</b><small>RANDONNÉES DU PACK</small></div><div class="adminFranceStat"><b id="adminFranceCount">0</b><small>AJOUTÉES</small></div></div><div class="adminFranceProgress"><i id="adminFranceBar"></i></div><div class="adminFranceStatus" id="adminFranceStatus">Pack prêt à être décompressé.</div><div class="adminFranceActions"><button class="adminFranceBtn cancel" id="adminFranceLater">Plus tard</button><button class="adminFranceBtn primary" id="adminFranceInstall">Décompresser / remplacer le pack</button></div><div class="adminFranceDone" id="adminFranceDone" hidden>✓ Les randonnées sont maintenant visibles sur la carte.</div><div class="adminFranceErr" id="adminFranceErr"></div></div></div>`;
  document.body.appendChild(d);
  document.getElementById('adminFranceLater').onclick=()=>d.hidden=true;
  document.getElementById('adminFranceInstall').onclick=adminInstall;
@@ -2304,9 +1855,3 @@ window.addEventListener('load',async()=>{try{adminFranceModal();const PACK_VERSI
 </style>
 </body></html>
 <style>.seasonNotice{margin-bottom:8px!important}</style>
-
-<style id="v13-hard-hide">
-#sideMenu,#side-menu,.sideMenu,.menuPanel,.menu-panel,.menuBackdrop,.menu-backdrop{
-  display:none!important;visibility:hidden!important;pointer-events:none!important;
-}
-</style>
