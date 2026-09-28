@@ -168,6 +168,39 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro D
   .referenceHome .refRecommendation{border-radius:20px!important;overflow:hidden!important}
 }
 
+
+/* V9 — actual replacement of the original referenceHome template */
+.h9Home{max-width:760px;margin:0 auto;padding:2px 0 34px;background:#f7f8f5;color:#1e261f}
+.h9Header{height:50px;display:flex;align-items:center;justify-content:space-between}
+.h9Menu{width:35px;height:35px;border:1px solid #dfe5de;background:#fff;border-radius:11px;color:#68716a;font-size:15px}
+.h9Logo{font-size:19px;font-weight:1000;letter-spacing:-1.3px}.h9Logo span{color:#e8794d}
+.h9Avatar{width:36px!important;height:36px!important;border:1px solid #dce2dc!important;box-shadow:0 3px 10px rgba(20,35,25,.08)}
+.h9Avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.h9Greeting{display:flex;align-items:center;justify-content:space-between;padding:15px 0 8px}
+.h9Greeting small,.h9SectionHead small{font-size:7px;letter-spacing:.14em;color:#8b948c;font-weight:1000}
+.h9Greeting h1{font-size:27px;line-height:1;margin:6px 0 3px;letter-spacing:-1.2px;font-weight:450}.h9Greeting h1 b{font-weight:950}
+.h9Greeting p{font-size:9px;color:#89918a;margin:0}
+.h9Level{width:55px;height:55px;border-radius:18px;background:#e9ef6b;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 0 #d8ddd4}
+.h9Level strong{font-size:19px;line-height:1}.h9Level span{font-size:6px;font-weight:1000;margin-top:3px}
+.h9Chips{display:flex;gap:6px;overflow-x:auto;padding:9px 0 14px;scrollbar-width:none}.h9Chips::-webkit-scrollbar{display:none}
+.h9Chips span{white-space:nowrap;border:1px solid #e0e5df;background:#fff;border-radius:999px;padding:8px 10px;font-size:7px;color:#687169;font-weight:900}
+.h9Section{margin-top:18px}.h9SectionHead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px}.h9SectionHead h2{font-size:18px;line-height:1;margin:4px 0 0;letter-spacing:-.7px}.h9SectionHead button,.h9SectionHead>span{border:0;background:none;color:#e7784d;font-size:7px;font-weight:1000;padding:0}
+.h9CircleRow{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.h9CircleItem{border:0;background:none;text-align:center;padding:0;min-width:0}
+.h9Circle{width:62px;height:62px;margin:0 auto 7px;border-radius:50%;display:grid;place-items:center;font-size:25px;border:4px solid #fff;box-shadow:0 4px 13px rgba(25,40,30,.08)}
+.h9Circle.c1{background:#dcebdc}.h9Circle.c2{background:#f0d9ca}.h9Circle.c3{background:#e8e6c9}.h9Circle.c4{background:#dce9ef}
+.h9CircleItem b{display:block;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.h9CircleItem small{display:block;font-size:6.5px;color:#89918a;margin-top:3px}
+.h9Feature{background:#fff;border:1px solid #e0e6df;border-radius:20px;overflow:hidden;box-shadow:0 7px 20px rgba(25,42,31,.05)}
+.h9FeatureVisual{height:150px;position:relative;background:linear-gradient(150deg,#88a08c,#496c52 50%,#26392d);overflow:hidden}
+.h9FeatureVisual:after{content:"";position:absolute;left:-10%;bottom:-30px;width:120%;height:75px;background:rgba(25,49,31,.55);transform:rotate(-4deg)}
+.h9FeatureVisual span{position:absolute;z-index:2;top:11px;left:11px;background:#fff;border-radius:99px;padding:6px 8px;font-size:6px;font-weight:1000;letter-spacing:.1em}.h9FeatureVisual i{position:absolute;z-index:2;right:11px;top:10px;width:32px;height:32px;border-radius:50%;background:#fff;display:grid;place-items:center;font-style:normal}
+.h9FeatureBody{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px}.h9FeatureBody b{display:block;font-size:12px}.h9FeatureBody small{display:block;font-size:7.5px;color:#89918a;margin-top:4px;max-width:280px}.h9FeatureBody button{border:0;border-radius:12px;background:#e8794d;color:#fff;font-size:8px;font-weight:950;padding:10px 12px}
+.h9XP{display:flex;gap:12px;align-items:center;background:#202b25;color:#fff;border-radius:19px;padding:12px}.h9XPBadge{width:52px;height:52px;border-radius:16px;background:#e9ef6b;color:#273128;display:flex;flex-direction:column;justify-content:center;align-items:center}.h9XPBadge strong{font-size:18px}.h9XPBadge span{font-size:6px;font-weight:1000}.h9XPInfo{flex:1}.h9XPInfo>b{font-size:14px}.h9XPInfo>small{display:block;color:#aeb6af;font-size:7px;margin:3px 0 8px}.h9XPInfo>div{height:5px;background:#4b564f;border-radius:99px;overflow:hidden}.h9XPInfo i{display:block;height:100%;background:#e8794d;border-radius:99px}
+.h9Stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.h9Stats div{background:#fff;border:1px solid #e1e6df;border-radius:16px;text-align:center;padding:11px}.h9Stats span{font-size:17px}.h9Stats b{display:block;font-size:14px;margin-top:3px}.h9Stats small{font-size:6.5px;color:#89918a}
+.h9Recommendation{margin-top:8px;min-height:70px;border-radius:16px;overflow:hidden}
+@media(max-width:600px){.h9Home{padding-left:13px!important;padding-right:13px!important}.h9Circle{width:57px;height:57px;font-size:22px}.h9Greeting h1{font-size:24px}}
+@media(max-width:370px){.h9Circle{width:51px;height:51px}.h9CircleItem small{display:none}}
+
 </style>
 <style>
 .testOnlyBadge{display:inline-flex;align-items:center;gap:5px;background:#fff1e9;color:#fc4c02;border:1px solid #ffd2bf;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}.todoCard:has(.todoTestOnly) .todoPhoto{filter:saturate(.9)}
@@ -1559,7 +1592,53 @@ function days30Bind(){
 }
 
 
-function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content referenceHome"><div class="homeProfileRow"><div class="homeProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div><div><div class="refWelcome">Bonjour <strong>${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</strong> 👋</div><div class="homeProfileSub">Prêt pour une nouvelle sortie ?</div></div></div><div class="seasonNotice" id="seasonNotice">⚠️ Le compte sera supprimé lors du lancement de la Saison 1.</div><div class="refOutdoor" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=88')"><div class="refMontInner"><div class="refMontTag">HIKE+ · PRÉ-BÊTA</div><h2>Explore. Marche. Progresse.</h2><p>Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.</p></div></div><div class="refActionGrid"><button class="refAction orange" id="refSearch"><span class="refIcon">⌕</span><span><span class="refActionTitle">Rechercher une randonnée</span><span class="refActionSub">Trouve un circuit autour de toi</span></span></button><button class="refAction green" id="refMap"><span class="refIcon">⌖</span><span><span class="refActionTitle">Voir ma carte</span><span class="refActionSub">Les randonnées disponibles dans la Manche</span></span></button></div><div class="refActionGrid" style="margin-top:8px"><button class="refAction yellow" id="refProgress"><span class="refIcon">◎</span><span><span class="refActionTitle">Ma progression</span><span class="refActionSub">Niveau ${user.level} · ${user.xp} XP</span></span></button><button class="refAction lime" id="refHikes"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">${user.hikes.length} sortie${user.hikes.length>1?'s':''} enregistrée${user.hikes.length>1?'s':''}</span></span></button></div><div class="refSection"><h2>Nos recommandations</h2><div class="refSectionRight"><span>Pour toi</span><span class="refRecTimer" id="homeRecTimer">Nouvelle dans 05:00</span></div></div><div class="refRecommendation" id="homeRecommendationCard"></div></div>`;
+function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content h9Home">
+  <header class="h9Header">
+    <button class="h9Menu" aria-label="Menu">☰</button>
+    <div class="h9Logo">HIKE<span>+</span></div>
+    <div class="homeProfileAvatar h9Avatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div>
+  </header>
+
+  <section class="h9Greeting">
+    <div><small>TON ESPACE RANDONNÉE</small><h1>Bonjour <b>${user.name.split(' ')[0]}</b> 👋</h1><p>Prêt pour une nouvelle sortie ?</p></div>
+    <div class="h9Level"><strong>${user.level}</strong><span>NIV.</span></div>
+  </section>
+
+  <div class="h9Chips">
+    <span>🔥 ${user.hikes.length} sortie${user.hikes.length>1?'s':''}</span>
+    <span>⭐ ${user.xp} XP</span>
+    <span>🥾 Ton aventure</span>
+  </div>
+
+  <section class="h9Section">
+    <div class="h9SectionHead"><div><small>EXPLORER</small><h2>Que veux-tu faire ?</h2></div><button id="refSearchTop">Voir tout</button></div>
+    <div class="h9CircleRow">
+      <button class="h9CircleItem" id="refMap"><div class="h9Circle c1">⌖</div><b>Carte</b><small>Explorer</small></button>
+      <button class="h9CircleItem" id="refSearch"><div class="h9Circle c2">⌕</div><b>Randonnées</b><small>Trouver</small></button>
+      <button class="h9CircleItem" id="refProgress"><div class="h9Circle c3">◎</div><b>Progression</b><small>${user.xp} XP</small></button>
+      <button class="h9CircleItem" id="refHikes"><div class="h9Circle c4">✓</div><b>Mes sorties</b><small>${user.hikes.length}</small></button>
+    </div>
+  </section>
+
+  <section class="h9Section">
+    <div class="h9SectionHead"><div><small>À LA UNE</small><h2>Une aventure pour toi</h2></div><span>HIKE+</span></div>
+    <div class="h9Feature">
+      <div class="h9FeatureVisual"><span>RECOMMANDATION</span><i>↗</i></div>
+      <div class="h9FeatureBody"><div><b>Découvre ta prochaine randonnée</b><small>Des parcours sélectionnés pour explorer et progresser.</small></div><button id="h9Explore">Explorer</button></div>
+    </div>
+  </section>
+
+  <section class="h9Section">
+    <div class="h9SectionHead"><div><small>TA PROGRESSION</small><h2>Continue comme ça !</h2></div><button id="h9Progress">Détails</button></div>
+    <div class="h9XP"><div class="h9XPBadge"><strong>${user.level}</strong><span>NIV.</span></div><div class="h9XPInfo"><b>${user.xp} XP</b><small>Continue tes randonnées</small><div><i style="width:${Math.min(100,Math.max(8,user.xp%100))}%"></i></div></div></div>
+  </section>
+
+  <section class="h9Section">
+    <div class="h9SectionHead"><div><small>POUR AUJOURD'HUI</small><h2>Ton activité</h2></div><span id="homeRecTimer">05:00</span></div>
+    <div class="h9Stats"><div><span>🥾</span><b>${user.hikes.length}</b><small>sorties</small></div><div><span>⭐</span><b>${user.xp}</b><small>XP</small></div><div><span>🏆</span><b>${user.level}</b><small>niveau</small></div></div>
+    <div id="homeRecommendationCard" class="h9Recommendation"></div>
+  </section>
+</div>`;
 else if(v==='hikes')x=`<div class="exploreScreen"><div id="exploreMap"></div><div class="exploreTop"><input class="exploreSearch" id="hikeSearch" placeholder="🔎 Ville, région ou randonnée…"><button class="exploreLocate" id="exploreLocate">⌖</button></div><div class="exploreFilters"><button class="exploreChip active" data-filter="all">Toutes</button><button class="exploreChip" data-filter="easy">Faciles</button><button class="exploreChip" data-filter="moderate">Modérées</button><button class="exploreChip" data-filter="hard">Difficiles</button><button class="exploreChip" data-filter="loop">↻ Boucles</button><button class="exploreChip" data-filter="done">✓ Déjà faites</button></div><div class="exploreInfo" id="exploreCount">Randonnées disponibles</div><div class="exploreSheet" id="exploreSheet"><div class="sheetHandle"></div><div class="sheetTop"><div><div class="eyebrow" id="sheetEyebrow"></div><div class="sheetTitle" id="sheetTitle"></div><div class="sheetMeta" id="sheetMeta"></div></div><button class="sheetClose" id="sheetClose">×</button></div><div class="sheetMetrics"><div><b id="sheetDistance">—</b><small>KM</small></div><div><b id="sheetDplus">—</b><small>D+</small></div><div><b id="sheetDuration">—</b><small>DURÉE</small></div><div><b id="sheetDifficulty">—</b><small>NIVEAU</small></div></div><div class="sheetDone" id="sheetDone"></div><div class="sheetActions"><button class="sheetAction start" id="sheetStart"><span class="actionIcon">➤</span><span class="actionTitle">Aller au départ</span><span class="actionSub">Ouvrir l’itinéraire dans votre GPS</span><span class="actionArrow">›</span></button><button class="sheetAction hike" id="sheetHikeStart"><span class="actionIcon">▷</span><span class="actionTitle">Voir la randonnée</span><span class="actionSub">Lancer le suivi GPS de la randonnée</span><span class="actionArrow">›</span></button></div><div class="sheetGuide"><span class="sheetGuideIcon">i</span><span>Vous pouvez commencer la randonnée où que vous soyez. Le suivi GPS se lance immédiatement et vous guide sur le tracé.</span></div></div></div>`;
 else if(v==='progress')x=`<div class="content"><div class="eyebrow">Progression</div><h1>Ton parcours</h1><div class="progressProfile"><div class="progressProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="">`:initials(user.name)}</div><div><div class="progressProfileName">${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</div><div class="progressProfileTag">Ton profil · aventure outdoor</div></div></div><div class="xpHero"><div class="xpLabel">Expérience</div><div class="xpBig">${user.xp} XP</div><div class="xpMeta">Niveau ${user.level} · progression vers le prochain niveau</div><div class="xpBar"><i style="width:${levelProgress(user.xp).pct}%"></i></div></div><div class="stats"><div class="stat"><b>${totalKm().toFixed(1)} km</b><small>parcourus</small></div><div class="stat"><b>${Math.round(totalDplus())} m</b><small>D+ cumulé</small></div><div class="stat"><b>${user.hikes.length}</b><small>sorties</small></div><div class="stat"><b>${user.xp}</b><small>XP</small></div></div><button class="refAction lime progressMyHikesBtn" id="progressMyHikes" style="width:100%"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">Voir le récapitulatif de tes sorties</span></span></button><div class="section">Mes badges 🏆</div><div class="card seasonalBadgesCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Badges saisonniers</b><span class="gradeCount">Bêta ouverte</span></div><div class="badgeBetaLock">🔒 <span><b>Les badges arrivent avec la bêta ouverte</b><br>La pré-bêta ne comporte aucun badge.</span></div></div><div class="section" style="margin-top:14px">Archives des badges 📚</div><div class="card seasonalArchiveCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Mes anciennes saisons</b><span class="gradeCount">Historique</span></div><div class="seasonArchiveEmpty">Aucune saison terminée pour le moment.<br><small>À la fin de la bêta ouverte, un onglet <b>« Bêta ouverte »</b> conservera les badges que tu auras remportés.</small></div></div></div>`;
 else if(v==='myhikes')x=renderMyHikes();else if(v==='days30')x=days30Render();else if(v==='weather')x=hikeWeatherRender();
