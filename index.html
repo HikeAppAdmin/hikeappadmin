@@ -114,6 +114,44 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro D
 .appSplash{position:fixed;inset:0;background:#101510;z-index:50000;display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;animation:splashOut .8s ease 2.8s forwards}.splashBg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1800&q=90') center/cover;filter:saturate(.9)}.splashBg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,18,12,.22),rgba(8,18,12,.78))}.splashInner{position:relative;z-index:1;text-align:center;animation:splashInnerIn .8s cubic-bezier(.2,.8,.2,1) both}.splashMark{display:flex;justify-content:center}.splashMark img{width:92px;height:92px;border-radius:22px;display:block;box-shadow:0 12px 36px rgba(0,0,0,.28)}.splashName{margin-top:8px;font-size:12px;letter-spacing:.22em;font-weight:900}.splashBeta{display:inline-flex;align-items:center;justify-content:center;margin-top:9px;padding:3px 7px;border:1px solid rgba(255,255,255,.7);border-radius:999px;background:#f28c28;color:#fff;font-size:8px;font-weight:850;letter-spacing:.13em;text-transform:uppercase}.splashSub{margin-top:10px;font-size:11px;color:rgba(255,255,255,.76)}.splashLine{width:92px;height:3px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;margin:17px auto 0}.splashLine i{display:block;height:100%;width:0;background:#fff;animation:splashLoad 2.15s .15s ease forwards}@keyframes splashInnerIn{from{opacity:0;transform:scale(.94) translateY(9px)}to{opacity:1;transform:none}}@keyframes splashLoad{to{width:100%}}@keyframes splashOut{to{opacity:0;visibility:hidden;pointer-events:none}}
 .offroute.show{animation:offrouteIn .28s ease both}.offroute{line-height:1.3}.offroute small{display:block;font-size:9px;font-weight:700;opacity:.86;margin-top:3px}@keyframes offrouteIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 .todoGrid{display:grid;gap:12px}.todoCard{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 26px #00000008}.todoPhoto{height:150px;background:center/cover no-repeat}.todoBody{padding:14px}.todoBody h3{margin:0 0 5px;font-size:16px}.todoBody p{margin:0;color:#777;font-size:11px}.todoActions{display:flex;gap:8px;margin-top:11px}.todoActions button{flex:1;border:0;border-radius:9px;padding:10px;font-weight:900}.todoActions .todoGo{background:#171717;color:#fff}.todoDone{font-size:9px;color:#16844f;font-weight:900;margin-top:7px}
+
+/* HIKE+ — LES 30 JOURS — ADMIN TEST */
+.days30Wrap{max-width:850px;margin:0 auto;padding:0 0 48px}
+.days30Hero{position:relative;overflow:hidden;border-radius:24px;padding:22px;color:#fff;background:linear-gradient(145deg,#173f2f,#2c694f);box-shadow:0 12px 30px rgba(20,61,45,.16)}
+.days30Eyebrow{font-size:10px;font-weight:950;letter-spacing:.16em;opacity:.72;text-transform:uppercase}
+.days30Hero h1{margin:6px 0 5px;font-size:clamp(28px,7vw,42px);letter-spacing:-1.4px}
+.days30Hero p{margin:0;max-width:620px;font-size:12px;line-height:1.5;opacity:.86}
+.days30Timer{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.11)}
+.days30Timer small{display:block;font-size:9px;opacity:.7;text-transform:uppercase;letter-spacing:.08em}
+.days30Timer b{font-size:22px;letter-spacing:-.5px}
+.days30Xp{font-size:11px;font-weight:900}
+.days30Today{margin-top:12px;border:1px solid #e1e6e0;background:#fff;border-radius:20px;padding:16px;box-shadow:0 8px 24px rgba(22,43,33,.055)}
+.days30TodayHead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.days30DayTag{font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;color:#6d756f}
+.days30Status{font-size:10px;font-weight:900;border-radius:999px;padding:6px 9px;background:#eef5f0;color:#24563f}
+.days30Status.done{background:#e6f5e9;color:#18703a}
+.days30Status.expired{background:#fff0ed;color:#a33a2c}
+.days30Challenge{margin-top:8px;font-size:23px;font-weight:950;letter-spacing:-.7px}
+.days30Desc{margin-top:5px;font-size:12px;color:#707770;line-height:1.45}
+.days30Progress{height:9px;border-radius:99px;background:#edf0ec;overflow:hidden;margin-top:13px}
+.days30Progress i{display:block;height:100%;width:0;background:#285d48;border-radius:99px;transition:width .3s}
+.days30ProgressMeta{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:#7c837d}
+.days30GridTitle{margin:20px 2px 9px;font-size:13px;font-weight:950}
+.days30Grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.days30Cell{min-height:62px;border:1px solid #e1e6e0;border-radius:13px;background:#fff;padding:8px;text-align:left;position:relative}
+.days30Cell .n{font-size:10px;font-weight:950;color:#777f79}
+.days30Cell .ico{font-size:16px;margin-top:5px}
+.days30Cell.locked{opacity:.48}
+.days30Cell.current{border:2px solid #285d48;padding:7px}
+.days30Cell.done{background:#eef8f0;border-color:#bfe2c6}
+.days30Cell.expired{background:#fff6f3;border-color:#f0c9c0}
+.days30Cell .miniXp{position:absolute;right:7px;top:7px;font-size:8px;font-weight:950;color:#6d756f}
+.days30Test{margin-top:12px;border:1px dashed #c9d0ca;border-radius:16px;padding:12px;background:#fafcf9;font-size:11px;color:#697169}
+.days30Test button{margin-top:8px;border:0;border-radius:11px;background:#173f2f;color:#fff;padding:9px 12px;font-weight:900}
+.darkMode .days30Today,.darkMode .days30Cell,.darkMode .days30Test{background:#1b1f1c;color:#eee;border-color:#303631}
+@media(max-width:650px){.days30Grid{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:430px){.days30Grid{grid-template-columns:repeat(4,1fr)}.days30Challenge{font-size:20px}}
+
 </style>
 <style>
 .testOnlyBadge{display:inline-flex;align-items:center;gap:5px;background:#fff1e9;color:#fc4c02;border:1px solid #ffd2bf;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}.todoCard:has(.todoTestOnly) .todoPhoto{filter:saturate(.9)}
@@ -818,7 +856,7 @@ function initLaunchGate(){
 
 function showHomeArrival(){const old=document.querySelector('.homeArrival');if(old)old.remove();const el=document.createElement('div');el.className='homeArrival';el.innerHTML='<div class="homeArrivalBg"></div><div class="homeArrivalInner"><div class="homeArrivalMark">+</div><div class="homeArrivalTitle">HIKE+</div><div class="homeArrivalSub">Cap sur le hiking</div><div class="homeArrivalLine"><i></i></div></div>';document.body.appendChild(el);setTimeout(()=>el.remove(),3600)}
 function updateHomeCountdown(){const target=new Date('2028-09-01T00:00:00');const tick=()=>{const el=document.getElementById('homeCdDays');if(!el)return;let d=Math.max(0,target-Date.now());const days=Math.floor(d/86400000);d%=86400000;const h=Math.floor(d/3600000);d%=3600000;const m=Math.floor(d/60000);const sec=Math.floor((d%60000)/1000);el.textContent=days+' j';$('homeCdHours').textContent=h+' h';$('homeCdMin').textContent=m+' min';$('homeCdSec').textContent=sec+' s'};tick();clearInterval(window.homeCdTimer);window.homeCdTimer=setInterval(tick,1000)}
-function ensureSideMenu(){if(document.getElementById('sideMenu'))return;const wrap=document.createElement('div');wrap.innerHTML='<div class="menuBackdrop" id="menuBackdrop"></div><aside class="sideMenu" id="sideMenu"><div class="menuHead"><div class="menuLogo">HIKE+</div><button class="menuClose" id="menuClose">×</button></div><div class="menuUser"><div class="menuAvatar" id="menuAvatar"></div><div><b id="menuUserName"></b><small id="menuUserGoal">Objectif hiking</small><small id="menuUserProgress"></small></div></div><div class="menuLinks"><button class="menuLink" data-menu-view="home"><span>⌂</span>Accueil</button><button class="menuLink" data-menu-view="hikes"><span>⌖</span>Randonnées</button><button class="menuLink" data-menu-view="progress"><span>↗</span>Ma progression</button><button class="menuLink" data-menu-view="weather"><span>☁</span>Météo</button><button class="menuLink" data-menu-view="settings"><span>⚙</span>Paramètres</button></div><div class="menuFooter"><button class="menuLogout" id="menuLogout">Se déconnecter</button></div></aside>';document.body.appendChild(wrap);document.getElementById('menuBackdrop').onclick=closeSideMenu;document.getElementById('menuClose').onclick=closeSideMenu;document.querySelectorAll('.menuLink').forEach(b=>b.onclick=()=>{const v=b.dataset.menuView;if(v===currentView){closeSideMenu();return}closeSideMenu();render(v)});document.getElementById('menuLogout').onclick=()=>{closeSideMenu();logout()}}
+function ensureSideMenu(){if(document.getElementById('sideMenu'))return;const wrap=document.createElement('div');wrap.innerHTML='<div class="menuBackdrop" id="menuBackdrop"></div><aside class="sideMenu" id="sideMenu"><div class="menuHead"><div class="menuLogo">HIKE+</div><button class="menuClose" id="menuClose">×</button></div><div class="menuUser"><div class="menuAvatar" id="menuAvatar"></div><div><b id="menuUserName"></b><small id="menuUserGoal">Objectif hiking</small><small id="menuUserProgress"></small></div></div><div class="menuLinks"><button class="menuLink" data-menu-view="home"><span>⌂</span>Accueil</button><button class="menuLink" data-menu-view="hikes"><span>⌖</span>Randonnées</button><button class="menuLink" data-menu-view="progress"><span>↗</span>Ma progression</button><button class="menuLink" data-menu-view="days30"><span>★</span>Les 30 jours de HIKE+</button><button class="menuLink" data-menu-view="weather"><span>☁</span>Météo</button><button class="menuLink" data-menu-view="settings"><span>⚙</span>Paramètres</button></div><div class="menuFooter"><button class="menuLogout" id="menuLogout">Se déconnecter</button></div></aside>';document.body.appendChild(wrap);document.getElementById('menuBackdrop').onclick=closeSideMenu;document.getElementById('menuClose').onclick=closeSideMenu;document.querySelectorAll('.menuLink').forEach(b=>b.onclick=()=>{const v=b.dataset.menuView;if(v===currentView){closeSideMenu();return}closeSideMenu();render(v)});document.getElementById('menuLogout').onclick=()=>{closeSideMenu();logout()}}
 function openSideMenu(){ensureSideMenu();$('menuAvatar').innerHTML=user?.avatar?`<img src="${user.avatar}" alt="">`:initials(user?.name);$('menuUserName').innerHTML=(user?.name||'Profil')+(user?.certified?'<span class="certBadge small" title="Profil certifié">✓</span>':'');if($('menuUserGoal'))$('menuUserGoal').textContent=t('hikingGoal');if($('menuUserProgress'))$('menuUserProgress').textContent=`${t('levelLabelMenu')} ${user?.level||1} · ${(user?.xp||0)} XP · ${Math.min(100,Math.round(((user?.xp||0)%500)/5))}%`;document.querySelectorAll('.menuLink').forEach(b=>{const active=b.dataset.menuView===currentView;b.classList.toggle('active',active);b.setAttribute('aria-current',active?'page':'false')});$('menuBackdrop').classList.add('show');$('sideMenu').classList.add('show')}
 function closeSideMenu(){const a=document.getElementById('menuBackdrop'),b=document.getElementById('sideMenu');if(a)a.classList.remove('show');if(b)b.classList.remove('show')}
 function applyTheme(){const dark=!!user?.darkMode;document.documentElement.classList.toggle('darkMode',dark);document.documentElement.style.colorScheme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]')?.setAttribute('content',dark?'#101210':'#f5f6f4');const sb=document.getElementById('appleStatusBarStyle');if(sb)sb.setAttribute('content',dark?'black':'default');document.documentElement.style.backgroundColor=dark?'#101210':'#f5f6f4';document.body.style.backgroundColor=dark?'#101210':'#f5f6f4'}
@@ -1363,10 +1401,160 @@ async function hwForecast(lat,lon){const params=new URLSearchParams({latitude:St
 function hwEscape(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 async function hwLoad(){const sel=$('weatherHike'),box=$('weatherOutput'),index=Number(sel?.value),hs=hwHikes(),h=Number.isInteger(index)?hs[index]:null,c=hwCoords(h);if(!h||!c){box.innerHTML='<div class="weatherError">Choisis une randonnée pour afficher sa météo.</div>';return}box.innerHTML='<div class="weatherCard">🌦️ Chargement de la météo de la randonnée…</div>';try{const f=await hwForecast(c.lat,c.lon),t=Number(f.current.temperature_2m),w=Number(f.current.wind_speed_10m),r=Number(f.daily.precipitation_probability_max?.[0]||0),fv=hwFav(t,w,r),days=f.daily.time.slice(0,4).map((d,i)=>`<div class="weatherDay"><b>${new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'})}</b><div class="weatherDayIcon">${hwIcon(f.daily.weather_code[i])}</div><div class="weatherDayTemp">${Math.round(f.daily.temperature_2m_min[i])}° / ${Math.round(f.daily.temperature_2m_max[i])}°</div><div class="weatherDayRain">💧 ${f.daily.precipitation_probability_max[i]}%</div></div>`).join('');box.innerHTML=`<div class="weatherResult"><div class="weatherResultTop"><div><div class="weatherResultTitle">${fv[0]} ${fv[1]}</div><div class="weatherCondition">🥾 ${hwEscape(h.name)} · ${hwText(f.current.weather_code)}</div><div class="weatherCondition">📍 ${hwEscape(h.city||h.region||'Point de départ')}</div></div><div class="weatherScore">${fv[2]}/100</div></div><div class="weatherMetrics"><div class="weatherMetric"><b>${Math.round(t)}°C</b><span>TEMPÉRATURE</span></div><div class="weatherMetric"><b>${Math.round(w)} km/h</b><span>VENT</span></div><div class="weatherMetric"><b>${r}%</b><span>PLUIE</span></div><div class="weatherMetric"><b>${hwIcon(f.current.weather_code)}</b><span>CONDITIONS</span></div></div><div class="weatherAdvice">${r>35?'🌧️ Prévois une protection contre la pluie. ':''}${w>30?'💨 Attention au vent. ':''}${t<5?'🧥 Prévois des vêtements chauds. ':''}${t>27?'☀️ Pense à l’eau et à la protection solaire. ':''}${fv[2]>=75?'🥾 Les conditions sont globalement très bonnes pour cette randonnée !':'🥾 Adapte ton équipement aux conditions et vérifie la météo avant le départ.'}</div></div><div class="weatherCard"><span class="weatherLabel">Prévisions</span><div class="weatherDays">${days}</div></div>`;localStorage.setItem(HIKE_WEATHER_KEY,JSON.stringify({hike:h.name,index}))}catch(e){box.innerHTML='<div class="weatherError">Impossible de récupérer la météo pour cette randonnée. Vérifie ta connexion puis réessaie.</div>'}}
 function hikeWeatherRender(){let saved={};try{saved=JSON.parse(localStorage.getItem(HIKE_WEATHER_KEY)||'{}')}catch(e){}const hs=hwHikes(),opts=hs.length?hs.map((h,i)=>`<option value="${i}" ${saved.index===i?'selected':''}>${hwEscape(h.name)}${h.city?' · '+hwEscape(h.city):''}</option>`).join(''):'<option value="">Aucune randonnée disponible</option>';return `<div class="weatherWrap"><div class="weatherHero"><div class="weatherEyebrow">HIKE+ · CONDITIONS</div><h1>La météo pour randonner</h1><p>Choisis une randonnée pour connaître les conditions météo à son point de départ.</p></div><div class="weatherGrid"><div class="weatherCard"><span class="weatherLabel">🥾 Randonnée</span><input id="weatherHikeFilter" class="weatherInput" type="search" placeholder="Rechercher une randonnée…" autocomplete="off" aria-label="Rechercher une randonnée"><select id="weatherHike" class="weatherSelect" style="margin-top:8px">${opts}</select><div style="font-size:10px;opacity:.55;margin-top:7px">Écris le nom pour filtrer rapidement les randonnées. La météo est calculée au point de départ.</div><button id="weatherSearch" class="weatherBtn" style="margin-top:12px;width:100%">Voir la météo</button></div><div id="weatherOutput"></div></div></div>`}
-function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content referenceHome"><div class="homeProfileRow"><div class="homeProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div><div><div class="refWelcome">Bonjour <strong>${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</strong> 👋</div><div class="homeProfileSub">Prêt pour une nouvelle sortie ?</div></div></div><div class="seasonNotice" id="seasonNotice">⚠️ Le compte sera supprimé lors du lancement de la Saison 1.</div><div class="refOutdoor" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=88')"><div class="refMontInner"><div class="refMontTag">HIKE+ · PRÉ-BÊTA</div><h2>Explore. Marche. Progresse.</h2><p>Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.</p></div></div><div class="refActionGrid"><button class="refAction orange" id="refSearch"><span class="refIcon">⌕</span><span><span class="refActionTitle">Rechercher une randonnée</span><span class="refActionSub">Trouve un circuit autour de toi</span></span></button><button class="refAction green" id="refMap"><span class="refIcon">⌖</span><span><span class="refActionTitle">Voir ma carte</span><span class="refActionSub">Les randonnées disponibles dans la Manche</span></span></button></div><div class="refActionGrid" style="margin-top:8px"><button class="refAction yellow" id="refProgress"><span class="refIcon">◎</span><span><span class="refActionTitle">Ma progression</span><span class="refActionSub">Niveau ${user.level} · ${user.xp} XP</span></span></button><button class="refAction lime" id="refHikes"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">${user.hikes.length} sortie${user.hikes.length>1?'s':''} enregistrée${user.hikes.length>1?'s':''}</span></span></button></div><div class="refSection"><h2>Nos recommandations</h2><div class="refSectionRight"><span>Pour toi</span><span class="refRecTimer" id="homeRecTimer">Nouvelle dans 05:00</span></div></div><div class="refRecommendation" id="homeRecommendationCard"></div></div>`;
+
+/* LES 30 JOURS DE HIKE+ — ADMIN TEST
+   Production: 24h per challenge.
+   Admin: 5 minutes per challenge, starting at 03/10/2026 10:00 Europe/Paris.
+*/
+const HIKE_DAYS30_START = new Date('2026-10-03T10:00:00+02:00').getTime();
+const HIKE_DAYS30_ADMIN_INTERVAL = 5 * 60 * 1000;
+const HIKE_DAYS30_PUBLIC_INTERVAL = 24 * 60 * 60 * 1000;
+const HIKE_DAYS30_COUNT = 31;
+const HIKE_DAYS30_KEY = 'hikeplus_30days_v1';
+
+const HIKE_DAYS30_CHALLENGES = [
+  ['Marche 1 km','Parcours au moins 1 km pendant une randonnée.',1,'km',50],
+  ['Marche 2 km','Parcours au moins 2 km pendant une randonnée.',2,'km',70],
+  ['Gagne 50 m de D+','Cumule au moins 50 m de dénivelé positif.',50,'dplus',80],
+  ['Marche 3 km','Parcours au moins 3 km pendant une randonnée.',3,'km',90],
+  ['Fais une randonnée','Termine au moins une randonnée.',1,'hike',100],
+  ['Marche 4 km','Parcours au moins 4 km pendant une randonnée.',4,'km',110],
+  ['Gagne 100 m de D+','Cumule au moins 100 m de dénivelé positif.',100,'dplus',120],
+  ['Marche 5 km','Parcours au moins 5 km pendant une randonnée.',5,'km',130],
+  ['Fais 20 min de randonnée','Termine une randonnée d’au moins 20 minutes.',20,'minutes',140],
+  ['Marche 2,5 km','Parcours au moins 2,5 km.',2.5,'km',100],
+  ['Gagne 150 m de D+','Cumule au moins 150 m de dénivelé positif.',150,'dplus',150],
+  ['Marche 6 km','Parcours au moins 6 km.',6,'km',160],
+  ['Fais une sortie','Termine une randonnée pendant la journée.',1,'hike',100],
+  ['Marche 3,5 km','Parcours au moins 3,5 km.',3.5,'km',120],
+  ['Gagne 200 m de D+','Cumule au moins 200 m de dénivelé positif.',200,'dplus',180],
+  ['Marche 7 km','Parcours au moins 7 km.',7,'km',190],
+  ['Fais 30 min de randonnée','Termine une randonnée d’au moins 30 minutes.',30,'minutes',170],
+  ['Marche 4 km','Parcours au moins 4 km.',4,'km',130],
+  ['Gagne 250 m de D+','Cumule au moins 250 m de dénivelé positif.',250,'dplus',200],
+  ['Marche 8 km','Parcours au moins 8 km.',8,'km',210],
+  ['Deux sorties','Termine 2 randonnées pendant la période du défi.',2,'hike2',220],
+  ['Marche 5 km','Parcours au moins 5 km.',5,'km',150],
+  ['Gagne 300 m de D+','Cumule au moins 300 m de dénivelé positif.',300,'dplus',230],
+  ['Marche 9 km','Parcours au moins 9 km.',9,'km',240],
+  ['Fais 45 min de randonnée','Termine une randonnée d’au moins 45 minutes.',45,'minutes',210],
+  ['Marche 6 km','Parcours au moins 6 km.',6,'km',170],
+  ['Gagne 400 m de D+','Cumule au moins 400 m de dénivelé positif.',400,'dplus',260],
+  ['Marche 10 km','Parcours au moins 10 km.',10,'km',280],
+  ['Trois sorties','Termine 3 randonnées pendant la période du défi.',3,'hike3',300],
+  ['Marche 12 km','Parcours au moins 12 km.',12,'km',320],
+  ['Défi final : 15 km','Parcours au moins 15 km. Termine les 30 jours en beauté !',15,'km',500]
+];
+
+function days30State(){
+  try{
+    const x=JSON.parse(localStorage.getItem(HIKE_DAYS30_KEY)||'{}');
+    return x&&typeof x==='object'?x:{};
+  }catch(e){return {}}
+}
+function days30Save(s){try{localStorage.setItem(HIKE_DAYS30_KEY,JSON.stringify(s))}catch(e){}}
+function days30Interval(){return HIKE_DAYS30_ADMIN_INTERVAL}
+function days30ChallengeIndex(now=Date.now()){
+  if(now<HIKE_DAYS30_START)return -1;
+  return Math.floor((now-HIKE_DAYS30_START)/days30Interval());
+}
+function days30Window(i){
+  return {start:HIKE_DAYS30_START+i*days30Interval(),end:HIKE_DAYS30_START+(i+1)*days30Interval()};
+}
+function days30Stats(start,end){
+  const hs=Array.isArray(user?.hikes)?user.hikes:[];
+  const valid=hs.filter(h=>Number(h.date)>=start&&Number(h.date)<end);
+  return {
+    km:valid.reduce((s,h)=>s+Math.max(0,Number(h.distance)||0),0),
+    dplus:valid.reduce((s,h)=>s+Math.max(0,Number(h.dplus)||0),0),
+    hikes:valid.length,
+    maxMinutes:valid.reduce((m,h)=>Math.max(m,(Number(h.durationSec)||0)/60),0)
+  };
+}
+function days30Progress(i){
+  if(i<0||i>=HIKE_DAYS30_COUNT)return {value:0,target:0,pct:0,done:false};
+  const [title,desc,target,type,xp]=HIKE_DAYS30_CHALLENGES[i];
+  const w=days30Window(i),s=days30Stats(w.start,w.end);
+  let value=type==='km'?s.km:type==='dplus'?s.dplus:type==='minutes'?s.maxMinutes:type==='hike'?s.hikes:type==='hike2'?s.hikes:type==='hike3'?s.hikes:0;
+  const actualTarget=type==='hike2'?2:type==='hike3'?3:target;
+  const done=value>=actualTarget;
+  return {value,target:actualTarget,pct:Math.min(100,Math.round((value/actualTarget)*100)),done,xp};
+}
+function days30MaybeAward(i){
+  if(i<0||i>=HIKE_DAYS30_COUNT)return;
+  const s=days30State(),key='c'+i,p=days30Progress(i);
+  if(!p.done||s[key]?.awarded)return;
+  const xp=Math.max(0,Number(p.xp)||0),oldXp=Math.max(0,Number(user.xp)||0);
+  user.xp=oldXp+xp;user.level=levelFromXp(user.xp);
+  s[key]={awarded:true,completedAt:Date.now(),xp};
+  days30Save(s);
+  db.profiles[db.current]=user;persist();
+  toast('🎉 Défi réussi ! +'+xp+' XP');
+}
+function days30Format(ms){
+  ms=Math.max(0,ms);const m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000);
+  if(m>=60){const h=Math.floor(m/60),mm=m%60;return `${String(h).padStart(2,'0')}h ${String(mm).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;}
+  return `${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+}
+function days30Render(){
+  const now=Date.now(),idx=days30ChallengeIndex(now),state=days30State();
+  let currentTitle='Les défis arrivent bientôt',currentDesc='Le premier défi apparaîtra le samedi 3 octobre à 10h00.',timer=idx<0?HIKE_DAYS30_START-now:idx<HIKE_DAYS30_COUNT?days30Window(idx).end-now:0;
+  if(idx>=0&&idx<HIKE_DAYS30_COUNT){
+    days30MaybeAward(idx);
+    const c=HIKE_DAYS30_CHALLENGES[idx],p=days30Progress(idx),w=days30Window(idx),done=state['c'+idx]?.awarded||p.done;
+    currentTitle=c[0];currentDesc=c[1];
+  }else if(idx>=HIKE_DAYS30_COUNT){
+    currentTitle='Les 30 jours sont terminés 🎉';currentDesc='Merci d’avoir participé à l’aventure HIKE+ !';
+  }
+  const cards=HIKE_DAYS30_CHALLENGES.map((c,i)=>{
+    const passed=idx>i,cur=idx===i,p=days30Progress(i),st=state['c'+i],done=!!st?.awarded;
+    let cls='days30Cell '+(cur?'current ':'')+(done?'done ':'')+(passed&&!done?'expired ':'')+(i>idx?'locked':'');
+    return `<div class="${cls}"><span class="n">JOUR ${i+1}</span><span class="miniXp">+${c[4]} XP</span><div class="ico">${done?'✓':passed&&!done?'×':cur?'★':'🔒'}</div></div>`;
+  }).join('');
+  const curP=idx>=0&&idx<HIKE_DAYS30_COUNT?days30Progress(idx):{value:0,target:1,pct:0};
+  const curState=idx>=0?state['c'+idx]:null;
+  const status=idx<0?'À VENIR':idx>=HIKE_DAYS30_COUNT?'TERMINÉ':curState?.awarded||curP.done?'DÉFI RÉUSSI':'EN COURS';
+  return `<div class="days30Wrap">
+    <div class="days30Hero">
+      <div class="days30Eyebrow">HIKE+ · BÊTA OUVERTE · MODE ADMIN</div>
+      <h1>Les 30 jours de HIKE+</h1>
+      <p>Un nouveau défi apparaît automatiquement. En production, chaque défi dure 24 h. Dans cette version Admin, le changement se fait toutes les <b>5 minutes</b> pour tester rapidement le système.</p>
+      <div class="days30Timer"><div><small>Prochain défi</small><b id="days30Countdown">${days30Format(timer)}</b></div><div class="days30Xp">31 défis · jusqu’à +${HIKE_DAYS30_CHALLENGES.reduce((a,c)=>a+c[4],0)} XP</div></div>
+    </div>
+    <div class="days30Today">
+      <div class="days30TodayHead"><span class="days30DayTag">${idx>=0&&idx<HIKE_DAYS30_COUNT?'Jour '+(idx+1):'Calendrier'}</span><span class="days30Status ${status==='DÉFI RÉUSSI'?'done':''} ${status==='TERMINÉ'?'done':''}">${status}</span></div>
+      <div class="days30Challenge">${currentTitle}</div>
+      <div class="days30Desc">${currentDesc}</div>
+      ${idx>=0&&idx<HIKE_DAYS30_COUNT?`<div class="days30Progress"><i style="width:${curP.pct}%"></i></div><div class="days30ProgressMeta"><span>${curP.value.toFixed(curP.target<10?1:0)} / ${curP.target} ${HIKE_DAYS30_CHALLENGES[idx][3]==='dplus'?'m D+':HIKE_DAYS30_CHALLENGES[idx][3]==='minutes'?'min':HIKE_DAYS30_CHALLENGES[idx][3].startsWith('hike')?'sortie(s)':'km'}</span><span>+${HIKE_DAYS30_CHALLENGES[idx][4]} XP</span></div>`:''}
+      <div class="days30Test"><b>Mode test Admin</b><br>Les défis tournent toutes les 5 minutes. La réussite est détectée automatiquement à partir des randonnées terminées pendant la fenêtre du défi.
+      ${idx>=0&&idx<HIKE_DAYS30_COUNT?`<br><button type="button" id="days30Force">✓ Tester la réussite du défi</button>`:''}</div>
+    </div>
+    <div class="days30GridTitle">Calendrier des défis</div>
+    <div class="days30Grid">${cards}</div>
+  </div>`;
+}
+function days30Bind(){
+  const update=()=>{
+    if(currentView!=='days30')return;
+    const idx=days30ChallengeIndex();
+    if(idx>=0&&idx<HIKE_DAYS30_COUNT)days30MaybeAward(idx);
+    const el=$('days30Countdown');if(el){const now=Date.now(),ms=idx<0?HIKE_DAYS30_START-now:idx<HIKE_DAYS30_COUNT?days30Window(idx).end-now:0;el.textContent=days30Format(ms);}
+    if(currentView==='days30'&&idx!==window._days30LastIndex){window._days30LastIndex=idx;render('days30',true);}
+  };
+  clearInterval(window.days30Timer);window.days30Timer=setInterval(update,1000);update();
+  const b=$('days30Force');
+  if(b)b.onclick=()=>{
+    const idx=days30ChallengeIndex();if(idx<0||idx>=HIKE_DAYS30_COUNT)return;
+    const s=days30State();if(s['c'+idx]?.awarded){toast('Défi déjà récompensé');return}
+    const c=HIKE_DAYS30_CHALLENGES[idx],xp=c[4],old=Math.max(0,Number(user.xp)||0);
+    user.xp=old+xp;user.level=levelFromXp(user.xp);s['c'+idx]={awarded:true,completedAt:Date.now(),xp,test:true};days30Save(s);db.profiles[db.current]=user;persist();toast('🧪 Test réussi : +'+xp+' XP');render('days30',true);
+  };
+}
+
+function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content referenceHome"><div class="homeProfileRow"><div class="homeProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div><div><div class="refWelcome">Bonjour <strong>${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</strong> 👋</div><div class="homeProfileSub">Prêt pour une nouvelle sortie ?</div></div></div><div class="seasonNotice" id="seasonNotice">⚠️ Le compte sera supprimé lors du lancement de la Saison 1.</div><div class="refOutdoor" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=88')"><div class="refMontInner"><div class="refMontTag">HIKE+ · PRÉ-BÊTA</div><h2>Explore. Marche. Progresse.</h2><p>Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.</p></div></div><div class="refActionGrid"><button class="refAction orange" id="refSearch"><span class="refIcon">⌕</span><span><span class="refActionTitle">Rechercher une randonnée</span><span class="refActionSub">Trouve un circuit autour de toi</span></span></button><button class="refAction green" id="refMap"><span class="refIcon">⌖</span><span><span class="refActionTitle">Voir ma carte</span><span class="refActionSub">Les randonnées disponibles dans la Manche</span></span></button></div><div class="refActionGrid" style="margin-top:8px"><button class="refAction yellow" id="refProgress"><span class="refIcon">◎</span><span><span class="refActionTitle">Ma progression</span><span class="refActionSub">Niveau ${user.level} · ${user.xp} XP</span></span></button><button class="refAction lime" id="refHikes"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">${user.hikes.length} sortie${user.hikes.length>1?'s':''} enregistrée${user.hikes.length>1?'s':''}</span></span></button></div><button class="refAction green" id="refDays30" style="margin:8px 0 14px;width:100%"><span class="refIcon">★</span><span><span class="refActionTitle">Les 30 jours de HIKE+</span><span class="refActionSub">Un nouveau défi chaque jour · XP à gagner</span></span></button><div class="refSection"><h2>Nos recommandations</h2><div class="refSectionRight"><span>Pour toi</span><span class="refRecTimer" id="homeRecTimer">Nouvelle dans 05:00</span></div></div><div class="refRecommendation" id="homeRecommendationCard"></div></div>`;
 else if(v==='hikes')x=`<div class="exploreScreen"><div id="exploreMap"></div><div class="exploreTop"><input class="exploreSearch" id="hikeSearch" placeholder="🔎 Ville, région ou randonnée…"><button class="exploreLocate" id="exploreLocate">⌖</button></div><div class="exploreFilters"><button class="exploreChip active" data-filter="all">Toutes</button><button class="exploreChip" data-filter="easy">Faciles</button><button class="exploreChip" data-filter="moderate">Modérées</button><button class="exploreChip" data-filter="hard">Difficiles</button><button class="exploreChip" data-filter="loop">↻ Boucles</button><button class="exploreChip" data-filter="done">✓ Déjà faites</button></div><div class="exploreInfo" id="exploreCount">Randonnées disponibles</div><div class="exploreSheet" id="exploreSheet"><div class="sheetHandle"></div><div class="sheetTop"><div><div class="eyebrow" id="sheetEyebrow"></div><div class="sheetTitle" id="sheetTitle"></div><div class="sheetMeta" id="sheetMeta"></div></div><button class="sheetClose" id="sheetClose">×</button></div><div class="sheetMetrics"><div><b id="sheetDistance">—</b><small>KM</small></div><div><b id="sheetDplus">—</b><small>D+</small></div><div><b id="sheetDuration">—</b><small>DURÉE</small></div><div><b id="sheetDifficulty">—</b><small>NIVEAU</small></div></div><div class="sheetDone" id="sheetDone"></div><div class="sheetActions"><button class="sheetAction start" id="sheetStart"><span class="actionIcon">➤</span><span class="actionTitle">Aller au départ</span><span class="actionSub">Ouvrir l’itinéraire dans votre GPS</span><span class="actionArrow">›</span></button><button class="sheetAction hike" id="sheetHikeStart"><span class="actionIcon">▷</span><span class="actionTitle">Voir la randonnée</span><span class="actionSub">Lancer le suivi GPS de la randonnée</span><span class="actionArrow">›</span></button></div><div class="sheetGuide"><span class="sheetGuideIcon">i</span><span>Vous pouvez commencer la randonnée où que vous soyez. Le suivi GPS se lance immédiatement et vous guide sur le tracé.</span></div></div></div>`;
 else if(v==='progress')x=`<div class="content"><div class="eyebrow">Progression</div><h1>Ton parcours</h1><div class="progressProfile"><div class="progressProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="">`:initials(user.name)}</div><div><div class="progressProfileName">${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</div><div class="progressProfileTag">Ton profil · aventure outdoor</div></div></div><div class="xpHero"><div class="xpLabel">Expérience</div><div class="xpBig">${user.xp} XP</div><div class="xpMeta">Niveau ${user.level} · progression vers le prochain niveau</div><div class="xpBar"><i style="width:${levelProgress(user.xp).pct}%"></i></div></div><div class="stats"><div class="stat"><b>${totalKm().toFixed(1)} km</b><small>parcourus</small></div><div class="stat"><b>${Math.round(totalDplus())} m</b><small>D+ cumulé</small></div><div class="stat"><b>${user.hikes.length}</b><small>sorties</small></div><div class="stat"><b>${user.xp}</b><small>XP</small></div></div><button class="refAction lime progressMyHikesBtn" id="progressMyHikes" style="width:100%"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">Voir le récapitulatif de tes sorties</span></span></button><div class="section">Mes badges 🏆</div><div class="card seasonalBadgesCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Badges saisonniers</b><span class="gradeCount">Bêta ouverte</span></div><div class="badgeBetaLock">🔒 <span><b>Les badges arrivent avec la bêta ouverte</b><br>La pré-bêta ne comporte aucun badge.</span></div></div><div class="section" style="margin-top:14px">Archives des badges 📚</div><div class="card seasonalArchiveCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Mes anciennes saisons</b><span class="gradeCount">Historique</span></div><div class="seasonArchiveEmpty">Aucune saison terminée pour le moment.<br><small>À la fin de la bêta ouverte, un onglet <b>« Bêta ouverte »</b> conservera les badges que tu auras remportés.</small></div></div></div>`;
-else if(v==='myhikes')x=renderMyHikes();else if(v==='weather')x=hikeWeatherRender();
+else if(v==='myhikes')x=renderMyHikes();else if(v==='days30')x=days30Render();else if(v==='weather')x=hikeWeatherRender();
 else if(v==='settings')x=`<div class="content"><div class="eyebrow">Compte</div><h1>Paramètres</h1><div class="card"><div class="profileHead"><div class="profileAvatar" id="profileAvatar">${user.avatar?`<img src="${user.avatar}">`:initials(user.name)}</div><div><div style="font-size:24px;font-weight:950">${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</div><p style="margin:5px 0;color:#858a84">@${user.name}</p><button class="avatarEdit" id="avatarEdit">Changer la photo</button><button class="avatarDelete" id="avatarDelete" type="button">Supprimer</button><input id="avatarFile" type="file" accept="image/*" hidden></div></div><div class="settingsXp"><div><b>${user.xp} XP</b><small>Niveau ${user.level}</small></div><div class="settingsXpBar"><i style="width:${levelProgress(user.xp).pct}%"></i></div><small class="settingsXpMeta">${Math.round(levelProgress(user.xp).pct)}% vers le prochain niveau · ${Math.max(0,levelProgress(user.xp).next - user.xp)} XP restants</small></div></div><div class="card certCard"><div class="certStatus">${user.certified?'<span class="certBadge">✓</span> Profil certifié':'Profil non certifié'}</div>${user.certified?'<p style="margin:7px 0 0;color:#858a84;font-size:11px">Ce profil est bien certifié.</p>':'<button class="certBtn" id="certifyBtn">Obtenir une certification</button>'}</div><div class="countdownSetting"><div class="countdownSettingHead"><div><b>Compte à rebours de départ</b><small>Durée avant le démarrage officiel du GPS et du chrono.</small></div><select class="countdownSelect" id="countdownDuration"><option value="5" ${Number(user.countdownDuration||20)===5?'selected':''}>5 s</option><option value="10" ${Number(user.countdownDuration||20)===10?'selected':''}>10 s</option><option value="15" ${Number(user.countdownDuration||20)===15?'selected':''}>15 s</option><option value="20" ${Number(user.countdownDuration||20)===20?'selected':''}>20 s</option><option value="30" ${Number(user.countdownDuration||20)===30?'selected':''}>30 s</option><option value="35" ${Number(user.countdownDuration||20)===35?'selected':''}>35 s</option><option value="60" ${Number(user.countdownDuration||20)===60?'selected':''}>60 s</option></select></div></div><div class="card" style="margin-top:12px"><div class="settingsRow"><div class="settingsLabel"><b>Mode sombre</b><small>Adapter toute l'interface à un thème sombre.</small></div><button class="switch ${user.darkMode?'on':''}" id="darkModeToggle" aria-label="Mode sombre"></button></div></div><div class="settingsActions"><button class="settingsLogout" id="logout" type="button">Se déconnecter</button><button class="settingsRefresh" id="refRefresh" type="button">↻ Actualiser HIKE+</button><button class="settingsReset" id="reset" type="button">Réinitialiser les données</button></div></div>`;
 $('view').innerHTML=x;bindView(v);applyLanguage()}
 function bindView(v){
@@ -1378,6 +1566,7 @@ function bindView(v){
     $('refMap').onclick=()=>go('hikes');
     $('refProgress').onclick=()=>go('progress');
     $('refHikes').onclick=()=>go('myhikes');
+    const d30=$('refDays30');if(d30)d30.onclick=()=>go('days30');
     startHomeRecommendationTimer();
     updateHomeRecommendation(true);
     bindHomeRecommendation();
@@ -1411,7 +1600,8 @@ function bindView(v){
   }
   if(v==='progress'){
     const b=$('progressMyHikes'); if(b)b.onclick=()=>render('myhikes');
-  }
+  }  if(v==='days30'){days30Bind();}
+
   if(v==='weather'){const b=$('weatherSearch');if(b)b.onclick=hwLoad;const filter=$('weatherHikeFilter'),sel=$('weatherHike');if(filter&&sel){const all=hwHikes();const norm=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();const rebuild=()=>{const q=norm(filter.value);const current=sel.value;const matches=all.map((h,i)=>({h,i})).filter(x=>!q||norm(x.h.name).includes(q)||(x.h.city&&norm(x.h.city).includes(q)));sel.innerHTML=matches.length?matches.map(x=>`<option value="${x.i}">${hwEscape(x.h.name)}${x.h.city?' · '+hwEscape(x.h.city):''}</option>`).join(''):'<option value="">Aucune randonnée trouvée</option>';if(matches.some(x=>String(x.i)===String(current)))sel.value=current;else if(matches.length===1)sel.value=String(matches[0].i)};filter.addEventListener('input',rebuild);}}
 
   if(v==='myhikes'){
