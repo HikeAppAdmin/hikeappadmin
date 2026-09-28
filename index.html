@@ -1402,11 +1402,10 @@ function hwEscape(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<
 async function hwLoad(){const sel=$('weatherHike'),box=$('weatherOutput'),index=Number(sel?.value),hs=hwHikes(),h=Number.isInteger(index)?hs[index]:null,c=hwCoords(h);if(!h||!c){box.innerHTML='<div class="weatherError">Choisis une randonnée pour afficher sa météo.</div>';return}box.innerHTML='<div class="weatherCard">🌦️ Chargement de la météo de la randonnée…</div>';try{const f=await hwForecast(c.lat,c.lon),t=Number(f.current.temperature_2m),w=Number(f.current.wind_speed_10m),r=Number(f.daily.precipitation_probability_max?.[0]||0),fv=hwFav(t,w,r),days=f.daily.time.slice(0,4).map((d,i)=>`<div class="weatherDay"><b>${new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short',day:'numeric'})}</b><div class="weatherDayIcon">${hwIcon(f.daily.weather_code[i])}</div><div class="weatherDayTemp">${Math.round(f.daily.temperature_2m_min[i])}° / ${Math.round(f.daily.temperature_2m_max[i])}°</div><div class="weatherDayRain">💧 ${f.daily.precipitation_probability_max[i]}%</div></div>`).join('');box.innerHTML=`<div class="weatherResult"><div class="weatherResultTop"><div><div class="weatherResultTitle">${fv[0]} ${fv[1]}</div><div class="weatherCondition">🥾 ${hwEscape(h.name)} · ${hwText(f.current.weather_code)}</div><div class="weatherCondition">📍 ${hwEscape(h.city||h.region||'Point de départ')}</div></div><div class="weatherScore">${fv[2]}/100</div></div><div class="weatherMetrics"><div class="weatherMetric"><b>${Math.round(t)}°C</b><span>TEMPÉRATURE</span></div><div class="weatherMetric"><b>${Math.round(w)} km/h</b><span>VENT</span></div><div class="weatherMetric"><b>${r}%</b><span>PLUIE</span></div><div class="weatherMetric"><b>${hwIcon(f.current.weather_code)}</b><span>CONDITIONS</span></div></div><div class="weatherAdvice">${r>35?'🌧️ Prévois une protection contre la pluie. ':''}${w>30?'💨 Attention au vent. ':''}${t<5?'🧥 Prévois des vêtements chauds. ':''}${t>27?'☀️ Pense à l’eau et à la protection solaire. ':''}${fv[2]>=75?'🥾 Les conditions sont globalement très bonnes pour cette randonnée !':'🥾 Adapte ton équipement aux conditions et vérifie la météo avant le départ.'}</div></div><div class="weatherCard"><span class="weatherLabel">Prévisions</span><div class="weatherDays">${days}</div></div>`;localStorage.setItem(HIKE_WEATHER_KEY,JSON.stringify({hike:h.name,index}))}catch(e){box.innerHTML='<div class="weatherError">Impossible de récupérer la météo pour cette randonnée. Vérifie ta connexion puis réessaie.</div>'}}
 function hikeWeatherRender(){let saved={};try{saved=JSON.parse(localStorage.getItem(HIKE_WEATHER_KEY)||'{}')}catch(e){}const hs=hwHikes(),opts=hs.length?hs.map((h,i)=>`<option value="${i}" ${saved.index===i?'selected':''}>${hwEscape(h.name)}${h.city?' · '+hwEscape(h.city):''}</option>`).join(''):'<option value="">Aucune randonnée disponible</option>';return `<div class="weatherWrap"><div class="weatherHero"><div class="weatherEyebrow">HIKE+ · CONDITIONS</div><h1>La météo pour randonner</h1><p>Choisis une randonnée pour connaître les conditions météo à son point de départ.</p></div><div class="weatherGrid"><div class="weatherCard"><span class="weatherLabel">🥾 Randonnée</span><input id="weatherHikeFilter" class="weatherInput" type="search" placeholder="Rechercher une randonnée…" autocomplete="off" aria-label="Rechercher une randonnée"><select id="weatherHike" class="weatherSelect" style="margin-top:8px">${opts}</select><div style="font-size:10px;opacity:.55;margin-top:7px">Écris le nom pour filtrer rapidement les randonnées. La météo est calculée au point de départ.</div><button id="weatherSearch" class="weatherBtn" style="margin-top:12px;width:100%">Voir la météo</button></div><div id="weatherOutput"></div></div></div>`}
 
-/* LES 30 JOURS DE HIKE+ — ADMIN TEST
-   Production: 24h per challenge.
-   Admin: 5 minutes per challenge, starting at 03/10/2026 10:00 Europe/Paris.
+/* LES 30 JOURS DE HIKE+ — PUBLIC
+   Public: 24h per challenge, starting at 03/10/2026 10:00 Europe/Paris.
 */
-const HIKE_DAYS30_START = new Date('2026-09-28T15:48:00+02:00').getTime();
+const HIKE_DAYS30_START = new Date('2026-10-03T10:00:00+02:00').getTime();
 const HIKE_DAYS30_ADMIN_INTERVAL = 5 * 60 * 1000;
 const HIKE_DAYS30_PUBLIC_INTERVAL = 24 * 60 * 60 * 1000;
 const HIKE_DAYS30_COUNT = 31;
@@ -1453,7 +1452,7 @@ function days30State(){
   }catch(e){return {}}
 }
 function days30Save(s){try{localStorage.setItem(HIKE_DAYS30_KEY,JSON.stringify(s))}catch(e){}}
-function days30Interval(){return HIKE_DAYS30_ADMIN_INTERVAL}
+function days30Interval(){return HIKE_DAYS30_PUBLIC_INTERVAL}
 function days30ChallengeIndex(now=Date.now()){
   if(now<HIKE_DAYS30_START)return -1;
   return Math.floor((now-HIKE_DAYS30_START)/days30Interval());
@@ -1516,9 +1515,9 @@ function days30Render(){
   const status=idx<0?'À VENIR':idx>=HIKE_DAYS30_COUNT?'TERMINÉ':curState?.awarded||curP.done?'DÉFI RÉUSSI':'EN COURS';
   return `<div class="days30Wrap">
     <div class="days30Hero">
-      <div class="days30Eyebrow">HIKE+ · BÊTA OUVERTE · MODE ADMIN</div>
+      <div class="days30Eyebrow">HIKE+ · BÊTA OUVERTE</div>
       <h1>Les 30 jours de HIKE+</h1>
-      <p>Un nouveau défi apparaît automatiquement. En production, chaque défi dure 24 h. Dans cette version Admin, le changement se fait toutes les <b>5 minutes</b> pour tester rapidement le système.</p>
+      <p>Un nouveau défi apparaît automatiquement. Chaque défi dure 24 h. Un nouveau défi apparaît chaque jour à 10h00.</p>
       <div class="days30Timer"><div><small>Prochain défi</small><b id="days30Countdown">${days30Format(timer)}</b></div><div class="days30Xp">31 défis · jusqu’à +${HIKE_DAYS30_CHALLENGES.reduce((a,c)=>a+c[4],0)} XP</div></div>
     </div>
     <div class="days30Today">
@@ -1526,8 +1525,7 @@ function days30Render(){
       <div class="days30Challenge">${currentTitle}</div>
       <div class="days30Desc">${currentDesc}</div>
       ${idx>=0&&idx<HIKE_DAYS30_COUNT?`<div class="days30Progress"><i style="width:${curP.pct}%"></i></div><div class="days30ProgressMeta"><span>${curP.value.toFixed(curP.target<10?1:0)} / ${curP.target} ${HIKE_DAYS30_CHALLENGES[idx][3]==='dplus'?'m D+':HIKE_DAYS30_CHALLENGES[idx][3]==='minutes'?'min':HIKE_DAYS30_CHALLENGES[idx][3].startsWith('hike')?'sortie(s)':'km'}</span><span>+${HIKE_DAYS30_CHALLENGES[idx][4]} XP</span></div>`:''}
-      <div class="days30Test"><b>Mode test Admin</b><br>Les défis tournent toutes les 5 minutes. La réussite est détectée automatiquement à partir des randonnées terminées pendant la fenêtre du défi.
-      ${idx>=0&&idx<HIKE_DAYS30_COUNT?`<br><button type="button" id="days30Force">✓ Tester la réussite du défi</button>`:''}</div>
+      <div class="days30Test"><b>Les 30 jours de HIKE+</b><br>Un nouveau défi apparaît chaque jour à 10h00. La réussite est détectée automatiquement à partir des randonnées terminées pendant la fenêtre du défi.</div>
     </div>
     <div class="days30GridTitle">Calendrier des défis</div>
     <div class="days30Grid">${cards}</div>
@@ -1542,14 +1540,8 @@ function days30Bind(){
     if(currentView==='days30'&&idx!==window._days30LastIndex){window._days30LastIndex=idx;render('days30',true);}
   };
   clearInterval(window.days30Timer);window.days30Timer=setInterval(update,1000);update();
-  const b=$('days30Force');
-  if(b)b.onclick=()=>{
-    const idx=days30ChallengeIndex();if(idx<0||idx>=HIKE_DAYS30_COUNT)return;
-    const s=days30State();if(s['c'+idx]?.awarded){toast('Défi déjà récompensé');return}
-    const c=HIKE_DAYS30_CHALLENGES[idx],xp=c[4],old=Math.max(0,Number(user.xp)||0);
-    user.xp=old+xp;user.level=levelFromXp(user.xp);s['c'+idx]={awarded:true,completedAt:Date.now(),xp,test:true};days30Save(s);db.profiles[db.current]=user;persist();toast('🧪 Test réussi : +'+xp+' XP');render('days30',true);
-  };
 }
+
 
 function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content referenceHome"><div class="homeProfileRow"><div class="homeProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div><div><div class="refWelcome">Bonjour <strong>${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</strong> 👋</div><div class="homeProfileSub">Prêt pour une nouvelle sortie ?</div></div></div><div class="seasonNotice" id="seasonNotice">⚠️ Le compte sera supprimé lors du lancement de la Saison 1.</div><div class="refOutdoor" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=88')"><div class="refMontInner"><div class="refMontTag">HIKE+ · PRÉ-BÊTA</div><h2>Explore. Marche. Progresse.</h2><p>Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.</p></div></div><div class="refActionGrid"><button class="refAction orange" id="refSearch"><span class="refIcon">⌕</span><span><span class="refActionTitle">Rechercher une randonnée</span><span class="refActionSub">Trouve un circuit autour de toi</span></span></button><button class="refAction green" id="refMap"><span class="refIcon">⌖</span><span><span class="refActionTitle">Voir ma carte</span><span class="refActionSub">Les randonnées disponibles dans la Manche</span></span></button></div><div class="refActionGrid" style="margin-top:8px"><button class="refAction yellow" id="refProgress"><span class="refIcon">◎</span><span><span class="refActionTitle">Ma progression</span><span class="refActionSub">Niveau ${user.level} · ${user.xp} XP</span></span></button><button class="refAction lime" id="refHikes"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">${user.hikes.length} sortie${user.hikes.length>1?'s':''} enregistrée${user.hikes.length>1?'s':''}</span></span></button></div><div class="refSection"><h2>Nos recommandations</h2><div class="refSectionRight"><span>Pour toi</span><span class="refRecTimer" id="homeRecTimer">Nouvelle dans 05:00</span></div></div><div class="refRecommendation" id="homeRecommendationCard"></div></div>`;
 else if(v==='hikes')x=`<div class="exploreScreen"><div id="exploreMap"></div><div class="exploreTop"><input class="exploreSearch" id="hikeSearch" placeholder="🔎 Ville, région ou randonnée…"><button class="exploreLocate" id="exploreLocate">⌖</button></div><div class="exploreFilters"><button class="exploreChip active" data-filter="all">Toutes</button><button class="exploreChip" data-filter="easy">Faciles</button><button class="exploreChip" data-filter="moderate">Modérées</button><button class="exploreChip" data-filter="hard">Difficiles</button><button class="exploreChip" data-filter="loop">↻ Boucles</button><button class="exploreChip" data-filter="done">✓ Déjà faites</button></div><div class="exploreInfo" id="exploreCount">Randonnées disponibles</div><div class="exploreSheet" id="exploreSheet"><div class="sheetHandle"></div><div class="sheetTop"><div><div class="eyebrow" id="sheetEyebrow"></div><div class="sheetTitle" id="sheetTitle"></div><div class="sheetMeta" id="sheetMeta"></div></div><button class="sheetClose" id="sheetClose">×</button></div><div class="sheetMetrics"><div><b id="sheetDistance">—</b><small>KM</small></div><div><b id="sheetDplus">—</b><small>D+</small></div><div><b id="sheetDuration">—</b><small>DURÉE</small></div><div><b id="sheetDifficulty">—</b><small>NIVEAU</small></div></div><div class="sheetDone" id="sheetDone"></div><div class="sheetActions"><button class="sheetAction start" id="sheetStart"><span class="actionIcon">➤</span><span class="actionTitle">Aller au départ</span><span class="actionSub">Ouvrir l’itinéraire dans votre GPS</span><span class="actionArrow">›</span></button><button class="sheetAction hike" id="sheetHikeStart"><span class="actionIcon">▷</span><span class="actionTitle">Voir la randonnée</span><span class="actionSub">Lancer le suivi GPS de la randonnée</span><span class="actionArrow">›</span></button></div><div class="sheetGuide"><span class="sheetGuideIcon">i</span><span>Vous pouvez commencer la randonnée où que vous soyez. Le suivi GPS se lance immédiatement et vous guide sur le tracé.</span></div></div></div>`;
