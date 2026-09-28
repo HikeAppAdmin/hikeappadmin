@@ -153,53 +153,20 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro D
 @media(max-width:430px){.days30Grid{grid-template-columns:repeat(4,1fr)}.days30Challenge{font-size:20px}}
 
 
-/* HIKE+ BETA OPEN — modern home / iPhone 17 Pro Max */
-.referenceHome.modernHome{padding:0 0 calc(28px + env(safe-area-inset-bottom));max-width:780px;margin:0 auto}
-.modHomeHero{position:relative;overflow:hidden;min-height:270px;border-radius:30px;padding:20px 18px 22px;color:#fff;background:linear-gradient(145deg,#123b2b 0%,#276548 58%,#5a9270 100%);box-shadow:0 18px 40px rgba(18,59,43,.18)}
-.modHomeHero:before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-92px;top:-100px;background:rgba(255,255,255,.09)}
-.modHomeHero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;left:-100px;bottom:-125px;background:rgba(255,255,255,.055)}
-.modHomeTop{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center}
-.modHomeLogo{font-weight:1000;letter-spacing:.13em;font-size:12px}
-.modHomeLogo b{font-size:16px}
-.modHomeXp{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.15);backdrop-filter:blur(12px);font-size:9px;font-weight:950}
-.modHomeContent{position:relative;z-index:2;margin-top:72px}
-.modHomeEyebrow{font-size:10px;letter-spacing:.12em;font-weight:850;opacity:.68;text-transform:uppercase}
-.modHomeHero h1{font-size:clamp(35px,10vw,52px);line-height:.92;letter-spacing:-2.1px;margin:7px 0 10px}
-.modHomeHero p{max-width:520px;margin:0;font-size:12px;line-height:1.45;opacity:.84}
-.modHomePrimary{margin-top:16px;display:flex;align-items:center;justify-content:space-between;width:100%;border:0;border-radius:17px;padding:14px 15px;background:#fff;color:#183f2f;text-align:left;box-shadow:0 9px 22px rgba(0,0,0,.08)}
-.modHomePrimary strong{display:block;font-size:12px}
-.modHomePrimary span{display:block;margin-top:3px;font-size:9px;opacity:.62}
-.modHomePrimary i{font-style:normal;font-size:22px;font-weight:900}
-.modHomeSection{margin-top:17px}
-.modHomeSectionHead{display:flex;justify-content:space-between;align-items:center;margin:0 3px 9px}
-.modHomeSectionHead h2{margin:0;font-size:15px;letter-spacing:-.3px}
-.modHomeSectionHead small{font-size:8px;letter-spacing:.08em;color:#8a918b;font-weight:850}
-.modHomeGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.modHomeCard{border:1px solid #e3e8e3;background:#fff;border-radius:20px;padding:15px;min-height:116px;box-shadow:0 8px 23px rgba(22,43,33,.045)}
-.modHomeCard .icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#eef5ef;font-size:17px;margin-bottom:12px}
-.modHomeCard strong{display:block;font-size:12px}
-.modHomeCard span{display:block;color:#7c847d;font-size:9px;line-height:1.35;margin-top:4px}
-.modHomeStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.modHomeStat{border:1px solid #e3e8e3;background:#fff;border-radius:17px;padding:13px 10px}
-.modHomeStat b{display:block;font-size:18px;letter-spacing:-.5px}
-.modHomeStat small{display:block;margin-top:3px;font-size:8px;color:#818981}
-.modHomeRec{border:1px solid #e3e8e3;background:#fff;border-radius:20px;padding:15px;box-shadow:0 8px 23px rgba(22,43,33,.045)}
-.modHomeRecTop{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.modHomeRecTitle{font-size:13px;font-weight:950}
-.modHomeRecBadge{font-size:8px;font-weight:900;padding:6px 8px;border-radius:999px;background:#edf5ef;color:#24543e}
-.modHomeRec p{margin:8px 0 0;color:#727a73;font-size:10px;line-height:1.4}
-.modHomeRecBtn{margin-top:11px;border:0;border-radius:13px;background:#173f2f;color:#fff;padding:10px 12px;font-size:10px;font-weight:900}
-.darkMode .modHomeCard,.darkMode .modHomeStat,.darkMode .modHomeRec{background:#1b1f1c;border-color:#303631;color:#eee}
-@media(max-width:600px){
-  .referenceHome.modernHome{padding-left:0!important;padding-right:0!important}
-  .modHomeHero{min-height:255px;border-radius:27px;padding:18px 16px 18px}
-  .modHomeContent{margin-top:66px}
-  .modHomeHero h1{font-size:39px}
-  .modHomeGrid{gap:7px}
-  .modHomeCard{min-height:110px;padding:13px}
-  .modHomeStats{gap:6px}
+/* HIKE+ mobile visual refresh — logic untouched */
+@media (max-width:600px){
+  .referenceHome{padding-left:14px!important;padding-right:14px!important;padding-bottom:calc(30px + env(safe-area-inset-bottom))!important}
+  .referenceHome .homeProfileRow{padding:4px 2px 12px}
+  .referenceHome .refOutdoor{border-radius:26px!important;min-height:260px!important;overflow:hidden!important;box-shadow:0 16px 34px rgba(20,61,45,.14)!important}
+  .referenceHome .refMontInner{padding:22px!important}
+  .referenceHome .refMontInner h2{font-size:34px!important;line-height:.98!important;letter-spacing:-1.5px!important}
+  .referenceHome .refActionGrid{gap:8px!important}
+  .referenceHome .refAction{min-height:82px!important;border-radius:18px!important;padding:13px!important}
+  .referenceHome .refActionTitle{font-size:11px!important}
+  .referenceHome .refActionSub{font-size:9px!important;line-height:1.25!important}
+  .referenceHome .refSection{margin-top:18px!important}
+  .referenceHome .refRecommendation{border-radius:20px!important;overflow:hidden!important}
 }
-@media(max-width:380px){.modHomeHero{min-height:245px}.modHomeHero h1{font-size:35px}}
 
 </style>
 <style>
@@ -1574,7 +1541,7 @@ function days30Render(){
       <div class="days30Challenge">${currentTitle}</div>
       <div class="days30Desc">${currentDesc}</div>
       ${idx>=0&&idx<HIKE_DAYS30_COUNT?`<div class="days30Progress"><i style="width:${curP.pct}%"></i></div><div class="days30ProgressMeta"><span>${curP.value.toFixed(curP.target<10?1:0)} / ${curP.target} ${HIKE_DAYS30_CHALLENGES[idx][3]==='dplus'?'m D+':HIKE_DAYS30_CHALLENGES[idx][3]==='minutes'?'min':HIKE_DAYS30_CHALLENGES[idx][3].startsWith('hike')?'sortie(s)':'km'}</span><span>+${HIKE_DAYS30_CHALLENGES[idx][4]} XP</span></div>`:''}
-      <div class="days30Test"><b>Les 30 jours de HIKE+</b><br>La réussite est détectée automatiquement à partir des randonnées terminées pendant la fenêtre du défi.</div>
+      <div class="days30Test"><b>Les 30 jours de HIKE+</b><br>Un nouveau défi apparaît chaque jour à 10h00. La réussite est détectée automatiquement à partir des randonnées terminées pendant la fenêtre du défi.</div>
     </div>
     <div class="days30GridTitle">Calendrier des défis</div>
     <div class="days30Grid">${cards}</div>
@@ -1592,50 +1559,7 @@ function days30Bind(){
 }
 
 
-function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content referenceHome modernHome">
-  <section class="modHomeHero">
-    <div class="modHomeTop">
-      <div class="modHomeLogo">HIKE<span>+</span></div>
-      <div class="modHomeXp">NIVEAU ${user.level} · ${user.xp} XP</div>
-    </div>
-    <div class="modHomeContent">
-      <div class="modHomeEyebrow">Ton espace randonnée</div>
-      <h1>Prêt pour<br>l’aventure ?</h1>
-      <p>Découvre de nouveaux parcours, suis tes sorties et fais progresser ton aventure HIKE+.</p>
-      <button class="modHomePrimary" id="modHomeExplore">
-        <span><strong>🥾 Explorer les randonnées</strong><span>Trouve ton prochain parcours</span></span><i>›</i>
-      </button>
-    </div>
-  </section>
-
-  <section class="modHomeSection">
-    <div class="modHomeSectionHead"><h2>Ton activité</h2><small>EN UN COUP D’ŒIL</small></div>
-    <div class="modHomeStats">
-      <div class="modHomeStat"><b>${user.hikes.length}</b><small>Randonnées</small></div>
-      <div class="modHomeStat"><b>${totalKm().toFixed(1)}</b><small>Km parcourus</small></div>
-      <div class="modHomeStat"><b>${Math.round(totalDplus())}</b><small>m de D+</small></div>
-    </div>
-  </section>
-
-  <section class="modHomeSection">
-    <div class="modHomeSectionHead"><h2>Accès rapide</h2><small>HIKE+</small></div>
-    <div class="modHomeGrid">
-      <button class="modHomeCard" id="modHomeProgress"><div class="icon">◎</div><strong>Ma progression</strong><span>Niveau, XP et badges</span></button>
-      <button class="modHomeCard" id="modHomeHikes"><div class="icon">✓</div><strong>Mes randonnées</strong><span>${user.hikes.length} sortie${user.hikes.length>1?'s':''} enregistrée${user.hikes.length>1?'s':''}</span></button>
-      <button class="modHomeCard" id="modHomeWeather"><div class="icon">☀</div><strong>Météo</strong><span>Vérifie les conditions d’une randonnée</span></button>
-      <button class="modHomeCard" id="modHomeDays30"><div class="icon">★</div><strong>Les 30 jours de HIKE+</strong><span>Le défi du jour et ton XP</span></button>
-    </div>
-  </section>
-
-  <section class="modHomeSection">
-    <div class="modHomeSectionHead"><h2>Nos recommandations</h2><small id="homeRecTimer">NOUVELLE DANS 05:00</small></div>
-    <div class="modHomeRec" id="homeRecommendationCard">
-      <div class="modHomeRecTop"><span class="modHomeRecTitle">Pour toi 🌲</span><span class="modHomeRecBadge">À découvrir</span></div>
-      <p>Une randonnée peut être sélectionnée automatiquement selon ton expérience.</p>
-      <button class="modHomeRecBtn" id="modHomeMoreRec">Voir les recommandations →</button>
-    </div>
-  </section>
-</div>
+function render(v,force=false){if(currentView===v&&!force){closeSideMenu();return}currentView=v;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===v));let x='';if(v==='home')x=`<div class="content referenceHome"><div class="homeProfileRow"><div class="homeProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="Photo de profil">`:initials(user.name)}</div><div><div class="refWelcome">Bonjour <strong>${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</strong> 👋</div><div class="homeProfileSub">Prêt pour une nouvelle sortie ?</div></div></div><div class="seasonNotice" id="seasonNotice">⚠️ Le compte sera supprimé lors du lancement de la Saison 1.</div><div class="refOutdoor" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=88')"><div class="refMontInner"><div class="refMontTag">HIKE+ · PRÉ-BÊTA</div><h2>Explore. Marche. Progresse.</h2><p>Découvre des randonnées, suis ton parcours et construis ton expérience au fil des sorties.</p></div></div><div class="refActionGrid"><button class="refAction orange" id="refSearch"><span class="refIcon">⌕</span><span><span class="refActionTitle">Rechercher une randonnée</span><span class="refActionSub">Trouve un circuit autour de toi</span></span></button><button class="refAction green" id="refMap"><span class="refIcon">⌖</span><span><span class="refActionTitle">Voir ma carte</span><span class="refActionSub">Les randonnées disponibles dans la Manche</span></span></button></div><div class="refActionGrid" style="margin-top:8px"><button class="refAction yellow" id="refProgress"><span class="refIcon">◎</span><span><span class="refActionTitle">Ma progression</span><span class="refActionSub">Niveau ${user.level} · ${user.xp} XP</span></span></button><button class="refAction lime" id="refHikes"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">${user.hikes.length} sortie${user.hikes.length>1?'s':''} enregistrée${user.hikes.length>1?'s':''}</span></span></button></div><div class="refSection"><h2>Nos recommandations</h2><div class="refSectionRight"><span>Pour toi</span><span class="refRecTimer" id="homeRecTimer">Nouvelle dans 05:00</span></div></div><div class="refRecommendation" id="homeRecommendationCard"></div></div>`;
 else if(v==='hikes')x=`<div class="exploreScreen"><div id="exploreMap"></div><div class="exploreTop"><input class="exploreSearch" id="hikeSearch" placeholder="🔎 Ville, région ou randonnée…"><button class="exploreLocate" id="exploreLocate">⌖</button></div><div class="exploreFilters"><button class="exploreChip active" data-filter="all">Toutes</button><button class="exploreChip" data-filter="easy">Faciles</button><button class="exploreChip" data-filter="moderate">Modérées</button><button class="exploreChip" data-filter="hard">Difficiles</button><button class="exploreChip" data-filter="loop">↻ Boucles</button><button class="exploreChip" data-filter="done">✓ Déjà faites</button></div><div class="exploreInfo" id="exploreCount">Randonnées disponibles</div><div class="exploreSheet" id="exploreSheet"><div class="sheetHandle"></div><div class="sheetTop"><div><div class="eyebrow" id="sheetEyebrow"></div><div class="sheetTitle" id="sheetTitle"></div><div class="sheetMeta" id="sheetMeta"></div></div><button class="sheetClose" id="sheetClose">×</button></div><div class="sheetMetrics"><div><b id="sheetDistance">—</b><small>KM</small></div><div><b id="sheetDplus">—</b><small>D+</small></div><div><b id="sheetDuration">—</b><small>DURÉE</small></div><div><b id="sheetDifficulty">—</b><small>NIVEAU</small></div></div><div class="sheetDone" id="sheetDone"></div><div class="sheetActions"><button class="sheetAction start" id="sheetStart"><span class="actionIcon">➤</span><span class="actionTitle">Aller au départ</span><span class="actionSub">Ouvrir l’itinéraire dans votre GPS</span><span class="actionArrow">›</span></button><button class="sheetAction hike" id="sheetHikeStart"><span class="actionIcon">▷</span><span class="actionTitle">Voir la randonnée</span><span class="actionSub">Lancer le suivi GPS de la randonnée</span><span class="actionArrow">›</span></button></div><div class="sheetGuide"><span class="sheetGuideIcon">i</span><span>Vous pouvez commencer la randonnée où que vous soyez. Le suivi GPS se lance immédiatement et vous guide sur le tracé.</span></div></div></div>`;
 else if(v==='progress')x=`<div class="content"><div class="eyebrow">Progression</div><h1>Ton parcours</h1><div class="progressProfile"><div class="progressProfileAvatar">${user.avatar?`<img src="${user.avatar}" alt="">`:initials(user.name)}</div><div><div class="progressProfileName">${user.name}${user.certified?'<span class="certBadge" title="Profil certifié">✓</span>':''}</div><div class="progressProfileTag">Ton profil · aventure outdoor</div></div></div><div class="xpHero"><div class="xpLabel">Expérience</div><div class="xpBig">${user.xp} XP</div><div class="xpMeta">Niveau ${user.level} · progression vers le prochain niveau</div><div class="xpBar"><i style="width:${levelProgress(user.xp).pct}%"></i></div></div><div class="stats"><div class="stat"><b>${totalKm().toFixed(1)} km</b><small>parcourus</small></div><div class="stat"><b>${Math.round(totalDplus())} m</b><small>D+ cumulé</small></div><div class="stat"><b>${user.hikes.length}</b><small>sorties</small></div><div class="stat"><b>${user.xp}</b><small>XP</small></div></div><button class="refAction lime progressMyHikesBtn" id="progressMyHikes" style="width:100%"><span class="refIcon">✓</span><span><span class="refActionTitle">Mes randonnées</span><span class="refActionSub">Voir le récapitulatif de tes sorties</span></span></button><div class="section">Mes badges 🏆</div><div class="card seasonalBadgesCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Badges saisonniers</b><span class="gradeCount">Bêta ouverte</span></div><div class="badgeBetaLock">🔒 <span><b>Les badges arrivent avec la bêta ouverte</b><br>La pré-bêta ne comporte aucun badge.</span></div></div><div class="section" style="margin-top:14px">Archives des badges 📚</div><div class="card seasonalArchiveCard"><div style="display:flex;justify-content:space-between;align-items:center"><b>Mes anciennes saisons</b><span class="gradeCount">Historique</span></div><div class="seasonArchiveEmpty">Aucune saison terminée pour le moment.<br><small>À la fin de la bêta ouverte, un onglet <b>« Bêta ouverte »</b> conservera les badges que tu auras remportés.</small></div></div></div>`;
 else if(v==='myhikes')x=renderMyHikes();else if(v==='days30')x=days30Render();else if(v==='weather')x=hikeWeatherRender();
@@ -1646,12 +1570,10 @@ function bindView(v){
     updateCountdown();
     updateHomeCountdown();
     const go=view=>{closeSideMenu();render(view)};
-    const mh=$('modHomeExplore'); if(mh)mh.onclick=()=>go('hikes');
-    const mp=$('modHomeProgress'); if(mp)mp.onclick=()=>go('progress');
-    const mk=$('modHomeHikes'); if(mk)mk.onclick=()=>go('myhikes');
-    const mw=$('modHomeWeather'); if(mw)mw.onclick=()=>go('weather');
-    const md=$('modHomeDays30'); if(md)md.onclick=()=>go('days30');
-    const mm=$('modHomeMoreRec'); if(mm)mm.onclick=()=>go('hikes');
+    $('refSearch').onclick=()=>go('hikes');
+    $('refMap').onclick=()=>go('hikes');
+    $('refProgress').onclick=()=>go('progress');
+    $('refHikes').onclick=()=>go('myhikes');
     startHomeRecommendationTimer();
     updateHomeRecommendation(true);
     bindHomeRecommendation();
