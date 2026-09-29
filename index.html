@@ -1510,19 +1510,19 @@ function initGroupStartInvite(){
 function groupHandleStart(hostStartAt,hike,accepted=false){
   if(!hike)return;
   groupHike=resolveGroupHike(hike);groupReady=true;groupSelectingHike=false;
-  const at=Number(hostStartAt)||Date.now();
-  groupPendingStartAt=at;
-  try{localStorage.setItem('hikeplus_group_start',JSON.stringify({at,hike,accepted:!!accepted}))}catch(e){}
+  const hostAt=Number(hostStartAt)||Date.now();
+  groupPendingStartAt=hostAt;
+  try{localStorage.setItem('hikeplus_group_start',JSON.stringify({at:hostAt,hike,accepted:true}))}catch(e){}
   clearTimeout(groupStartTimer);
-  const delay=Math.max(0,at-(Date.now()+groupClockOffset));
   groupStartRouteData();
   if(groupStarted)return;
-  // Basculer immédiatement hors de l'écran groupe dès que le départ est reçu.
-  // Le participant ne doit jamais rester bloqué sur le code.
-  try{closeExploreSheet();document.querySelectorAll('.modal,.sheet,.overlay').forEach(el=>el.classList.remove('show','active'));}catch(e){}
-  if(currentView==='group')render('home',true);
-  toast(delay>500?'Départ du groupe dans quelques secondes…':'Départ du groupe…');
-  groupStartTimer=setTimeout(()=>{groupStarted=true;startGroupHike(true,at-(groupClockOffset||0));},delay);
+  groupStarted=true;
+  // Ouvre immédiatement la même randonnée sur la carte. startNav() attend ensuite
+  // le timestamp commun et affiche le compte à rebours sur chaque appareil.
+  try{closeGroupStartInvite();closeExploreSheet();document.querySelectorAll('.modal,.sheet,.overlay').forEach(el=>el.classList.remove('show','active'));}catch(e){}
+  const localStartAt=hostAt-(groupClockOffset||0);
+  toast('🥾 Départ du groupe synchronisé…');
+  startGroupHike(true,localStartAt);
 }
 function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
   if(msg.type==='hello'&&groupHost){
@@ -1534,8 +1534,7 @@ function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
   if(msg.type==='stateRequest'&&groupHost){groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt||0,started:groupStarted});return}
   if(msg.type==='groupFull'){groupError(`Groupe complet : maximum ${GROUP_MAX_MEMBERS} personnes.`);try{groupPeer?.destroy()}catch(e){};return}
   if(msg.type==='state'){groupMembers={};(msg.members||[]).forEach(m=>groupMembers[m.id]=m);groupHike=resolveGroupHike(msg.hike||groupHike);groupReady=true;renderGroupRoom();renderGroupMembers();updateGroupMapMarkers();if((msg.started||Number(msg.startAt)>0)&&!groupStarted&&groupHike){
-    if(msg.accepted){groupHandleStart(Number(msg.startAt)||Date.now(),groupHike,true)}
-    else if(!groupHost)showGroupStartInvite(Number(msg.startAt)||Date.now(),groupHike);
+    groupHandleStart(Number(msg.startAt)||Date.now(),groupHike,true);
   }return}
   if(msg.type==='members'){groupMembers={};(msg.members||[]).forEach(m=>groupMembers[m.id]=m);renderGroupMembers();updateGroupMapMarkers();return}
   if(msg.type==='hikeSelected'){
@@ -1547,7 +1546,7 @@ function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
   if(msg.type==='startHike'){
     if(!msg.hike)return;
     groupHike=resolveGroupHike(msg.hike);groupReady=true;groupSelectingHike=false;
-    if(groupHost){ groupHandleStart(Number(msg.startAt)||Date.now(),groupHike,true); } else { showGroupStartInvite(Number(msg.startAt)||Date.now(),groupHike); }
+    groupHandleStart(Number(msg.startAt)||Date.now(),groupHike,true);
     try{groupSend(c,{type:'startInviteAck',peer:groupPeer?.id||'local'})}catch(e){}
     return;
   }
@@ -1592,8 +1591,13 @@ function startGroupHike(remote=false,startAtOverride=null){
     [250,500,1000,1500,2500,4000,6000,7500,9000,11000,13000,15000].forEach(ms=>setTimeout(()=>groupBroadcast(msg),ms));
     // État persistant : si un téléphone rate le premier message, il récupère le départ via les sync suivantes.
     [500,1500,3000,5000,8000,10000,12000,15000].forEach(ms=>setTimeout(()=>groupBroadcast({type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt,started:true}),ms));
-    toast('Départ synchronisé dans 8 secondes…');
-    clearTimeout(groupStartTimer);groupStartTimer=setTimeout(()=>startGroupHike(true,startAt),8000);return;
+    toast('🥾 Départ synchronisé · compte à rebours…');
+    clearTimeout(groupStartTimer);
+    groupStarted=true;
+    // Tous les appareils ouvrent immédiatement la même carte puis attendent
+    // le même timestamp pour lancer le chrono ensemble.
+    startGroupHike(true,startAt);
+    return;
   }
   const startAt=Number(startAtOverride)||Date.now();
   closeExploreSheet();
@@ -1610,7 +1614,7 @@ function startGroupHike(remote=false,startAtOverride=null){
 }
 function groupCreateForHike(h){groupHike=h;openGroupScreen(false,h);setTimeout(initGroupPeerHost,50)}
 function recoverGroupStart(){
-  try{const raw=localStorage.getItem('hikeplus_group_start');if(!raw)return;const st=JSON.parse(raw);if(st?.at&&st?.hike&&!groupStarted&&Date.now()<Number(st.at)+120000){ if(groupHost) groupHandleStart(Number(st.at),st.hike,true); else showGroupStartInvite(Number(st.at),st.hike); }else if(Date.now()>=Number(st?.at||0)+120000)localStorage.removeItem('hikeplus_group_start')}catch(e){}
+  try{const raw=localStorage.getItem('hikeplus_group_start');if(!raw)return;const st=JSON.parse(raw);if(st?.at&&st?.hike&&!groupStarted&&Date.now()<Number(st.at)+120000){ groupHandleStart(Number(st.at),st.hike,true); }else if(Date.now()>=Number(st?.at||0)+120000)localStorage.removeItem('hikeplus_group_start')}catch(e){}
 }
 
 function initGroupView(){initGroupStartInvite();recoverGroupStart();const back=$('groupBack');if(back)back.onclick=()=>{groupLeave();render('home')};const join=$('groupJoinBtn');if(join)join.onclick=()=>initGroupPeerJoin($('groupJoinCode')?.value);if(groupReady)renderGroupRoom();const panel=$('groupJoinPanel');if(panel&&!groupReady)panel.style.display='block';const hostBtn=$('groupHostBtn');if(hostBtn)hostBtn.onclick=()=>initGroupPeerHost();}
