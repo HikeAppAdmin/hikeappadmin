@@ -1437,12 +1437,12 @@ function feedbackAlreadyAnswered(){return user?.feedbackAnswered===true}
 function closeFeedbackLater(){const m=$('feedbackModal');if(!m)return;m.classList.remove('show');m.setAttribute('aria-hidden','true');m.setAttribute('hidden','');}
 
 // ===== HIKE+ RANDONNÉE À PLUSIEURS =====
-let groupPeer=null, groupHost=false, groupRoomCode='', groupConnections=[], groupMembers={}, groupHike=null, groupReady=false, groupMarkerLayers={}, groupSelectingHike=false, groupStartTimer=null, groupClockOffset=0, groupPendingStartAt=0, groupStarted=false;
+let groupPeer=null, groupHost=false, groupRoomCode='', groupConnections=[], groupMembers={}, groupHike=null, groupReady=false, groupMarkerLayers={}, groupSelectingHike=false, groupStartTimer=null, groupClockOffset=0, groupPendingStartAt=0, groupStarted=false, groupStarting=false;
 let groupStartInviteData=null;
 const GROUP_MAX_MEMBERS=6;
 function groupCode(){return Math.random().toString(36).slice(2,8).toUpperCase();}
 function groupInitials(n){return initials(n||'?');}
-function groupReset(){closeGroupStartInvite();clearTimeout(groupStartTimer);clearInterval(window.hikeGroupStatePoll);window.hikeGroupStatePoll=null;clearTimeout(groupStartTimer);groupStartTimer=null;groupClockOffset=0;groupPendingStartAt=0;groupStarted=false;try{groupConnections.forEach(c=>c.close())}catch(e){};groupConnections=[];try{groupPeer?.destroy()}catch(e){};groupPeer=null;groupHost=false;groupRoomCode='';groupMembers={};groupHike=null;groupReady=false;groupSelectingHike=false;Object.values(groupMarkerLayers).forEach(m=>{try{map?.removeLayer(m)}catch(e){}});groupMarkerLayers={};}
+function groupReset(){closeGroupStartInvite();clearTimeout(groupStartTimer);clearInterval(window.hikeGroupStatePoll);window.hikeGroupStatePoll=null;clearTimeout(groupStartTimer);groupStartTimer=null;groupClockOffset=0;groupPendingStartAt=0;groupStarted=false;groupStarting=false;try{groupConnections.forEach(c=>c.close())}catch(e){};groupConnections=[];try{groupPeer?.destroy()}catch(e){};groupPeer=null;groupHost=false;groupRoomCode='';groupMembers={};groupHike=null;groupReady=false;groupSelectingHike=false;Object.values(groupMarkerLayers).forEach(m=>{try{map?.removeLayer(m)}catch(e){}});groupMarkerLayers={};}
 function groupSelf(){return {id:groupPeer?.id||'local',name:user?.name||'Moi',avatar:user?.avatar||'',lat:null,lon:null,distance:0,online:true,host:groupHost};}
 function groupSend(c,msg){try{if(c&&c.open)c.send(msg)}catch(e){}}
 function groupBroadcast(msg){groupConnections=groupConnections.filter(c=>c);groupConnections.forEach(c=>{if(c&&c.open)groupSend(c,msg)});}
@@ -1509,16 +1509,14 @@ function initGroupStartInvite(){
 }
 function groupHandleStart(hostStartAt,hike,accepted=false){
   if(!hike)return;
+  if(groupStarted||groupStarting)return;
   groupHike=resolveGroupHike(hike);groupReady=true;groupSelectingHike=false;
   const hostAt=Number(hostStartAt)||Date.now();
   groupPendingStartAt=hostAt;
   try{localStorage.setItem('hikeplus_group_start',JSON.stringify({at:hostAt,hike,accepted:true}))}catch(e){}
   clearTimeout(groupStartTimer);
   groupStartRouteData();
-  if(groupStarted)return;
-  groupStarted=true;
-  // Ouvre immédiatement la même randonnée sur la carte. startNav() attend ensuite
-  // le timestamp commun et affiche le compte à rebours sur chaque appareil.
+  groupStarting=true;
   try{closeGroupStartInvite();closeExploreSheet();document.querySelectorAll('.modal,.sheet,.overlay').forEach(el=>el.classList.remove('show','active'));}catch(e){}
   const localStartAt=hostAt-(groupClockOffset||0);
   toast('🥾 Départ du groupe synchronisé…');
@@ -1581,39 +1579,40 @@ function groupStartRouteData(){
   localStorage.removeItem('hikeplus_pending_start');return true
 }
 function startGroupHike(remote=false,startAtOverride=null){
-  if(!groupHike||!groupStartRouteData())return;
+  if(!groupHike||!groupStartRouteData())return false;
   if(!remote&&groupHost){
-    const startAt=Date.now()+8000;
-    groupPendingStartAt=startAt;groupStarted=true;
+    const startAt=Date.now()+9000;
+    groupPendingStartAt=startAt;
+    groupStarting=true;
     const msg={type:'startHike',hike:groupHike,startAt,hostNow:Date.now()};
-    // Répéter le signal pendant toute la fenêtre de départ pour les téléphones mobiles.
-    groupBroadcast(msg);
-    [250,500,1000,1500,2500,4000,6000,7500,9000,11000,13000,15000].forEach(ms=>setTimeout(()=>groupBroadcast(msg),ms));
-    // État persistant : si un téléphone rate le premier message, il récupère le départ via les sync suivantes.
-    [500,1500,3000,5000,8000,10000,12000,15000].forEach(ms=>setTimeout(()=>groupBroadcast({type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt,started:true}),ms));
+    const sendStart=()=>groupBroadcast(msg);
+    sendStart();
+    [250,750,1500,2500,4000,5500,7000,8500,10000,12000].forEach(ms=>setTimeout(sendStart,ms));
+    const sendState=()=>groupBroadcast({type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt,started:true});
+    [500,1500,3000,5000,7000,9000,11000,13000].forEach(ms=>setTimeout(sendState,ms));
     toast('🥾 Départ synchronisé · compte à rebours…');
     clearTimeout(groupStartTimer);
-    groupStarted=true;
-    // Tous les appareils ouvrent immédiatement la même carte puis attendent
-    // le même timestamp pour lancer le chrono ensemble.
     startGroupHike(true,startAt);
-    return;
+    return true;
   }
   const startAt=Number(startAtOverride)||Date.now();
   closeExploreSheet();
   try{document.querySelectorAll('.modal,.sheet,.overlay').forEach(el=>el.classList.remove('show','active'));}catch(e){}
   clearTimeout(groupStartTimer);groupStartTimer=null;
-  // Ne repasse pas par render('home') : cela pouvait recréer la vue et
-  // interrompre le clic de départ avant l'ouverture de la navigation.
   setTimeout(async()=>{
     try{
-      await startNav({groupMode:true,groupStartAt:startAt});
+      const ok=await startNav({groupMode:true,groupStartAt:startAt});
+      if(ok===false)throw new Error('navigation indisponible');
+      groupStarted=true;groupStarting=false;
     }catch(e){
+      groupStarted=false;groupStarting=false;
       console.error('HIKE+ group start',e);
-      toast('Impossible de démarrer la randonnée du groupe. '+(e?.message||'Réessaie.'));
+      toast('Impossible de démarrer la randonnée du groupe. Réessaie.');
     }
   },30);
+  return true;
 }
+
 function groupCreateForHike(h){groupHike=h;openGroupScreen(false,h);setTimeout(initGroupPeerHost,50)}
 function recoverGroupStart(){
   try{const raw=localStorage.getItem('hikeplus_group_start');if(!raw)return;const st=JSON.parse(raw);if(st?.at&&st?.hike&&!groupStarted&&Date.now()<Number(st.at)+120000){ groupHandleStart(Number(st.at),st.hike,true); }else if(Date.now()>=Number(st?.at||0)+120000)localStorage.removeItem('hikeplus_group_start')}catch(e){}
@@ -2182,12 +2181,12 @@ const START_CONFIRM_DISTANCE_METERS=500;
 function hikeStartDistanceMeters(a,b){const R=6371000,rad=Math.PI/180,dLat=(b.lat-a.lat)*rad,dLon=(b.lon-a.lon)*rad,q=Math.sin(dLat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(Math.max(0,Math.min(1,q))))}
 function formatStartDistance(m){return m>=1000?(m/1000).toFixed(1).replace('.',',')+' km':Math.round(m)+' m'}
 async function ensureStartRadius(){if(!navigator.geolocation){toast('Le GPS est nécessaire pour commencer la randonnée');return false}let pos=window.hikeCurrentPosition;if(!pos||!pos.coords){try{pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,maximumAge:3000,timeout:15000}))}catch(e){toast(e.code===1?'Autorisez la localisation pour vérifier le départ':'Position GPS indisponible — réessayez');return false}}const current={lat:pos.coords.latitude,lon:pos.coords.longitude};let start=null;if(Number.isFinite(Number(routeData.lat))&&Number.isFinite(Number(routeData.lon)))start={lat:Number(routeData.lat),lon:Number(routeData.lon)};if(!start&&routeData.gpx){try{const r=await fetch(routeData.gpx,{cache:'no-store'});if(!r.ok)throw new Error();const txt=await r.text();const first=parseGPX(txt)[0];if(first)start=first}catch(e){}}if(!start){toast('Point de départ indisponible');return false}const distance=hikeStartDistanceMeters(current,start);if(distance>=START_CONFIRM_DISTANCE_METERS){const label=formatStartDistance(distance);const ok=window.confirm(`⚠️ Tu es à environ ${label} du départ de cette randonnée.\n\nEs-tu vraiment sûr de vouloir commencer la randonnée ici ?\n\nLe suivi GPS va démarrer depuis ta position actuelle.`);if(!ok)return false}return true}
-async function startNav(options={}){const skipCountdown=!!options.skipCountdown;const groupMode=!!options.groupMode;const groupStartAt=Number(options.groupStartAt)||0;enableDeviceHeading();if(!groupMode&&!(await ensureStartRadius()))return;stopWatch();if(routeData.gpx){try{const r=await fetch(routeData.gpx,{cache:'no-store'});if(!r.ok)throw new Error('GPX '+r.status);GPX=await r.text()}catch(e){toast('Impossible de charger le tracé GPX');return}}prep();if(!makeMap()){$('instruction').textContent='Carte indisponible — recharge la page avec Internet';$('navScreen').classList.add('active');return}$('app').classList.remove('active');$('navScreen').classList.add('active');if(groupPeer){let gm=document.getElementById('groupMini');if(!gm){gm=document.createElement('div');gm.id='groupMini';gm.className='groupMini';document.body.appendChild(gm)}gm.innerHTML=`👥 <b>${Object.values(groupMembers).filter(m=>m.online!==false).length}</b> randonneur(s)`;}setTimeout(()=>map.invalidateSize(true),100);traveled=0;dplus=0;best=0;cp=0;lastPos=null;offRouteSince=0;navStarted=false;navCancelling=false;drawRoute();updateRouteGuidance(0);refreshCheckpointMarkers();if(turnMarker){map.removeLayer(turnMarker);turnMarker=null}$('offroute').classList.remove('show');if(userMarker){map.removeLayer(userMarker);userMarker=null}const initialPos=window.hikeCurrentPosition;if(initialPos&&initialPos.coords){const ic=initialPos.coords;const ip={lat:ic.latitude,lon:ic.longitude};const ih=Number.isFinite(ic.heading)&&ic.heading>=0?ic.heading:0;marker(ip,ih);$('gpsAcc').textContent=Number.isFinite(ic.accuracy)?Math.round(ic.accuracy)+' m':'—';}cpbar();$('instruction').textContent=t('preparing');$('navStatus').textContent='DÉPART · COMPTE À REBOURS';$('time').textContent='00:00';const duration=[5,10,15,20,30,35,60].includes(Number(user.countdownDuration))?Number(user.countdownDuration):20;
+async function startNav(options={}){const skipCountdown=!!options.skipCountdown;const groupMode=!!options.groupMode;const groupStartAt=Number(options.groupStartAt)||0;enableDeviceHeading();if(!groupMode&&!(await ensureStartRadius()))return;stopWatch();if(routeData.gpx){try{const r=await fetch(routeData.gpx,{cache:'no-store'});if(!r.ok)throw new Error('GPX '+r.status);GPX=await r.text()}catch(e){toast('Impossible de charger le tracé GPX');return false}}prep();if(!makeMap()){$('instruction').textContent='Carte indisponible — recharge la page avec Internet';$('navScreen').classList.add('active');return false}$('app').classList.remove('active');$('navScreen').classList.add('active');if(groupPeer){let gm=document.getElementById('groupMini');if(!gm){gm=document.createElement('div');gm.id='groupMini';gm.className='groupMini';document.body.appendChild(gm)}gm.innerHTML=`👥 <b>${Object.values(groupMembers).filter(m=>m.online!==false).length}</b> randonneur(s)`;}setTimeout(()=>map.invalidateSize(true),100);traveled=0;dplus=0;best=0;cp=0;lastPos=null;offRouteSince=0;navStarted=false;navCancelling=false;drawRoute();updateRouteGuidance(0);refreshCheckpointMarkers();if(turnMarker){map.removeLayer(turnMarker);turnMarker=null}$('offroute').classList.remove('show');if(userMarker){map.removeLayer(userMarker);userMarker=null}const initialPos=window.hikeCurrentPosition;if(initialPos&&initialPos.coords){const ic=initialPos.coords;const ip={lat:ic.latitude,lon:ic.longitude};const ih=Number.isFinite(ic.heading)&&ic.heading>=0?ic.heading:0;marker(ip,ih);$('gpsAcc').textContent=Number.isFinite(ic.accuracy)?Math.round(ic.accuracy)+' m':'—';}cpbar();$('instruction').textContent=t('preparing');$('navStatus').textContent='DÉPART · COMPTE À REBOURS';$('time').textContent='00:00';const duration=[5,10,15,20,30,35,60].includes(Number(user.countdownDuration))?Number(user.countdownDuration):20;
 if(groupMode&&groupStartAt){
   const target=Number(groupStartAt)||Date.now();
   await runSynchronizedStartCountdown(target);
 }else if(!skipCountdown){await runStartCountdown(duration);}
-navStarted=true;$('instruction').textContent=t('searching');$('navStatus').textContent=t('navigation');startAt=groupMode&&groupStartAt?groupStartAt:Date.now();elapsedSec=Math.max(0,Math.floor((Date.now()-startAt)/1000));$('time').textContent=formatNavTime(elapsedSec);timerId=setInterval(()=>{elapsedSec=Math.max(0,Math.floor((Date.now()-startAt)/1000));$('time').textContent=formatNavTime(elapsedSec);saveNavSession()},500);saveNavSession();if(!navigator.geolocation){gpsError({code:2});return}const opts={enableHighAccuracy:true,maximumAge:0,timeout:15000};navigator.geolocation.getCurrentPosition(onGPS,gpsError,opts);watchId=navigator.geolocation.watchPosition(onGPS,gpsError,opts);if(groupPeer){clearInterval(window.hikeGroupHeartbeat);window.hikeGroupHeartbeat=setInterval(()=>{if(window.hikeCurrentPosition)groupSendLocation(window.hikeCurrentPosition);updateGroupMapMarkers()},2000);updateGroupMapMarkers()}}
+navStarted=true;$('instruction').textContent=t('searching');$('navStatus').textContent=t('navigation');startAt=groupMode&&groupStartAt?groupStartAt:Date.now();elapsedSec=Math.max(0,Math.floor((Date.now()-startAt)/1000));$('time').textContent=formatNavTime(elapsedSec);timerId=setInterval(()=>{elapsedSec=Math.max(0,Math.floor((Date.now()-startAt)/1000));$('time').textContent=formatNavTime(elapsedSec);saveNavSession()},500);saveNavSession();if(!navigator.geolocation){gpsError({code:2});return}const opts={enableHighAccuracy:true,maximumAge:0,timeout:15000};navigator.geolocation.getCurrentPosition(onGPS,gpsError,opts);watchId=navigator.geolocation.watchPosition(onGPS,gpsError,opts);if(groupPeer){clearInterval(window.hikeGroupHeartbeat);window.hikeGroupHeartbeat=setInterval(()=>{if(window.hikeCurrentPosition)groupSendLocation(window.hikeCurrentPosition);updateGroupMapMarkers()},2000);updateGroupMapMarkers()}return true}
 const NAV_SESSION_KEY='hikeplus_nav_session_v1';
 function saveNavSession(){try{const active=document.getElementById('navScreen')?.classList.contains('active');if(!active){localStorage.removeItem(NAV_SESSION_KEY);return}localStorage.setItem(NAV_SESSION_KEY,JSON.stringify({active:true,name:routeData.name,distance:routeData.distance,dplusMeta:routeData.dplus,gpx:routeData.gpx,startAt,traveled,dplus,best,cp,navStarted,simulating,lastPos,offRouteSince,savedAt:Date.now()}))}catch(e){console.warn('HIKE+: session navigation non sauvegardée',e)}}
 function clearNavSession(){try{localStorage.removeItem(NAV_SESSION_KEY)}catch(e){}}

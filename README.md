@@ -1,8 +1,8 @@
-# HIKE+ V2.47 — départ groupe corrigé
+HIKE+ V2.48
 
-- Correction du bouton « Lancer la randonnée ».
-- Le départ groupe ouvre directement la navigation sans repasser par l'accueil.
-- Compte à rebours synchronisé sur le timestamp commun.
-- Les participants reçoivent la randonnée de l'hôte et basculent sur la carte.
-- Chrono commun au groupe.
-- Maximum 6 participants.
+Correction du départ synchronisé en randonnée à plusieurs.
+- Départ hôte avec compte à rebours commun.
+- Transfert automatique de la randonnée choisie par l'hôte.
+- Reprise automatique si le premier signal de départ est manqué.
+- Les participants restent synchronisés sans popup.
+- Groupe limité à 6 personnes.
