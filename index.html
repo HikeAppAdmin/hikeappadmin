@@ -1762,6 +1762,8 @@ function bindView(v){
     $('refMap').onclick=()=>go('hikes');
     $('refProgress').onclick=()=>go('progress');
     $('refHikes').onclick=()=>go('myhikes');
+    $('homeGroupCreate').onclick=()=>{closeSideMenu();openGroupScreen(false);setTimeout(()=>initGroupPeerHost(),80)};
+    $('homeGroupJoin').onclick=()=>{closeSideMenu();openGroupScreen(true);};
     startHomeRecommendationTimer();
     updateHomeRecommendation(true);
     bindHomeRecommendation();
