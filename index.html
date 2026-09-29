@@ -1513,7 +1513,7 @@ function groupHandleStart(hostStartAt,hike,accepted=false){
   const hostAt=Number(hostStartAt)||Date.now();
   groupPendingStartAt=hostAt;
   try{localStorage.setItem('hikeplus_group_start',JSON.stringify({at:hostAt,hike:groupHike,accepted:true}))}catch(e){}
-  if(groupStarted && groupPendingStartAt===hostAt)return;
+  if(groupStarted && groupPendingStartAt===hostAt && $('navScreen')?.classList.contains('active'))return;
   groupStarted=true;
   try{closeGroupStartInvite();closeExploreSheet();document.querySelectorAll('.modal,.sheet,.overlay').forEach(el=>el.classList.remove('show','active'));}catch(e){}
   const localStartAt=hostAt-(groupClockOffset||0);
@@ -1527,7 +1527,7 @@ function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
     groupSend(c,{type:'clockSync',hostNow:Date.now()});
     groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt||0,started:groupStarted});groupPublishMembers();if(groupPendingStartAt)groupSend(c,{type:'startHike',hike:groupHike,startAt:groupPendingStartAt,hostNow:Date.now()});return}
   if(msg.type==='clockSync'){groupClockOffset=Number(msg.hostNow||Date.now())-Date.now();return}
-  if(msg.type==='stateRequest'&&groupHost){groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt||0,started:groupStarted});return}
+  if(msg.type==='stateRequest'&&groupHost){groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt||0,started:groupStarted});if(groupStarted&&groupPendingStartAt&&groupHike)groupSend(c,{type:'startHike',hike:groupHike,startAt:groupPendingStartAt,hostNow:Date.now()});return}
   if(msg.type==='groupFull'){groupError(`Groupe complet : maximum ${GROUP_MAX_MEMBERS} personnes.`);try{groupPeer?.destroy()}catch(e){};return}
   if(msg.type==='state'){groupMembers={};(msg.members||[]).forEach(m=>groupMembers[m.id]=m);groupHike=resolveGroupHike(msg.hike||groupHike);groupReady=true;renderGroupRoom();renderGroupMembers();updateGroupMapMarkers();if((msg.started||Number(msg.startAt)>0)&&groupHike){
     const at=Number(msg.startAt)||Date.now();
@@ -1543,6 +1543,7 @@ function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
   if(msg.type==='startHike'){
     if(!msg.hike)return;
     groupHike=resolveGroupHike(msg.hike);groupReady=true;groupSelectingHike=false;
+    if(!$('navScreen')?.classList.contains('active'))groupStarted=false;
     groupHandleStart(Number(msg.startAt)||Date.now(),groupHike,true);
     try{groupSend(c,{type:'startInviteAck',peer:groupPeer?.id||'local'})}catch(e){}
     return;
@@ -1553,7 +1554,7 @@ function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
 }
 function groupBind(c){groupConnections.push(c);c.on('open',()=>{groupSend(c,{type:'hello',member:groupSelf()});if(groupHost){groupMembers[groupPeer.id]=groupSelf();groupPublishMembers();if(groupStarted&&groupHike)groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt,started:true});}});c.on('data',m=>groupHandleMessage(c,m));c.on('close',()=>{if(groupHost){const id=c.peer;if(id&&groupMembers[id]){delete groupMembers[id];groupPublishMembers()}}else{renderGroupMembers();updateGroupMapMarkers()}});c.on('error',e=>console.warn('HIKE+ group connection',e));}
 function initGroupPeerHost(){if(typeof Peer==='undefined'){groupError('Le service de groupe est indisponible hors connexion.');return}groupReset();groupHost=true;groupRoomCode=groupCode();groupMembers={};groupPeer=new Peer('hikeplus-'+groupRoomCode,{debug:0});groupPeer.on('open',()=>{groupMembers[groupPeer.id]=groupSelf();groupReady=true;renderGroupRoom();renderGroupMembers()});groupPeer.on('connection',c=>groupBind(c));groupPeer.on('error',e=>{console.error(e);groupError('Impossible de créer le groupe. Réessaie dans quelques secondes.')});}
-function initGroupPeerJoin(code){if(typeof Peer==='undefined'){groupError('Le service de groupe est indisponible hors connexion.');return}groupReset();groupHost=false;groupRoomCode=String(code||'').trim().toUpperCase();if(groupRoomCode.length!==6){groupError('Le code doit contenir 6 caractères.');return}groupPeer=new Peer(undefined,{debug:0});groupPeer.on('open',()=>{const c=groupPeer.connect('hikeplus-'+groupRoomCode,{reliable:true,serialization:'json'});groupBind(c);clearInterval(window.hikeGroupStatePoll);window.hikeGroupStatePoll=setInterval(()=>{const cc=groupConnections.find(x=>x&&x.open);if(cc&&!groupStarted)groupSend(cc,{type:'stateRequest',peer:groupPeer?.id||'local'});},1000);});groupPeer.on('error',e=>{console.error(e);groupError('Impossible de rejoindre ce groupe. Vérifie le code et ta connexion.')});}
+function initGroupPeerJoin(code){if(typeof Peer==='undefined'){groupError('Le service de groupe est indisponible hors connexion.');return}groupReset();groupHost=false;groupRoomCode=String(code||'').trim().toUpperCase();if(groupRoomCode.length!==6){groupError('Le code doit contenir 6 caractères.');return}groupPeer=new Peer(undefined,{debug:0});groupPeer.on('open',()=>{const c=groupPeer.connect('hikeplus-'+groupRoomCode,{reliable:true,serialization:'json'});groupBind(c);clearInterval(window.hikeGroupStatePoll);window.hikeGroupStatePoll=setInterval(()=>{const cc=groupConnections.find(x=>x&&x.open);if(cc&&!$('navScreen')?.classList.contains('active'))groupSend(cc,{type:'stateRequest',peer:groupPeer?.id||'local'});},700);});groupPeer.on('error',e=>{console.error(e);groupError('Impossible de rejoindre ce groupe. Vérifie le code et ta connexion.')});}
 function groupError(msg){const e=$('groupJoinError');if(e)e.textContent=msg;toast(msg)}
 function openGroupScreen(join=false,hike=null){if(hike)groupHike=hike;render('group',true);if(join)setTimeout(()=>$('groupJoinCode')?.focus(),60)}
 function renderGroupRoom(){const a=$('groupRoomArea');if(!a||!groupReady)return;const canChoose=groupHost&&!groupHike;const canStart=!!groupHike;const route=groupHike?`🥾 ${groupHike.name} · ${groupHike.distance} km`:(groupHost?'Choisis une randonnée pour le groupe.':'En attente du choix de l’hôte…');a.innerHTML=`<div class="groupCode"><small>CODE À PARTAGER</small><b>${groupRoomCode}</b><button class="groupCopy" id="groupCopy">Copier le code</button></div><div class="groupRoute">${route}</div>${canChoose?`<button class="groupBtn alt" id="groupChooseHike" style="width:100%;margin-top:12px;background:#f0f3ee;color:#173f2f;border:1px solid #dfe5de">🗺️ Choisir la randonnée</button>`:''}${canStart?`<button class="primary" id="groupStartHike" style="width:100%;margin-top:12px;min-height:44px">🥾 ${groupHost?'Lancer la randonnée':'En attente du départ de l’hôte'}</button>`:''}`;
