@@ -1447,6 +1447,11 @@ function groupSelf(){return {id:groupPeer?.id||'local',name:user?.name||'Moi',av
 function groupSend(c,msg){try{if(c&&c.open)c.send(msg)}catch(e){}}
 function groupBroadcast(msg){groupConnections=groupConnections.filter(c=>c);groupConnections.forEach(c=>{if(c&&c.open)groupSend(c,msg)});}
 function groupPublishMembers(){const payload={type:'members',members:Object.values(groupMembers)};groupBroadcast(payload);renderGroupMembers();updateGroupMapMarkers();}
+function groupWireHike(h){
+  if(!h)return null;
+  const out={name:h.name,distance:h.distance,dplus:h.dplus,duration:h.duration||'',difficulty:h.difficulty||'Facile',city:h.city||'',region:h.region||'',lat:h.lat,lon:h.lon,gpx:h.gpx||'',nav:h.nav};
+  return out;
+}
 async function groupApplyHike(h,broadcast=true){
   if(!h)return;
   const next={name:h.name,distance:h.distance,dplus:h.dplus,duration:h.duration||'',difficulty:h.difficulty||'Facile',city:h.city||'',region:h.region||'',lat:h.lat,lon:h.lon,gpx:h.gpx||'',nav:h.nav};
@@ -1463,7 +1468,7 @@ async function groupApplyHike(h,broadcast=true){
     }
   }catch(e){console.warn('HIKE+ groupe: GPX non embarqué',e)}
   groupHike=next;
-  if(broadcast&&groupHost)groupBroadcast({type:'hikeSelected',hike:{...groupHike,name:groupHike.name}});
+  if(broadcast&&groupHost)groupBroadcast({type:'hikeSelected',hike:groupWireHike(groupHike)});
   groupReady=true;groupSelectingHike=false;render('group',true);
 }
 function resolveGroupHike(hike){
@@ -1516,6 +1521,8 @@ function groupHandleStart(hostStartAt,hike,accepted=false){
   if(groupStarted && groupPendingStartAt===hostAt && $('navScreen')?.classList.contains('active'))return;
   groupStarted=true;
   try{closeGroupStartInvite();closeExploreSheet();document.querySelectorAll('.modal,.sheet,.overlay').forEach(el=>el.classList.remove('show','active'));}catch(e){}
+  if(!groupHost)groupStartRouteData();
+  try{document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('navScreen')?.classList.remove('active');}catch(e){}
   const localStartAt=hostAt-(groupClockOffset||0);
   toast('🥾 Départ du groupe synchronisé…');
   startGroupHike(true,localStartAt);
@@ -1525,19 +1532,23 @@ function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
     if(Object.keys(groupMembers).length>=GROUP_MAX_MEMBERS){groupSend(c,{type:'groupFull',max:GROUP_MAX_MEMBERS});setTimeout(()=>{try{c.close()}catch(e){}},250);return}
     const m={...msg.member,online:true};groupMembers[m.id]=m;
     groupSend(c,{type:'clockSync',hostNow:Date.now()});
-    groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt||0,started:groupStarted});groupPublishMembers();if(groupPendingStartAt)groupSend(c,{type:'startHike',hike:groupHike,startAt:groupPendingStartAt,hostNow:Date.now()});return}
+    groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupWireHike(groupHike),startAt:groupPendingStartAt||0,started:groupStarted});groupPublishMembers();if(groupPendingStartAt)groupSend(c,{type:'startHike',hike:groupHike,startAt:groupPendingStartAt,hostNow:Date.now()});return}
   if(msg.type==='clockSync'){groupClockOffset=Number(msg.hostNow||Date.now())-Date.now();return}
-  if(msg.type==='stateRequest'&&groupHost){groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt||0,started:groupStarted});if(groupStarted&&groupPendingStartAt&&groupHike)groupSend(c,{type:'startHike',hike:groupHike,startAt:groupPendingStartAt,hostNow:Date.now()});return}
+  if(msg.type==='stateRequest'&&groupHost){groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupWireHike(groupHike),startAt:groupPendingStartAt||0,started:groupStarted});if(groupStarted&&groupPendingStartAt&&groupHike)groupSend(c,{type:'startHike',hike:groupHike,startAt:groupPendingStartAt,hostNow:Date.now()});return}
   if(msg.type==='groupFull'){groupError(`Groupe complet : maximum ${GROUP_MAX_MEMBERS} personnes.`);try{groupPeer?.destroy()}catch(e){};return}
-  if(msg.type==='state'){groupMembers={};(msg.members||[]).forEach(m=>groupMembers[m.id]=m);groupHike=resolveGroupHike(msg.hike||groupHike);groupReady=true;if(!groupHost&&groupHike&&!msg.started&&!Number(msg.startAt)){groupStartRouteData();prepareGroupWaitingNavigation()}else{renderGroupRoom()}renderGroupMembers();updateGroupMapMarkers();if((msg.started||Number(msg.startAt)>0)&&groupHike){
+  if(msg.type==='state'){groupMembers={};(msg.members||[]).forEach(m=>groupMembers[m.id]=m);groupHike=resolveGroupHike(msg.hike||groupHike);groupReady=true;if(!groupHost&&groupHike&&!msg.started&&!Number(msg.startAt)){groupStartRouteData();prepareGroupWaitingNavigation().catch(e=>console.warn('HIKE+ groupe: attente',e));}else if(groupHost||!groupHike){renderGroupRoom()}renderGroupMembers();updateGroupMapMarkers();if((msg.started||Number(msg.startAt)>0)&&groupHike){
     const at=Number(msg.startAt)||Date.now();
     if(!groupStarted || Math.abs(at-Number(groupPendingStartAt||0))>50) groupHandleStart(at,groupHike,true);
   }return}
   if(msg.type==='members'){groupMembers={};(msg.members||[]).forEach(m=>groupMembers[m.id]=m);renderGroupMembers();updateGroupMapMarkers();return}
   if(msg.type==='hikeSelected'){
     groupHike=resolveGroupHike(msg.hike||null);groupReady=true;groupSelectingHike=false;
-    if(!groupHost&&groupHike){groupStartRouteData();prepareGroupWaitingNavigation()}else{renderGroupRoom()}
-    renderGroupMembers();updateGroupMapMarkers();return
+    if(!groupHost&&groupHike){
+      groupStartRouteData();
+      renderGroupMembers();updateGroupMapMarkers();
+      prepareGroupWaitingNavigation().catch(e=>console.warn('HIKE+ groupe: navigation attente',e));
+    }else{renderGroupRoom();renderGroupMembers();updateGroupMapMarkers()}
+    return
   }
   if(msg.type==='startHike'){
     if(!msg.hike)return;
@@ -1551,7 +1562,7 @@ function groupHandleMessage(c,msg){if(!msg||!msg.type)return;
   if(msg.type==='location'){const m={...(groupMembers[msg.member.id]||{}),...msg.member,online:true,lastSeen:Date.now()};groupMembers[m.id]=m;if(groupHost)groupBroadcast(msg);renderGroupMembers();updateGroupMapMarkers();return}
   if(msg.type==='leave'){delete groupMembers[msg.id];if(groupHost)groupPublishMembers();renderGroupMembers();updateGroupMapMarkers();}
 }
-function groupBind(c){groupConnections.push(c);c.on('open',()=>{groupSend(c,{type:'hello',member:groupSelf()});if(groupHost){groupMembers[groupPeer.id]=groupSelf();groupPublishMembers();if(groupStarted&&groupHike)groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt:groupPendingStartAt,started:true});}});c.on('data',m=>groupHandleMessage(c,m));c.on('close',()=>{if(groupHost){const id=c.peer;if(id&&groupMembers[id]){delete groupMembers[id];groupPublishMembers()}}else{renderGroupMembers();updateGroupMapMarkers()}});c.on('error',e=>console.warn('HIKE+ group connection',e));}
+function groupBind(c){groupConnections.push(c);c.on('open',()=>{groupSend(c,{type:'hello',member:groupSelf()});if(groupHost){groupMembers[groupPeer.id]=groupSelf();groupPublishMembers();if(groupStarted&&groupHike)groupSend(c,{type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupWireHike(groupHike),startAt:groupPendingStartAt,started:true});}});c.on('data',m=>groupHandleMessage(c,m));c.on('close',()=>{if(groupHost){const id=c.peer;if(id&&groupMembers[id]){delete groupMembers[id];groupPublishMembers()}}else{renderGroupMembers();updateGroupMapMarkers()}});c.on('error',e=>console.warn('HIKE+ group connection',e));}
 function initGroupPeerHost(){if(typeof Peer==='undefined'){groupError('Le service de groupe est indisponible hors connexion.');return}groupReset();groupHost=true;groupRoomCode=groupCode();groupMembers={};groupPeer=new Peer('hikeplus-'+groupRoomCode,{debug:0});groupPeer.on('open',()=>{groupMembers[groupPeer.id]=groupSelf();groupReady=true;renderGroupRoom();renderGroupMembers()});groupPeer.on('connection',c=>groupBind(c));groupPeer.on('error',e=>{console.error(e);groupError('Impossible de créer le groupe. Réessaie dans quelques secondes.')});}
 function initGroupPeerJoin(code){if(typeof Peer==='undefined'){groupError('Le service de groupe est indisponible hors connexion.');return}groupReset();groupHost=false;groupRoomCode=String(code||'').trim().toUpperCase();if(groupRoomCode.length!==6){groupError('Le code doit contenir 6 caractères.');return}groupPeer=new Peer(undefined,{debug:0});groupPeer.on('open',()=>{const c=groupPeer.connect('hikeplus-'+groupRoomCode,{reliable:true,serialization:'json'});groupBind(c);clearInterval(window.hikeGroupStatePoll);window.hikeGroupStatePoll=setInterval(()=>{const cc=groupConnections.find(x=>x&&x.open);if(cc&&!$('navScreen')?.classList.contains('active'))groupSend(cc,{type:'stateRequest',peer:groupPeer?.id||'local'});},700);});groupPeer.on('error',e=>{console.error(e);groupError('Impossible de rejoindre ce groupe. Vérifie le code et ta connexion.')});}
 function groupError(msg){const e=$('groupJoinError');if(e)e.textContent=msg;toast(msg)}
@@ -1569,9 +1580,9 @@ async function prepareGroupWaitingNavigation(){
   if(!groupHike||groupStarted||$('navScreen')?.classList.contains('active'))return;
   if(!groupStartRouteData())return;
   try{
-    if(routeData.gpx){const r=await fetch(routeData.gpx,{cache:'no-store'});if(r.ok)GPX=await r.text();}
     prep();if(!makeMap())return;
     $('app').classList.remove('active');$('navScreen').classList.add('active');
+    if(routeData.gpx){try{const r=await fetch(routeData.gpx,{cache:'no-store'});if(r.ok)GPX=await r.text();}catch(e){console.warn('HIKE+ groupe: GPX attente',e)}}
     setTimeout(()=>map?.invalidateSize(true),100);drawRoute();updateRouteGuidance(0);refreshCheckpointMarkers();
     $('instruction').textContent='En attente du départ de l’hôte…';$('navStatus').textContent='GROUPE · EN ATTENTE';$('time').textContent='00:00';
     if(groupPeer){let gm=document.getElementById('groupMini');if(!gm){gm=document.createElement('div');gm.id='groupMini';gm.className='groupMini';document.body.appendChild(gm)}gm.innerHTML=`👥 <b>${Object.values(groupMembers).filter(m=>m.online!==false).length}</b> randonneur(s)`;}
@@ -1595,10 +1606,10 @@ function startGroupHike(remote=false,startAtOverride=null){
   if(!remote&&groupHost){
     const startAt=Date.now()+8000;
     groupPendingStartAt=startAt;groupStarted=true;
-    const msg={type:'startHike',hike:groupHike,startAt,hostNow:Date.now()};
+    const msg={type:'startHike',hike:groupWireHike(groupHike),startAt,hostNow:Date.now()};
     groupBroadcast(msg);
     [300,1000,2000,3500,5000,6500].forEach(ms=>setTimeout(()=>groupBroadcast(msg),ms));
-    [1000,3000,5000,7000,9000,12000].forEach(ms=>setTimeout(()=>groupBroadcast({type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupHike,startAt,started:true}),ms));
+    [1000,3000,5000,7000,9000,12000].forEach(ms=>setTimeout(()=>groupBroadcast({type:'state',room:groupRoomCode,members:Object.values(groupMembers),hike:groupWireHike(groupHike),startAt,started:true}),ms));
     toast('🥾 Départ synchronisé · compte à rebours…');
     launchGroupNavigation(startAt);
     return;
