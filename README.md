@@ -1,11 +1,8 @@
-HIKE+ V2.36 — RANDONNÉE À PLUSIEURS
+HIKE+ V2.38 — Randonnée à plusieurs : départ synchronisé corrigé
 
-- Maximum 6 participants par groupe (hôte compris).
-- Seul l’hôte choisit la randonnée et lance le départ.
-- Départ synchronisé sur tous les appareils avec une horloge hôte.
-- Chronomètre de randonnée démarré au même instant pour le groupe.
-- Positions GPS partagées pendant la randonnée via PeerJS.
-- Les positions des autres participants sont affichées sur la carte de navigation.
-- Le code du groupe reste dans l’écran du groupe et n’est pas affiché sur la carte des randonnées.
-
-Important : la synchronisation entre téléphones nécessite une connexion Internet pour PeerJS et l’autorisation de localisation sur chaque téléphone.
+- Participants quittent automatiquement l'écran du groupe au départ de l'hôte.
+- Tous ouvrent la randonnée sélectionnée par l'hôte.
+- Le chrono de groupe utilise le même timestamp de départ.
+- Le participant n'est plus bloqué par la vérification de distance du départ.
+- Positions de groupe rafraîchies toutes les 2 secondes pendant la navigation.
+- Maximum 6 participants conservé.
