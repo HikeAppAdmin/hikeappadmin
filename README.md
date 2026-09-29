@@ -1,31 +1,7 @@
-# HIKE+ V.01 — Version officielle
+HIKE+ V2.33 — Randonnée à plusieurs corrigée
 
-Version officielle V.01 de HIKE+.
-
-## Contenu
-- Application HIKE+ en français
-- Navigation GPS HIKE+
-- Départ à 150 m
-- Choix Google Maps / Waze pour rejoindre le départ
-- Pop-ups intégrées à l'application
-- Mode sombre
-- PWA installable
-- Parcours GPX inclus dans `gpx/`
-
-## Déploiement GitHub Pages
-Publier le contenu de ce dossier à la racine du dépôt GitHub Pages.
-Le dossier `gpx/` doit rester au même niveau que `index.html`.
-
-Pack France intégré : V5 BOUCLES (162 GPX : 126 existantes + 36 boucles).
-
-
-V5: le pack France est automatiquement redécompressé au lancement de l’application.
-
-
-Météo HIKE+ activée pour la bêta ouverte : sélection d’une randonnée, météo au point de départ et prévisions.
-
-
-## V2.31 — Auth background + password requirements
-- The bundled splash-sunset.jpg is also used as the full-screen background for login and registration.
-- Registration visibly lists the password requirements: 10+ characters, one uppercase letter, one special character.
-- Existing password validation remains enforced.
+- Retrait de « Randonnée à plusieurs » du menu de navigation.
+- « Créer un groupe » depuis l’accueil ouvre maintenant l’écran de groupe et lance réellement la création du groupe.
+- « Rejoindre » depuis l’accueil ouvre l’écran de groupe avec le champ de code prêt à être utilisé.
+- Le bouton « Rejoindre le groupe » reste fonctionnel avec un code à 6 caractères.
+- Le reste de la version précédente est conservé.
