@@ -1,7 +1,10 @@
-HIKE+ V2.33 — Randonnée à plusieurs corrigée
-
-- Retrait de « Randonnée à plusieurs » du menu de navigation.
-- « Créer un groupe » depuis l’accueil ouvre maintenant l’écran de groupe et lance réellement la création du groupe.
-- « Rejoindre » depuis l’accueil ouvre l’écran de groupe avec le champ de code prêt à être utilisé.
-- Le bouton « Rejoindre le groupe » reste fonctionnel avec un code à 6 caractères.
-- Le reste de la version précédente est conservé.
+# HIKE+ V2.34
+## Randonnée à plusieurs — synchronisation
+- Le menu de navigation ne contient plus l'entrée « Randonnée à plusieurs ».
+- Seul l'hôte choisit la randonnée du groupe.
+- Le choix est diffusé à tous les participants.
+- Seul l'hôte peut lancer le départ.
+- Le départ est synchronisé avec un horodatage partagé.
+- Les positions GPS sont relayées par l'hôte aux autres participants.
+- Les marqueurs GPS sont rafraîchis sur la carte de navigation.
+- Le code du groupe n'est plus affiché sur la carte, seulement le nombre de randonneurs.
