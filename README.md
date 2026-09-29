@@ -1,7 +1,9 @@
-HIKE+ V2.40 — Randonnée à plusieurs : départ réellement propagé
+HIKE+ V2.41 — Randonnée à plusieurs : synchronisation de départ renforcée
 
-- Le participant bascule immédiatement hors de l'écran du code dès réception du départ.
-- Le signal de départ est répété plusieurs fois pendant les 8 secondes de synchronisation.
-- L'état de départ est inclus lors des reconnexions.
-- Une reprise locale du départ est prévue si l'écran groupe est rouvert pendant la fenêtre de départ.
-- Maximum 6 personnes conservé.
+Corrections :
+- Le participant récupère automatiquement l'état de départ même s'il rate le premier message.
+- L'hôte republie l'état du groupe et du départ pendant la fenêtre de lancement.
+- Les nouveaux participants récupèrent immédiatement une randonnée déjà lancée.
+- Les participants interrogent l'hôte périodiquement tant qu'ils attendent le départ.
+- Le basculement automatique vers la navigation reste actif.
+- Groupe limité à 6 personnes.
