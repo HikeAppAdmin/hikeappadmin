@@ -1,7 +1,8 @@
-# HIKE+ V2.44 — Randonnée à plusieurs : invitation au départ
+# HIKE+ V2.47 — départ groupe corrigé
 
-- L’hôte choisit et lance la randonnée.
-- Les participants reçoivent un popup demandant s’ils veulent rejoindre la même randonnée.
-- Oui : chargement du tracé de l’hôte + départ synchronisé.
-- Non : le participant reste sur sa randonnée actuelle.
-- Maximum 6 personnes par groupe.
+- Correction du bouton « Lancer la randonnée ».
+- Le départ groupe ouvre directement la navigation sans repasser par l'accueil.
+- Compte à rebours synchronisé sur le timestamp commun.
+- Les participants reçoivent la randonnée de l'hôte et basculent sur la carte.
+- Chrono commun au groupe.
+- Maximum 6 participants.
