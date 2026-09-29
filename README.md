@@ -1,9 +1,8 @@
-# HIKE+ V2.42 — Randonnée à plusieurs : randonnée de l'hôte synchronisée
+HIKE+ V2.43 — Randonnée à plusieurs : synchronisation automatique hôte → groupe
 
-Correction : lorsqu'un participant est sur une randonnée différente de celle de l'hôte, le départ de groupe remplace maintenant réellement sa randonnée par celle choisie par l'hôte.
-
-- L'hôte reste le seul à choisir la randonnée.
-- Le GPX de la randonnée choisie est embarqué dans les données du groupe lorsque nécessaire, notamment pour les fichiers locaux/blob.
-- Chaque participant reconstruit un fichier GPX local à partir des données reçues.
-- Le participant n'a donc plus besoin d'avoir sélectionné la même randonnée avant le départ.
-- Le départ synchronisé, le chrono, le partage GPS et la limite de 6 personnes sont conservés.
+- Une fois dans le groupe, seul l'hôte choisit la randonnée.
+- Le choix de l'hôte est automatiquement appliqué aux participants.
+- Les participants peuvent être sur une autre randonnée au moment du choix.
+- Le participant résout la randonnée reçue avec son propre catalogue local quand elle existe, ce qui garantit le même tracé/GPX sur chaque appareil.
+- Le départ de l'hôte conserve le timestamp commun et lance automatiquement la navigation sur tous les participants.
+- Groupe limité à 6 personnes.
