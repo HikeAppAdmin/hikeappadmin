@@ -23,3 +23,9 @@ V5: le pack France est automatiquement redécompressé au lancement de l’appli
 
 
 Météo HIKE+ activée pour la bêta ouverte : sélection d’une randonnée, météo au point de départ et prévisions.
+
+
+## V2.31 — Auth background + password requirements
+- The bundled splash-sunset.jpg is also used as the full-screen background for login and registration.
+- Registration visibly lists the password requirements: 10+ characters, one uppercase letter, one special character.
+- Existing password validation remains enforced.
