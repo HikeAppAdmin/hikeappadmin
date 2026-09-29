@@ -1375,9 +1375,9 @@ const MAX_BETA_XP=LEVEL_THRESHOLDS[MAX_BETA_LEVEL-1];
 const BADGE_SEASON_ID='beta-ouverte-s1';
 const BADGE_SEASON_NAME='Bêta ouverte';
 const GRADES=[
-  ['Premier pas',2],['Marcheur',4],['Randonneur',6],['Explorateur',8],['Aventurier',10],
-  ['Montagnard',12],['Grimpeur',14],['Alpiniste',16],['Maître des sentiers',18],['Sommet',20],
-  ['Conquérant',22],['Maître des hauteurs',24],['Légende HIKE+',26],['Aigle des montagnes',28],['Légende alpine',30]
+  ['Premier départ',2],['Éclaireur',4],['Pionnier HIKE+',6],['Explorateur de la bêta',8],['Marcheur bêta',10],
+  ['Traceur',12],['Aventurier HIKE+',14],['Maître des sentiers',16],['Explorateur confirmé',18],['Grand explorateur',20],
+  ['Pilote HIKE+',22],['Vétéran de la bêta',24],['Légende HIKE+',26],['Pionnier de la saison',28],['Héros de la bêta',30]
 ];
 function gradeIcon(i){const icons=['🥾','🌿','🗺️','🧭','🏕️','⛰️','🧗','🏔️','⭐','🏆','🌲','🦅','👑','🔥','🏅'];return `<span style="font-size:34px;line-height:1">${icons[Math.max(0,Math.min(icons.length-1,i))]}</span>`;}
 function badgeSeasonInit(){
@@ -2144,3 +2144,35 @@ html.darkMode .toast{
 <style>.seasonNotice{margin-bottom:8px!important}</style>
 
 <style id="badgeSeasonFinalFix">.badgesLiveMeta{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.badgesSeasonCountdown{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:6px 9px;border-radius:999px;background:#eef5ef;color:#205b43;font-size:8.5px;font-weight:900;white-space:nowrap}.badgeSimpleName{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}.badgeSimpleName>span{display:block!important;font-size:20px!important;line-height:1!important;margin:0 0 2px!important;vertical-align:middle!important}.badgeSimpleIcon{font-size:20px!important}.badgeSimple{align-items:center;text-align:center}.badgeSimpleDesc,.badgeSimpleState{width:100%;text-align:center}@media(max-width:520px){.badgesLiveMeta{gap:5px}.badgesSeasonCountdown{font-size:7.5px;padding:5px 7px}.badgeSimpleName>span{font-size:18px!important}}</style>
+
+<style id="badgeIphone17ProMaxFix">
+/* Badge collection — optimized for iPhone 17 Pro Max and narrow mobile screens */
+.badgesLiveCard{padding:18px 16px;border-radius:22px;overflow:hidden}
+.badgesLiveHead{align-items:flex-start;margin-bottom:14px}
+.badgesLiveHead>b{font-size:18px;line-height:1.18;max-width:180px}
+.badgesLiveMeta{max-width:180px}
+.badgesLiveCount,.badgesSeasonCountdown{font-size:8px;padding:7px 9px}
+.badgeSeasonGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.badgeSimple{min-height:156px;padding:12px 8px;border-radius:18px;justify-content:flex-start}
+.badgeSimpleIcon{width:52px;height:52px;font-size:19px;margin-bottom:8px;border-width:2px}
+.badgeSimpleName{font-size:11px;line-height:1.2;min-height:30px;display:flex;align-items:center;justify-content:center}
+.badgeSimpleName>span{font-size:22px!important;line-height:1!important;margin:0 0 5px!important}
+.badgeSimpleState{font-size:8px;padding-top:7px;line-height:1.2}
+.badgeSimple.locked .badgeSimpleName{color:#777d78}
+.badgeArchivesTitle{margin-top:20px}
+@media (min-width:521px){.badgeSeasonGrid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:430px){
+  .content{padding-left:14px!important;padding-right:14px!important}
+  .badgesLiveCard{padding:15px 12px;border-radius:20px}
+  .badgesLiveHead{gap:8px}
+  .badgesLiveHead>b{font-size:17px;max-width:165px}
+  .badgesLiveMeta{gap:4px;max-width:160px}
+  .badgesLiveCount,.badgesSeasonCountdown{font-size:7.5px;padding:6px 8px}
+  .badgeSeasonGrid{gap:8px}
+  .badgeSimple{min-height:148px;padding:10px 6px;border-radius:16px}
+  .badgeSimpleIcon{width:48px;height:48px;font-size:18px;margin-bottom:7px}
+  .badgeSimpleName{font-size:10.5px;min-height:28px}
+  .badgeSimpleName>span{font-size:20px!important;margin-bottom:4px!important}
+  .badgeSimpleState{font-size:7.5px}
+}
+</style>
