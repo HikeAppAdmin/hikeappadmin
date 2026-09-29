@@ -1,5 +1,3 @@
-HIKE+ V2.50 — Randonnée à plusieurs : participants synchronisés
+HIKE+ V2.51 — Randonnée à plusieurs automatique
 
-Correction ciblée depuis V2.49 : les participants interrogent régulièrement l'hôte pour récupérer l'état du groupe et l'ordre de départ. L'hôte renvoie explicitement l'ordre startHike lorsqu'un départ est déjà lancé. Si le participant a reçu l'état mais n'est pas encore dans la navigation, il relance le démarrage.
-
-Maximum : 6 personnes.
+L’hôte choisit la randonnée. Les participants sont automatiquement synchronisés sur la même carte sans action. L’hôte lance ensuite le compte à rebours commun; tous démarrent ensemble et voient les positions du groupe. Maximum 6 personnes.
